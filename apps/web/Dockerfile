@@ -12,6 +12,7 @@ FROM deps AS build
 ARG NEXT_PUBLIC_API_BASE_URL
 ENV NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
 COPY . .
+RUN mkdir -p apps/web/public
 RUN pnpm --filter @replica/web build
 
 FROM base AS runner
