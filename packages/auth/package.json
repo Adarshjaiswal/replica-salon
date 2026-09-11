@@ -1,0 +1,24 @@
+{
+  "name": "@replica/auth",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "lint": "tsc --noEmit",
+    "type-check": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@replica/contracts": "workspace:*",
+    "better-auth": "1.6.23",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "26.1.1",
+    "typescript": "7.0.2",
+    "vitest": "4.1.10"
+  }
+}

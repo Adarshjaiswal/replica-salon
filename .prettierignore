@@ -1,0 +1,11 @@
+node_modules/
+.turbo/
+.next/
+dist/
+coverage/
+packages/db/src/generated/
+pnpm-lock.yaml
+AGENTS.md
+START_HERE.md
+docs/reference/*.pdf
+docs/reference/*.html
