@@ -24,6 +24,12 @@ pnpm test
 pnpm build
 ```
 
+## Production Deployment
+
+For a fresh Hostinger Ubuntu 24 VPS, use the Docker Compose deployment in
+`deploy/hostinger/`. Start with `deploy/hostinger/README.md` and keep
+`deploy/hostinger/.env.production` on the server only.
+
 ## Source Material
 
 - `docs/reference/replica-home-salon-sow-v1.1.pdf`

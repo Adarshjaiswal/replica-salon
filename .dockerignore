@@ -1,0 +1,16 @@
+.git
+node_modules
+.pnpm-store
+.turbo
+.next
+dist
+coverage
+.env
+.env.*
+*.log
+*.tsbuildinfo
+.DS_Store
+tmp
+uploads
+playwright-report
+test-results

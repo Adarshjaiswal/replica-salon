@@ -16,6 +16,7 @@
     "format:write": "prettier --write .",
     "db:generate": "pnpm --filter @replica/db prisma:generate",
     "db:migrate": "pnpm --filter @replica/db prisma:migrate",
+    "db:deploy": "pnpm --filter @replica/db prisma:deploy",
     "db:seed": "pnpm --filter @replica/db db:seed"
   },
   "devDependencies": {
