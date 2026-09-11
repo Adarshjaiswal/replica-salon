@@ -10,7 +10,7 @@
     }
   },
   "scripts": {
-    "build": "tsc --project tsconfig.json",
+    "build": "tsc --project tsconfig.json && node scripts/copy-generated-client.mjs",
     "lint": "tsc --noEmit",
     "type-check": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
