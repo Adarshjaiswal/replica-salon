@@ -230,6 +230,9 @@ importers:
       '@prisma/client':
         specifier: 7.9.1
         version: 7.9.1(prisma@7.9.1(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(typescript@7.0.2))(typescript@7.0.2)
+      '@prisma/client-runtime-utils':
+        specifier: 7.9.1
+        version: 7.9.1
       '@replica/auth':
         specifier: workspace:*
         version: link:../auth
