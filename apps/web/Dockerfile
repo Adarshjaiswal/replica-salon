@@ -18,6 +18,7 @@ RUN pnpm --filter @replica/web... build
 FROM base AS runner
 ENV NODE_ENV=production
 ENV NODE_OPTIONS=--conditions=production
+ENV HOSTNAME=0.0.0.0
 ARG NEXT_PUBLIC_API_BASE_URL
 ENV NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
 COPY --from=build /app/apps/web/.next/standalone ./
