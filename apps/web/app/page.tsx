@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import CustomerExperience from "./CustomerExperience";
 
 export const metadata: Metadata = {
-  title: "Replica Home Salon | Professional Beauty Services at Home in Lucknow",
+  title:
+    "Replica Home Saloon Service | Professional Beauty Services at Home in Lucknow",
   description:
-    "Book professional beauty, facial, waxing, makeup and grooming services at home in Lucknow with Replica Home Salon.",
+    "Book professional beauty, facial, waxing, makeup and grooming services at home in Lucknow with Replica Home Saloon Service.",
   alternates: {
     canonical: "/",
   },

@@ -3,8 +3,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "Replica Home Salon",
-    template: "%s | Replica Home Salon",
+    default: "Replica Home Saloon Service",
+    template: "%s | Replica Home Saloon Service",
   },
   description: "Professional beauty and grooming services at home in Lucknow.",
   robots: {
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     follow: true,
   },
   openGraph: {
-    title: "Replica Home Salon",
+    title: "Replica Home Saloon Service",
     description:
       "Professional beauty and grooming services at home in Lucknow.",
     images: [

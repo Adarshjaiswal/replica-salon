@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import CustomerExperience from "../CustomerExperience";
 
 export const metadata: Metadata = {
-  title: "Contact | Replica Home Salon",
+  title: "Contact | Replica Home Saloon Service",
   description:
-    "Contact Replica Home Salon for booking, service and support questions.",
+    "Contact Replica Home Saloon Service for booking, service and support questions.",
   alternates: {
     canonical: "/contact",
   },

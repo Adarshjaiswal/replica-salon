@@ -1664,9 +1664,13 @@ export function createCustomerRouter(env: AppEnv): Router {
         successEnvelope(
           {
             business: {
-              name: "Replica Home Salon",
+              name: "Replica Home Saloon Service",
               city: "Lucknow",
               area: "Indira Nagar",
+              addressLine:
+                "C04 Gayatri Nagar (Pani Gao), Indira Nagar, near Peepal Tree, Lucknow 226016",
+              supportEmail: "support@replicahomesaloonservice.in",
+              websiteUrl: "https://replicahomesaloonservice.in",
               supportPhone: "+91 81128 68347",
               heroImageUrl: FALLBACK_HERO_IMAGE,
               fallbackServiceImages: serializedServices.map((_service, index) =>

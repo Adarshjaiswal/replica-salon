@@ -9,6 +9,12 @@ import {
   UserRound,
 } from "lucide-react";
 
+const BUSINESS_NAME = "Replica Home Saloon Service";
+const BUSINESS_LOGO_PRIMARY = "Replica";
+const BUSINESS_LOGO_SECONDARY = "Home Saloon Service";
+const BUSINESS_ADDRESS =
+  "C04 Gayatri Nagar (Pani Gao), Indira Nagar, near Peepal Tree, Lucknow 226016";
+
 interface PolicyPageProps {
   eyebrow: string;
   title: string;
@@ -29,10 +35,10 @@ export default function PolicyPage({
     <main className="customer-site">
       <header className="customer-header">
         <div className="customer-header-shell">
-          <a className="customer-brand" href="/" aria-label="Replica Home Salon">
+          <a className="customer-brand" href="/" aria-label={BUSINESS_NAME}>
             <span className="customer-brand-logo">
-              <strong>Replica</strong>
-              <small>Home Salon</small>
+              <strong>{BUSINESS_LOGO_PRIMARY}</strong>
+              <small>{BUSINESS_LOGO_SECONDARY}</small>
             </span>
           </a>
           <a
@@ -102,7 +108,7 @@ export default function PolicyPage({
       <section className="policy-contact-strip">
         <span>
           <Home size={18} />
-          Replica Home Salon, Lucknow
+          {BUSINESS_NAME}, {BUSINESS_ADDRESS}
         </span>
         <a href="/contact">
           <Mail size={18} />

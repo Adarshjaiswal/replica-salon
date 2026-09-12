@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import PolicyPage from "../PolicyPage";
 
 export const metadata: Metadata = {
-  title: "Terms and Conditions | Replica Home Salon",
+  title: "Terms and Conditions | Replica Home Saloon Service",
   description:
-    "Draft terms placeholder for Replica Home Salon bookings and customer use.",
+    "Draft terms placeholder for Replica Home Saloon Service bookings and customer use.",
   alternates: {
     canonical: "/terms-and-conditions",
   },

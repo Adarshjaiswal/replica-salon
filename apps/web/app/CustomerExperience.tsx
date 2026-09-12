@@ -40,6 +40,13 @@ const INDIA_TIME_ZONE = "Asia/Kolkata";
 const FALLBACK_DEAL_STARTS_AT = "2026-01-01T00:00:00.000Z";
 const FALLBACK_DEAL_ENDS_AT = "2027-01-01T00:00:00.000Z";
 const CATALOGUE_SERVICES_PER_PAGE = 6;
+const BUSINESS_NAME = "Replica Home Saloon Service";
+const BUSINESS_LOGO_PRIMARY = "Replica";
+const BUSINESS_LOGO_SECONDARY = "Home Saloon Service";
+const BUSINESS_ADDRESS =
+  "C04 Gayatri Nagar (Pani Gao), Indira Nagar, near Peepal Tree, Lucknow 226016";
+const BUSINESS_SUPPORT_EMAIL = "support@replicahomesaloonservice.in";
+const BUSINESS_WEBSITE_URL = "https://replicahomesaloonservice.in";
 const DEFAULT_CUSTOMER_ADDRESS_FORM = {
   label: "Home",
   line1: "",
@@ -206,6 +213,9 @@ interface CataloguePayload {
     name: string;
     city: string;
     area: string;
+    addressLine?: string;
+    supportEmail?: string;
+    websiteUrl?: string;
     supportPhone: string;
     heroImageUrl: string;
     fallbackServiceImages: string[];
@@ -1130,9 +1140,12 @@ const FALLBACK_SERVICES: FallbackPublicService[] = [
 
 const FALLBACK_CATALOGUE: CataloguePayload = {
   business: {
-    name: "Replica Home Salon",
+    name: BUSINESS_NAME,
     city: "Lucknow",
     area: "Indira Nagar",
+    addressLine: BUSINESS_ADDRESS,
+    supportEmail: BUSINESS_SUPPORT_EMAIL,
+    websiteUrl: BUSINESS_WEBSITE_URL,
     supportPhone: "+918112868347",
     heroImageUrl: FALLBACK_HERO_IMAGE_URL,
     fallbackServiceImages: FALLBACK_SERVICE_IMAGE_URLS,
@@ -3023,7 +3036,7 @@ export default function CustomerExperience({
         key: checkout.razorpayKeyId,
         amount: checkout.order.amount,
         currency: checkout.order.currency,
-        name: "Replica Home Salon",
+        name: catalogue?.business.name ?? BUSINESS_NAME,
         description: currentBooking.items
           .map((item) => item.serviceName)
           .join(", "),
@@ -3400,11 +3413,11 @@ export default function CustomerExperience({
             <a
               className="customer-brand"
               href="/"
-              aria-label="Replica Home Salon"
+              aria-label={BUSINESS_NAME}
             >
               <span className="customer-brand-logo">
-                <strong>Replica</strong>
-                <small>Home Salon</small>
+                <strong>{BUSINESS_LOGO_PRIMARY}</strong>
+                <small>{BUSINESS_LOGO_SECONDARY}</small>
               </span>
             </a>
             <a
@@ -5774,8 +5787,8 @@ export default function CustomerExperience({
           ) : (
             <>
               <a className="customer-auth-dialog-brand" href="/">
-                <span>Replica</span>
-                <small>Home Salon</small>
+                <span>{BUSINESS_LOGO_PRIMARY}</span>
+                <small>{BUSINESS_LOGO_SECONDARY}</small>
               </a>
               <p className="customer-auth-welcome">Welcome</p>
               <h1>
@@ -6066,7 +6079,7 @@ export default function CustomerExperience({
       <section className="customer-contact-page">
         <div className="customer-section-head">
           <p className="customer-eyebrow">Support</p>
-          <h1>Contact Replica Home Salon</h1>
+          <h1>Contact {catalogue?.business.name ?? BUSINESS_NAME}</h1>
           <p>
             Send a booking or service question. The request is stored in the
             admin contact list for follow-up.
@@ -6778,8 +6791,12 @@ export default function CustomerExperience({
 
   function renderFooter(): React.ReactElement {
     const supportPhone = catalogue?.business.supportPhone ?? "+918112868347";
+    const supportEmail =
+      catalogue?.business.supportEmail ?? BUSINESS_SUPPORT_EMAIL;
+    const businessName = catalogue?.business.name ?? BUSINESS_NAME;
+    const addressLine = catalogue?.business.addressLine ?? BUSINESS_ADDRESS;
+    const websiteUrl = catalogue?.business.websiteUrl ?? BUSINESS_WEBSITE_URL;
     const city = catalogue?.business.city ?? "Lucknow";
-    const area = catalogue?.business.area ?? "Indira Nagar";
 
     return (
       <footer className="customer-footer">
@@ -6787,17 +6804,17 @@ export default function CustomerExperience({
           <span>
             <MapPin size={18} />
             <strong>Find us</strong>
-            {area}, {city}
+            {addressLine}
           </span>
           <a href={`tel:${supportPhone}`}>
             <Phone size={18} />
             <strong>Call us</strong>
             {supportPhone}
           </a>
-          <a href="mailto:support@replicahomesalon.com">
+          <a href={`mailto:${supportEmail}`}>
             <MessageCircle size={18} />
             <strong>Mail us</strong>
-            support@replicahomesalon.com
+            {supportEmail}
           </a>
         </div>
 
@@ -6806,8 +6823,8 @@ export default function CustomerExperience({
             <a className="customer-brand customer-brand-light" href="/">
               <span className="customer-brand-mark">R</span>
               <span>
-                Replica
-                <small>Home Salon</small>
+                {BUSINESS_LOGO_PRIMARY}
+                <small>{BUSINESS_LOGO_SECONDARY}</small>
               </span>
             </a>
             <p>
@@ -6852,7 +6869,10 @@ export default function CustomerExperience({
             Service availability, tax details and payment status are confirmed
             during checkout.
           </p>
-          <span>Replica Home Salon</span>
+          <span>{businessName}</span>
+          <a href={websiteUrl} rel="noreferrer">
+            replicahomesaloonservice.in
+          </a>
         </div>
 
         <a

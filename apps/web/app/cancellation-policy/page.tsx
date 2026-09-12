@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import PolicyPage from "../PolicyPage";
 
 export const metadata: Metadata = {
-  title: "Cancellation Policy | Replica Home Salon",
+  title: "Cancellation Policy | Replica Home Saloon Service",
   description:
-    "Draft cancellation policy placeholder for Replica Home Salon bookings.",
+    "Draft cancellation policy placeholder for Replica Home Saloon Service bookings.",
   alternates: {
     canonical: "/cancellation-policy",
   },

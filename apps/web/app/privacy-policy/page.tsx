@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import PolicyPage from "../PolicyPage";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Replica Home Salon",
+  title: "Privacy Policy | Replica Home Saloon Service",
   description:
-    "Draft privacy policy placeholder for Replica Home Salon customer data and booking workflows.",
+    "Draft privacy policy placeholder for Replica Home Saloon Service customer data and booking workflows.",
   alternates: {
     canonical: "/privacy-policy",
   },

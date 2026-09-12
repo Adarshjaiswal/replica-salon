@@ -12,7 +12,7 @@ export async function generateMetadata({
 }: CategoryPageProps): Promise<Metadata> {
   const { categorySlug } = await params;
   return {
-    title: `${categorySlug.replaceAll("-", " ")} Services | Replica Home Salon`,
+    title: `${categorySlug.replaceAll("-", " ")} Services | Replica Home Saloon Service`,
     description:
       "Browse category-specific home salon services and book a professional slot in Lucknow.",
     alternates: {

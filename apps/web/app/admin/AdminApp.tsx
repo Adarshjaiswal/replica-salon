@@ -9127,7 +9127,7 @@ export default function AdminApp(): React.ReactElement {
         >
           <div className="auth-brand">
             <span className="brand-mark">R</span>
-            <span>Replica Admin</span>
+            <span>Replica Saloon Admin</span>
           </div>
           <div className="auth-loading">
             <RefreshCw aria-hidden="true" size={18} />
@@ -9145,7 +9145,7 @@ export default function AdminApp(): React.ReactElement {
           <div className="login-visual-header">
             <div className="auth-brand auth-brand-light">
               <span className="brand-mark">R</span>
-              <span>Replica Admin</span>
+              <span>Replica Saloon Admin</span>
             </div>
             <span className="visual-status">Live</span>
           </div>
@@ -9181,7 +9181,7 @@ export default function AdminApp(): React.ReactElement {
           </div>
 
           <div className="visual-copy">
-            <p className="eyebrow">Replica Home Salon</p>
+            <p className="eyebrow">Replica Home Saloon Service</p>
             <h2>Operations desk for bookings, staff and service control.</h2>
           </div>
         </section>
@@ -9190,7 +9190,7 @@ export default function AdminApp(): React.ReactElement {
           <div className="auth-panel-heading">
             <div className="auth-brand compact-brand">
               <span className="brand-mark">R</span>
-              <span>Replica Admin</span>
+              <span>Replica Saloon Admin</span>
             </div>
             <div>
               <p className="eyebrow">Invite-only access</p>
@@ -9264,7 +9264,7 @@ export default function AdminApp(): React.ReactElement {
         <div className="admin-brand-row">
           <div className="auth-brand">
             <span className="brand-mark">R</span>
-            <span>Replica Admin</span>
+            <span>Replica Saloon Admin</span>
           </div>
           <button
             aria-label="Close navigation"

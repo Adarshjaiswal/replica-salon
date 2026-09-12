@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import PolicyPage from "../PolicyPage";
 
 export const metadata: Metadata = {
-  title: "Return and Refund Policy | Replica Home Salon",
+  title: "Return and Refund Policy | Replica Home Saloon Service",
   description:
-    "Draft return and refund policy placeholder for Replica Home Salon service bookings and payment issues.",
+    "Draft return and refund policy placeholder for Replica Home Saloon Service service bookings and payment issues.",
   alternates: {
     canonical: "/return-refund-policy",
   },
