@@ -4366,8 +4366,8 @@ export default function CustomerExperience({
           </span>
         </div>
         <div className="customer-why-grid">
-          {reasons.map((reason) => (
-            <article key={reason.title}>
+          {reasons.map((reason, index) => (
+            <article data-step={`0${index + 1}`} key={reason.title}>
               <span aria-hidden="true">{reason.icon}</span>
               <strong>{reason.title}</strong>
               <p>{reason.text}</p>
