@@ -3410,11 +3410,7 @@ export default function CustomerExperience({
       {!isAuthPage ? (
         <header className="customer-header">
           <div className="customer-header-shell">
-            <a
-              className="customer-brand"
-              href="/"
-              aria-label={BUSINESS_NAME}
-            >
+            <a className="customer-brand" href="/" aria-label={BUSINESS_NAME}>
               <span className="customer-brand-logo">
                 <strong>{BUSINESS_LOGO_PRIMARY}</strong>
                 <small>{BUSINESS_LOGO_SECONDARY}</small>
@@ -6836,6 +6832,7 @@ export default function CustomerExperience({
             <h4>Useful links</h4>
             <a href="/">Home</a>
             <a href="/services">Services</a>
+            <a href="/blog">Blog</a>
             <a href="/#categories">Categories</a>
             <a href="/cart">Cart</a>
             <a href="/orders">My orders</a>

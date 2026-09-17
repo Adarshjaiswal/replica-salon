@@ -10,6 +10,7 @@ import {
   ArrowLeft,
   BarChart3,
   Bell,
+  BookOpen,
   Bold,
   CalendarCheck,
   ChevronDown,
@@ -9350,6 +9351,14 @@ export default function AdminApp(): React.ReactElement {
               </button>
             );
           })}
+          <button
+            className="admin-module-button"
+            onClick={() => router.push("/admin/blogs")}
+            type="button"
+          >
+            <BookOpen aria-hidden="true" size={16} />
+            <span>Blogs</span>
+          </button>
           <div className="admin-nav-group">
             <button
               aria-expanded={isUserManagementRoute}

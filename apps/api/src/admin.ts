@@ -10,6 +10,8 @@ import {
   adminCreateUserRequestSchema,
   adminCreatePackageRequestSchema,
   adminBookingListQuerySchema,
+  adminBlogListQuerySchema,
+  adminCreateBlogRequestSchema,
   adminCategoryListQuerySchema,
   adminImageUploadRequestSchema,
   adminPackageListQuerySchema,
@@ -19,6 +21,7 @@ import {
   adminServiceListQuerySchema,
   adminStaffListQuerySchema,
   adminUpdateBookingAssignmentRequestSchema,
+  adminUpdateBlogRequestSchema,
   adminUpdatePackageRequestSchema,
   adminUpdateReviewRequestSchema,
   adminUpdateCategoryRequestSchema,
@@ -1186,6 +1189,61 @@ function mediaAssetToRow(mediaAsset: {
     altText: mediaAsset.altText,
     contentType: mediaAsset.contentType,
     sizeBytes: mediaAsset.sizeBytes,
+  };
+}
+
+type BlogPostRecord = {
+  id: string;
+  publicId: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  body: string;
+  coverImageUrl: string | null;
+  coverImageAlt: string | null;
+  seoTitle: string | null;
+  seoDescription: string | null;
+  status: "DRAFT" | "PUBLISHED" | "ARCHIVED";
+  publishedAt: Date | null;
+  archivedAt: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+  author?: { name: string } | null;
+};
+
+function serializeBlogPost(post: BlogPostRecord): Record<string, unknown> {
+  return {
+    id: post.id,
+    publicId: post.publicId,
+    title: post.title,
+    slug: post.slug,
+    excerpt: post.excerpt,
+    body: post.body,
+    coverImageUrl: post.coverImageUrl,
+    coverImageAlt: post.coverImageAlt,
+    seoTitle: post.seoTitle,
+    seoDescription: post.seoDescription,
+    status: post.status,
+    authorName: post.author?.name ?? null,
+    publishedAt: post.publishedAt?.toISOString() ?? null,
+    archivedAt: post.archivedAt?.toISOString() ?? null,
+    createdAt: post.createdAt.toISOString(),
+    updatedAt: post.updatedAt.toISOString(),
+  };
+}
+
+function blogAuditSummary(
+  post: Pick<
+    BlogPostRecord,
+    "id" | "title" | "slug" | "status" | "publishedAt"
+  >,
+): Record<string, unknown> {
+  return {
+    id: post.id,
+    title: post.title,
+    slug: post.slug,
+    status: post.status,
+    publishedAt: post.publishedAt?.toISOString() ?? null,
   };
 }
 
@@ -4262,6 +4320,8 @@ export function createAdminRouter(env: AppEnv): Router {
         toPermissionKey("categories", "update"),
         toPermissionKey("services", "create"),
         toPermissionKey("services", "update"),
+        toPermissionKey("content", "create"),
+        toPermissionKey("content", "update"),
       ]);
 
       if (!canUploadMedia) {
@@ -4346,6 +4406,244 @@ export function createAdminRouter(env: AppEnv): Router {
           },
           getRequestId(res),
         ),
+      );
+    }),
+  );
+
+  router.get(
+    "/blogs",
+    requirePermission("content", "view"),
+    asyncHandler(async (req, res) => {
+      const parsed = adminBlogListQuerySchema.safeParse(req.query);
+      if (!parsed.success) {
+        sendValidationError(
+          res,
+          "Check the submitted blog filters.",
+          parsed.error.issues,
+        );
+        return;
+      }
+
+      const { page, pageSize, search, status, sort } = parsed.data;
+      const where: Prisma.BlogPostWhereInput = {
+        ...(status ? { status } : {}),
+        ...(search
+          ? {
+              OR: [
+                { title: { contains: search } },
+                { excerpt: { contains: search } },
+              ],
+            }
+          : {}),
+      };
+      const orderBy: Prisma.BlogPostOrderByWithRelationInput =
+        sort === "updatedAt_asc"
+          ? { updatedAt: "asc" }
+          : sort === "title_asc"
+            ? { title: "asc" }
+            : sort === "title_desc"
+              ? { title: "desc" }
+              : sort === "publishedAt_desc"
+                ? { publishedAt: "desc" }
+                : { updatedAt: "desc" };
+      const [totalCount, posts] = await Promise.all([
+        prisma.blogPost.count({ where }),
+        prisma.blogPost.findMany({
+          where,
+          orderBy,
+          skip: (page - 1) * pageSize,
+          take: pageSize,
+          include: { author: { select: { name: true } } },
+        }),
+      ]);
+      res.json(
+        successEnvelope(
+          {
+            posts: posts.map(serializeBlogPost),
+            pagination: {
+              page,
+              pageSize,
+              totalCount,
+              totalPages: Math.max(1, Math.ceil(totalCount / pageSize)),
+            },
+          },
+          getRequestId(res),
+        ),
+      );
+    }),
+  );
+
+  router.get(
+    "/blogs/:blogId",
+    requirePermission("content", "view"),
+    asyncHandler(async (req, res) => {
+      const blogId = getRouteParam(req.params.blogId);
+      const post = blogId
+        ? await prisma.blogPost.findUnique({
+            where: { id: blogId },
+            include: { author: { select: { name: true } } },
+          })
+        : null;
+      if (!post) {
+        sendError(res, 404, "NOT_FOUND", "Blog post was not found.");
+        return;
+      }
+      res.json(
+        successEnvelope({ post: serializeBlogPost(post) }, getRequestId(res)),
+      );
+    }),
+  );
+
+  router.post(
+    "/blogs",
+    requirePermission("content", "create"),
+    asyncHandler(async (req, res) => {
+      const parsed = adminCreateBlogRequestSchema.safeParse(req.body);
+      if (!parsed.success) {
+        sendValidationError(
+          res,
+          "Check the submitted blog fields.",
+          parsed.error.issues,
+        );
+        return;
+      }
+      const actor = getActor(res);
+      const slug = parsed.data.slug ?? toSlug(parsed.data.title);
+      if (await prisma.blogPost.findUnique({ where: { slug } })) {
+        sendValidationError(res, "A blog post with this slug already exists.");
+        return;
+      }
+      const now = new Date();
+      const post = await prisma.blogPost.create({
+        data: {
+          ...parsed.data,
+          slug,
+          authorId: actor.id,
+          coverImageUrl: parsed.data.coverImageUrl || null,
+          coverImageAlt: parsed.data.coverImageAlt || null,
+          seoTitle: parsed.data.seoTitle || null,
+          seoDescription: parsed.data.seoDescription || null,
+          publishedAt: parsed.data.status === "PUBLISHED" ? now : null,
+          archivedAt: parsed.data.status === "ARCHIVED" ? now : null,
+        },
+        include: { author: { select: { name: true } } },
+      });
+      await recordAuditLog(
+        req,
+        res,
+        "blog.create",
+        "BlogPost",
+        post.id,
+        blogAuditSummary(post),
+      );
+      res
+        .status(201)
+        .json(
+          successEnvelope({ post: serializeBlogPost(post) }, getRequestId(res)),
+        );
+    }),
+  );
+
+  router.put(
+    "/blogs/:blogId",
+    requirePermission("content", "update"),
+    asyncHandler(async (req, res) => {
+      const blogId = getRouteParam(req.params.blogId);
+      const parsed = adminUpdateBlogRequestSchema.safeParse(req.body);
+      if (!blogId) {
+        sendError(res, 404, "NOT_FOUND", "Blog post was not found.");
+        return;
+      }
+      if (!parsed.success) {
+        sendValidationError(
+          res,
+          "Check the submitted blog fields.",
+          parsed.error.issues,
+        );
+        return;
+      }
+      const existing = await prisma.blogPost.findUnique({
+        where: { id: blogId },
+      });
+      if (!existing) {
+        sendError(res, 404, "NOT_FOUND", "Blog post was not found.");
+        return;
+      }
+      const slug = parsed.data.slug ?? toSlug(parsed.data.title);
+      const duplicate = await prisma.blogPost.findFirst({
+        where: { slug, id: { not: blogId } },
+      });
+      if (duplicate) {
+        sendValidationError(res, "A blog post with this slug already exists.");
+        return;
+      }
+      const now = new Date();
+      const post = await prisma.blogPost.update({
+        where: { id: blogId },
+        data: {
+          ...parsed.data,
+          slug,
+          coverImageUrl: parsed.data.coverImageUrl || null,
+          coverImageAlt: parsed.data.coverImageAlt || null,
+          seoTitle: parsed.data.seoTitle || null,
+          seoDescription: parsed.data.seoDescription || null,
+          publishedAt:
+            parsed.data.status === "PUBLISHED"
+              ? (existing.publishedAt ?? now)
+              : null,
+          archivedAt:
+            parsed.data.status === "ARCHIVED"
+              ? (existing.archivedAt ?? now)
+              : null,
+        },
+        include: { author: { select: { name: true } } },
+      });
+      await recordAuditLog(
+        req,
+        res,
+        "blog.update",
+        "BlogPost",
+        post.id,
+        blogAuditSummary(post),
+        blogAuditSummary(existing),
+      );
+      res.json(
+        successEnvelope({ post: serializeBlogPost(post) }, getRequestId(res)),
+      );
+    }),
+  );
+
+  router.delete(
+    "/blogs/:blogId",
+    requirePermission("content", "delete"),
+    asyncHandler(async (req, res) => {
+      const blogId = getRouteParam(req.params.blogId);
+      const existing = blogId
+        ? await prisma.blogPost.findUnique({ where: { id: blogId } })
+        : null;
+      if (!existing) {
+        sendError(res, 404, "NOT_FOUND", "Blog post was not found.");
+        return;
+      }
+      const post = await prisma.blogPost.update({
+        where: { id: existing.id },
+        data: {
+          status: "ARCHIVED",
+          archivedAt: existing.archivedAt ?? new Date(),
+        },
+        include: { author: { select: { name: true } } },
+      });
+      await recordAuditLog(
+        req,
+        res,
+        "blog.archive",
+        "BlogPost",
+        post.id,
+        blogAuditSummary(post),
+        blogAuditSummary(existing),
+      );
+      res.json(
+        successEnvelope({ post: serializeBlogPost(post) }, getRequestId(res)),
       );
     }),
   );

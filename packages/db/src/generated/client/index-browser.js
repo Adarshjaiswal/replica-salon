@@ -638,6 +638,25 @@ exports.Prisma.ContentRevisionScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.BlogPostScalarFieldEnum = {
+  id: 'id',
+  publicId: 'publicId',
+  authorId: 'authorId',
+  title: 'title',
+  slug: 'slug',
+  excerpt: 'excerpt',
+  body: 'body',
+  coverImageUrl: 'coverImageUrl',
+  coverImageAlt: 'coverImageAlt',
+  seoTitle: 'seoTitle',
+  seoDescription: 'seoDescription',
+  status: 'status',
+  publishedAt: 'publishedAt',
+  archivedAt: 'archivedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.ContactSubmissionScalarFieldEnum = {
   id: 'id',
   customerProfileId: 'customerProfileId',
@@ -1117,6 +1136,20 @@ exports.Prisma.ContentRevisionOrderByRelevanceFieldEnum = {
   bodyText: 'bodyText'
 };
 
+exports.Prisma.BlogPostOrderByRelevanceFieldEnum = {
+  id: 'id',
+  publicId: 'publicId',
+  authorId: 'authorId',
+  title: 'title',
+  slug: 'slug',
+  excerpt: 'excerpt',
+  body: 'body',
+  coverImageUrl: 'coverImageUrl',
+  coverImageAlt: 'coverImageAlt',
+  seoTitle: 'seoTitle',
+  seoDescription: 'seoDescription'
+};
+
 exports.Prisma.ContactSubmissionOrderByRelevanceFieldEnum = {
   id: 'id',
   customerProfileId: 'customerProfileId',
@@ -1318,6 +1351,7 @@ exports.Prisma.ModelName = {
   Invoice: 'Invoice',
   ContentPage: 'ContentPage',
   ContentRevision: 'ContentRevision',
+  BlogPost: 'BlogPost',
   ContactSubmission: 'ContactSubmission',
   ContactActivity: 'ContactActivity',
   SupportTicket: 'SupportTicket',

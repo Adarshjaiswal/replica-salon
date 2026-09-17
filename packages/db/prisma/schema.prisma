@@ -110,6 +110,7 @@ model User {
   securityEvents   SecurityEvent[]   @relation("SecurityEventActor")
   auditLogs        AuditLog[]        @relation("AuditLogActor")
   contentRevisions ContentRevision[] @relation("ContentRevisionAuthor")
+  blogPosts        BlogPost[]        @relation("BlogPostAuthor")
   reviewsModerated Review[]          @relation("ReviewModerator")
 
   @@index([accountType, status])
@@ -863,6 +864,30 @@ model ContentRevision {
   author      User?       @relation("ContentRevisionAuthor", fields: [authorId], references: [id], onDelete: SetNull)
 
   @@unique([contentPageId, revisionNo])
+}
+
+model BlogPost {
+  id             String        @id @default(cuid())
+  publicId       String        @unique @default(cuid())
+  authorId       String?
+  title          String        @db.VarChar(180)
+  slug           String        @unique @db.VarChar(180)
+  excerpt        String        @db.VarChar(500)
+  body           String        @db.LongText
+  coverImageUrl  String?       @db.VarChar(1000)
+  coverImageAlt  String?       @db.VarChar(240)
+  seoTitle       String?       @db.VarChar(180)
+  seoDescription String?       @db.VarChar(320)
+  status         PublishStatus @default(DRAFT)
+  publishedAt    DateTime?
+  archivedAt     DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  author User? @relation("BlogPostAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([status, publishedAt])
+  @@index([updatedAt])
 }
 
 model ContactSubmission {

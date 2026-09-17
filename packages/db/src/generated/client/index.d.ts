@@ -244,6 +244,11 @@ export type ContentPage = $Result.DefaultSelection<Prisma.$ContentPagePayload>
  */
 export type ContentRevision = $Result.DefaultSelection<Prisma.$ContentRevisionPayload>
 /**
+ * Model BlogPost
+ * 
+ */
+export type BlogPost = $Result.DefaultSelection<Prisma.$BlogPostPayload>
+/**
  * Model ContactSubmission
  * 
  */
@@ -1038,6 +1043,16 @@ export class PrismaClient<
   get contentRevision(): Prisma.ContentRevisionDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.blogPost`: Exposes CRUD operations for the **BlogPost** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BlogPosts
+    * const blogPosts = await prisma.blogPost.findMany()
+    * ```
+    */
+  get blogPost(): Prisma.BlogPostDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.contactSubmission`: Exposes CRUD operations for the **ContactSubmission** model.
     * Example usage:
     * ```ts
@@ -1629,6 +1644,7 @@ export namespace Prisma {
     Invoice: 'Invoice',
     ContentPage: 'ContentPage',
     ContentRevision: 'ContentRevision',
+    BlogPost: 'BlogPost',
     ContactSubmission: 'ContactSubmission',
     ContactActivity: 'ContactActivity',
     SupportTicket: 'SupportTicket',
@@ -1654,7 +1670,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "authAccount" | "authSession" | "authVerification" | "adminInvitation" | "role" | "permission" | "userRole" | "rolePermission" | "securityEvent" | "auditLog" | "category" | "service" | "serviceTier" | "servicePackage" | "servicePackageItem" | "mediaAsset" | "serviceImage" | "serviceAddon" | "skill" | "zone" | "serviceSkill" | "serviceZone" | "customerProfile" | "address" | "staffProfile" | "staffSkill" | "staffService" | "staffZone" | "staffDocument" | "staffSchedule" | "availabilityException" | "booking" | "bookingItem" | "bookingStatusHistory" | "staffAssignment" | "serviceStartOtp" | "review" | "coupon" | "couponRedemption" | "payment" | "webhookEvent" | "refundRecord" | "invoice" | "contentPage" | "contentRevision" | "contactSubmission" | "contactActivity" | "supportTicket" | "ticketMessage" | "notificationTemplate" | "notificationRule" | "notificationDelivery" | "outboxEvent" | "idempotencyKey" | "appSetting"
+      modelProps: "user" | "authAccount" | "authSession" | "authVerification" | "adminInvitation" | "role" | "permission" | "userRole" | "rolePermission" | "securityEvent" | "auditLog" | "category" | "service" | "serviceTier" | "servicePackage" | "servicePackageItem" | "mediaAsset" | "serviceImage" | "serviceAddon" | "skill" | "zone" | "serviceSkill" | "serviceZone" | "customerProfile" | "address" | "staffProfile" | "staffSkill" | "staffService" | "staffZone" | "staffDocument" | "staffSchedule" | "availabilityException" | "booking" | "bookingItem" | "bookingStatusHistory" | "staffAssignment" | "serviceStartOtp" | "review" | "coupon" | "couponRedemption" | "payment" | "webhookEvent" | "refundRecord" | "invoice" | "contentPage" | "contentRevision" | "blogPost" | "contactSubmission" | "contactActivity" | "supportTicket" | "ticketMessage" | "notificationTemplate" | "notificationRule" | "notificationDelivery" | "outboxEvent" | "idempotencyKey" | "appSetting"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4694,6 +4710,72 @@ export namespace Prisma {
           }
         }
       }
+      BlogPost: {
+        payload: Prisma.$BlogPostPayload<ExtArgs>
+        fields: Prisma.BlogPostFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BlogPostFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlogPostPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BlogPostFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlogPostPayload>
+          }
+          findFirst: {
+            args: Prisma.BlogPostFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlogPostPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BlogPostFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlogPostPayload>
+          }
+          findMany: {
+            args: Prisma.BlogPostFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlogPostPayload>[]
+          }
+          create: {
+            args: Prisma.BlogPostCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlogPostPayload>
+          }
+          createMany: {
+            args: Prisma.BlogPostCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.BlogPostDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlogPostPayload>
+          }
+          update: {
+            args: Prisma.BlogPostUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlogPostPayload>
+          }
+          deleteMany: {
+            args: Prisma.BlogPostDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BlogPostUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.BlogPostUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlogPostPayload>
+          }
+          aggregate: {
+            args: Prisma.BlogPostAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBlogPost>
+          }
+          groupBy: {
+            args: Prisma.BlogPostGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BlogPostGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BlogPostCountArgs<ExtArgs>
+            result: $Utils.Optional<BlogPostCountAggregateOutputType> | number
+          }
+        }
+      }
       ContactSubmission: {
         payload: Prisma.$ContactSubmissionPayload<ExtArgs>
         fields: Prisma.ContactSubmissionFieldRefs
@@ -5523,6 +5605,7 @@ export namespace Prisma {
     invoice?: InvoiceOmit
     contentPage?: ContentPageOmit
     contentRevision?: ContentRevisionOmit
+    blogPost?: BlogPostOmit
     contactSubmission?: ContactSubmissionOmit
     contactActivity?: ContactActivityOmit
     supportTicket?: SupportTicketOmit
@@ -5620,6 +5703,7 @@ export namespace Prisma {
     securityEvents: number
     auditLogs: number
     contentRevisions: number
+    blogPosts: number
     reviewsModerated: number
   }
 
@@ -5631,6 +5715,7 @@ export namespace Prisma {
     securityEvents?: boolean | UserCountOutputTypeCountSecurityEventsArgs
     auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
     contentRevisions?: boolean | UserCountOutputTypeCountContentRevisionsArgs
+    blogPosts?: boolean | UserCountOutputTypeCountBlogPostsArgs
     reviewsModerated?: boolean | UserCountOutputTypeCountReviewsModeratedArgs
   }
 
@@ -5692,6 +5777,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountContentRevisionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ContentRevisionWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountBlogPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BlogPostWhereInput
   }
 
   /**
@@ -6883,6 +6975,7 @@ export namespace Prisma {
     securityEvents?: boolean | User$securityEventsArgs<ExtArgs>
     auditLogs?: boolean | User$auditLogsArgs<ExtArgs>
     contentRevisions?: boolean | User$contentRevisionsArgs<ExtArgs>
+    blogPosts?: boolean | User$blogPostsArgs<ExtArgs>
     reviewsModerated?: boolean | User$reviewsModeratedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
@@ -6915,6 +7008,7 @@ export namespace Prisma {
     securityEvents?: boolean | User$securityEventsArgs<ExtArgs>
     auditLogs?: boolean | User$auditLogsArgs<ExtArgs>
     contentRevisions?: boolean | User$contentRevisionsArgs<ExtArgs>
+    blogPosts?: boolean | User$blogPostsArgs<ExtArgs>
     reviewsModerated?: boolean | User$reviewsModeratedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -6931,6 +7025,7 @@ export namespace Prisma {
       securityEvents: Prisma.$SecurityEventPayload<ExtArgs>[]
       auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
       contentRevisions: Prisma.$ContentRevisionPayload<ExtArgs>[]
+      blogPosts: Prisma.$BlogPostPayload<ExtArgs>[]
       reviewsModerated: Prisma.$ReviewPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -7295,6 +7390,7 @@ export namespace Prisma {
     securityEvents<T extends User$securityEventsArgs<ExtArgs> = {}>(args?: Subset<T, User$securityEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SecurityEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     auditLogs<T extends User$auditLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     contentRevisions<T extends User$contentRevisionsArgs<ExtArgs> = {}>(args?: Subset<T, User$contentRevisionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    blogPosts<T extends User$blogPostsArgs<ExtArgs> = {}>(args?: Subset<T, User$blogPostsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reviewsModerated<T extends User$reviewsModeratedArgs<ExtArgs> = {}>(args?: Subset<T, User$reviewsModeratedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -7888,6 +7984,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ContentRevisionScalarFieldEnum | ContentRevisionScalarFieldEnum[]
+  }
+
+  /**
+   * User.blogPosts
+   */
+  export type User$blogPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlogPost
+     */
+    select?: BlogPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlogPost
+     */
+    omit?: BlogPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlogPostInclude<ExtArgs> | null
+    where?: BlogPostWhereInput
+    orderBy?: BlogPostOrderByWithRelationInput | BlogPostOrderByWithRelationInput[]
+    cursor?: BlogPostWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BlogPostScalarFieldEnum | BlogPostScalarFieldEnum[]
   }
 
   /**
@@ -53915,6 +54035,1080 @@ export namespace Prisma {
 
 
   /**
+   * Model BlogPost
+   */
+
+  export type AggregateBlogPost = {
+    _count: BlogPostCountAggregateOutputType | null
+    _min: BlogPostMinAggregateOutputType | null
+    _max: BlogPostMaxAggregateOutputType | null
+  }
+
+  export type BlogPostMinAggregateOutputType = {
+    id: string | null
+    publicId: string | null
+    authorId: string | null
+    title: string | null
+    slug: string | null
+    excerpt: string | null
+    body: string | null
+    coverImageUrl: string | null
+    coverImageAlt: string | null
+    seoTitle: string | null
+    seoDescription: string | null
+    status: $Enums.PublishStatus | null
+    publishedAt: Date | null
+    archivedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BlogPostMaxAggregateOutputType = {
+    id: string | null
+    publicId: string | null
+    authorId: string | null
+    title: string | null
+    slug: string | null
+    excerpt: string | null
+    body: string | null
+    coverImageUrl: string | null
+    coverImageAlt: string | null
+    seoTitle: string | null
+    seoDescription: string | null
+    status: $Enums.PublishStatus | null
+    publishedAt: Date | null
+    archivedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BlogPostCountAggregateOutputType = {
+    id: number
+    publicId: number
+    authorId: number
+    title: number
+    slug: number
+    excerpt: number
+    body: number
+    coverImageUrl: number
+    coverImageAlt: number
+    seoTitle: number
+    seoDescription: number
+    status: number
+    publishedAt: number
+    archivedAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type BlogPostMinAggregateInputType = {
+    id?: true
+    publicId?: true
+    authorId?: true
+    title?: true
+    slug?: true
+    excerpt?: true
+    body?: true
+    coverImageUrl?: true
+    coverImageAlt?: true
+    seoTitle?: true
+    seoDescription?: true
+    status?: true
+    publishedAt?: true
+    archivedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BlogPostMaxAggregateInputType = {
+    id?: true
+    publicId?: true
+    authorId?: true
+    title?: true
+    slug?: true
+    excerpt?: true
+    body?: true
+    coverImageUrl?: true
+    coverImageAlt?: true
+    seoTitle?: true
+    seoDescription?: true
+    status?: true
+    publishedAt?: true
+    archivedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BlogPostCountAggregateInputType = {
+    id?: true
+    publicId?: true
+    authorId?: true
+    title?: true
+    slug?: true
+    excerpt?: true
+    body?: true
+    coverImageUrl?: true
+    coverImageAlt?: true
+    seoTitle?: true
+    seoDescription?: true
+    status?: true
+    publishedAt?: true
+    archivedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type BlogPostAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BlogPost to aggregate.
+     */
+    where?: BlogPostWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BlogPosts to fetch.
+     */
+    orderBy?: BlogPostOrderByWithRelationInput | BlogPostOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BlogPostWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BlogPosts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BlogPosts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BlogPosts
+    **/
+    _count?: true | BlogPostCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BlogPostMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BlogPostMaxAggregateInputType
+  }
+
+  export type GetBlogPostAggregateType<T extends BlogPostAggregateArgs> = {
+        [P in keyof T & keyof AggregateBlogPost]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBlogPost[P]>
+      : GetScalarType<T[P], AggregateBlogPost[P]>
+  }
+
+
+
+
+  export type BlogPostGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BlogPostWhereInput
+    orderBy?: BlogPostOrderByWithAggregationInput | BlogPostOrderByWithAggregationInput[]
+    by: BlogPostScalarFieldEnum[] | BlogPostScalarFieldEnum
+    having?: BlogPostScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BlogPostCountAggregateInputType | true
+    _min?: BlogPostMinAggregateInputType
+    _max?: BlogPostMaxAggregateInputType
+  }
+
+  export type BlogPostGroupByOutputType = {
+    id: string
+    publicId: string
+    authorId: string | null
+    title: string
+    slug: string
+    excerpt: string
+    body: string
+    coverImageUrl: string | null
+    coverImageAlt: string | null
+    seoTitle: string | null
+    seoDescription: string | null
+    status: $Enums.PublishStatus
+    publishedAt: Date | null
+    archivedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: BlogPostCountAggregateOutputType | null
+    _min: BlogPostMinAggregateOutputType | null
+    _max: BlogPostMaxAggregateOutputType | null
+  }
+
+  type GetBlogPostGroupByPayload<T extends BlogPostGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BlogPostGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BlogPostGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BlogPostGroupByOutputType[P]>
+            : GetScalarType<T[P], BlogPostGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BlogPostSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    publicId?: boolean
+    authorId?: boolean
+    title?: boolean
+    slug?: boolean
+    excerpt?: boolean
+    body?: boolean
+    coverImageUrl?: boolean
+    coverImageAlt?: boolean
+    seoTitle?: boolean
+    seoDescription?: boolean
+    status?: boolean
+    publishedAt?: boolean
+    archivedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    author?: boolean | BlogPost$authorArgs<ExtArgs>
+  }, ExtArgs["result"]["blogPost"]>
+
+
+
+  export type BlogPostSelectScalar = {
+    id?: boolean
+    publicId?: boolean
+    authorId?: boolean
+    title?: boolean
+    slug?: boolean
+    excerpt?: boolean
+    body?: boolean
+    coverImageUrl?: boolean
+    coverImageAlt?: boolean
+    seoTitle?: boolean
+    seoDescription?: boolean
+    status?: boolean
+    publishedAt?: boolean
+    archivedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type BlogPostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "publicId" | "authorId" | "title" | "slug" | "excerpt" | "body" | "coverImageUrl" | "coverImageAlt" | "seoTitle" | "seoDescription" | "status" | "publishedAt" | "archivedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["blogPost"]>
+  export type BlogPostInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    author?: boolean | BlogPost$authorArgs<ExtArgs>
+  }
+
+  export type $BlogPostPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BlogPost"
+    objects: {
+      author: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      publicId: string
+      authorId: string | null
+      title: string
+      slug: string
+      excerpt: string
+      body: string
+      coverImageUrl: string | null
+      coverImageAlt: string | null
+      seoTitle: string | null
+      seoDescription: string | null
+      status: $Enums.PublishStatus
+      publishedAt: Date | null
+      archivedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["blogPost"]>
+    composites: {}
+  }
+
+  type BlogPostGetPayload<S extends boolean | null | undefined | BlogPostDefaultArgs> = $Result.GetResult<Prisma.$BlogPostPayload, S>
+
+  type BlogPostCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BlogPostFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BlogPostCountAggregateInputType | true
+    }
+
+  export interface BlogPostDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BlogPost'], meta: { name: 'BlogPost' } }
+    /**
+     * Find zero or one BlogPost that matches the filter.
+     * @param {BlogPostFindUniqueArgs} args - Arguments to find a BlogPost
+     * @example
+     * // Get one BlogPost
+     * const blogPost = await prisma.blogPost.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BlogPostFindUniqueArgs>(args: SelectSubset<T, BlogPostFindUniqueArgs<ExtArgs>>): Prisma__BlogPostClient<$Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one BlogPost that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BlogPostFindUniqueOrThrowArgs} args - Arguments to find a BlogPost
+     * @example
+     * // Get one BlogPost
+     * const blogPost = await prisma.blogPost.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BlogPostFindUniqueOrThrowArgs>(args: SelectSubset<T, BlogPostFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BlogPostClient<$Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BlogPost that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BlogPostFindFirstArgs} args - Arguments to find a BlogPost
+     * @example
+     * // Get one BlogPost
+     * const blogPost = await prisma.blogPost.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BlogPostFindFirstArgs>(args?: SelectSubset<T, BlogPostFindFirstArgs<ExtArgs>>): Prisma__BlogPostClient<$Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BlogPost that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BlogPostFindFirstOrThrowArgs} args - Arguments to find a BlogPost
+     * @example
+     * // Get one BlogPost
+     * const blogPost = await prisma.blogPost.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BlogPostFindFirstOrThrowArgs>(args?: SelectSubset<T, BlogPostFindFirstOrThrowArgs<ExtArgs>>): Prisma__BlogPostClient<$Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more BlogPosts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BlogPostFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BlogPosts
+     * const blogPosts = await prisma.blogPost.findMany()
+     * 
+     * // Get first 10 BlogPosts
+     * const blogPosts = await prisma.blogPost.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const blogPostWithIdOnly = await prisma.blogPost.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BlogPostFindManyArgs>(args?: SelectSubset<T, BlogPostFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a BlogPost.
+     * @param {BlogPostCreateArgs} args - Arguments to create a BlogPost.
+     * @example
+     * // Create one BlogPost
+     * const BlogPost = await prisma.blogPost.create({
+     *   data: {
+     *     // ... data to create a BlogPost
+     *   }
+     * })
+     * 
+     */
+    create<T extends BlogPostCreateArgs>(args: SelectSubset<T, BlogPostCreateArgs<ExtArgs>>): Prisma__BlogPostClient<$Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many BlogPosts.
+     * @param {BlogPostCreateManyArgs} args - Arguments to create many BlogPosts.
+     * @example
+     * // Create many BlogPosts
+     * const blogPost = await prisma.blogPost.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BlogPostCreateManyArgs>(args?: SelectSubset<T, BlogPostCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a BlogPost.
+     * @param {BlogPostDeleteArgs} args - Arguments to delete one BlogPost.
+     * @example
+     * // Delete one BlogPost
+     * const BlogPost = await prisma.blogPost.delete({
+     *   where: {
+     *     // ... filter to delete one BlogPost
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BlogPostDeleteArgs>(args: SelectSubset<T, BlogPostDeleteArgs<ExtArgs>>): Prisma__BlogPostClient<$Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one BlogPost.
+     * @param {BlogPostUpdateArgs} args - Arguments to update one BlogPost.
+     * @example
+     * // Update one BlogPost
+     * const blogPost = await prisma.blogPost.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BlogPostUpdateArgs>(args: SelectSubset<T, BlogPostUpdateArgs<ExtArgs>>): Prisma__BlogPostClient<$Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more BlogPosts.
+     * @param {BlogPostDeleteManyArgs} args - Arguments to filter BlogPosts to delete.
+     * @example
+     * // Delete a few BlogPosts
+     * const { count } = await prisma.blogPost.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BlogPostDeleteManyArgs>(args?: SelectSubset<T, BlogPostDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BlogPosts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BlogPostUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BlogPosts
+     * const blogPost = await prisma.blogPost.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BlogPostUpdateManyArgs>(args: SelectSubset<T, BlogPostUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one BlogPost.
+     * @param {BlogPostUpsertArgs} args - Arguments to update or create a BlogPost.
+     * @example
+     * // Update or create a BlogPost
+     * const blogPost = await prisma.blogPost.upsert({
+     *   create: {
+     *     // ... data to create a BlogPost
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BlogPost we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BlogPostUpsertArgs>(args: SelectSubset<T, BlogPostUpsertArgs<ExtArgs>>): Prisma__BlogPostClient<$Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of BlogPosts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BlogPostCountArgs} args - Arguments to filter BlogPosts to count.
+     * @example
+     * // Count the number of BlogPosts
+     * const count = await prisma.blogPost.count({
+     *   where: {
+     *     // ... the filter for the BlogPosts we want to count
+     *   }
+     * })
+    **/
+    count<T extends BlogPostCountArgs>(
+      args?: Subset<T, BlogPostCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BlogPostCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BlogPost.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BlogPostAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BlogPostAggregateArgs>(args: Subset<T, BlogPostAggregateArgs>): Prisma.PrismaPromise<GetBlogPostAggregateType<T>>
+
+    /**
+     * Group by BlogPost.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BlogPostGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BlogPostGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BlogPostGroupByArgs['orderBy'] }
+        : { orderBy?: BlogPostGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BlogPostGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBlogPostGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BlogPost model
+   */
+  readonly fields: BlogPostFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BlogPost.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BlogPostClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    author<T extends BlogPost$authorArgs<ExtArgs> = {}>(args?: Subset<T, BlogPost$authorArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BlogPost model
+   */
+  interface BlogPostFieldRefs {
+    readonly id: FieldRef<"BlogPost", 'String'>
+    readonly publicId: FieldRef<"BlogPost", 'String'>
+    readonly authorId: FieldRef<"BlogPost", 'String'>
+    readonly title: FieldRef<"BlogPost", 'String'>
+    readonly slug: FieldRef<"BlogPost", 'String'>
+    readonly excerpt: FieldRef<"BlogPost", 'String'>
+    readonly body: FieldRef<"BlogPost", 'String'>
+    readonly coverImageUrl: FieldRef<"BlogPost", 'String'>
+    readonly coverImageAlt: FieldRef<"BlogPost", 'String'>
+    readonly seoTitle: FieldRef<"BlogPost", 'String'>
+    readonly seoDescription: FieldRef<"BlogPost", 'String'>
+    readonly status: FieldRef<"BlogPost", 'PublishStatus'>
+    readonly publishedAt: FieldRef<"BlogPost", 'DateTime'>
+    readonly archivedAt: FieldRef<"BlogPost", 'DateTime'>
+    readonly createdAt: FieldRef<"BlogPost", 'DateTime'>
+    readonly updatedAt: FieldRef<"BlogPost", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BlogPost findUnique
+   */
+  export type BlogPostFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlogPost
+     */
+    select?: BlogPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlogPost
+     */
+    omit?: BlogPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlogPostInclude<ExtArgs> | null
+    /**
+     * Filter, which BlogPost to fetch.
+     */
+    where: BlogPostWhereUniqueInput
+  }
+
+  /**
+   * BlogPost findUniqueOrThrow
+   */
+  export type BlogPostFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlogPost
+     */
+    select?: BlogPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlogPost
+     */
+    omit?: BlogPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlogPostInclude<ExtArgs> | null
+    /**
+     * Filter, which BlogPost to fetch.
+     */
+    where: BlogPostWhereUniqueInput
+  }
+
+  /**
+   * BlogPost findFirst
+   */
+  export type BlogPostFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlogPost
+     */
+    select?: BlogPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlogPost
+     */
+    omit?: BlogPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlogPostInclude<ExtArgs> | null
+    /**
+     * Filter, which BlogPost to fetch.
+     */
+    where?: BlogPostWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BlogPosts to fetch.
+     */
+    orderBy?: BlogPostOrderByWithRelationInput | BlogPostOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BlogPosts.
+     */
+    cursor?: BlogPostWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BlogPosts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BlogPosts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BlogPosts.
+     */
+    distinct?: BlogPostScalarFieldEnum | BlogPostScalarFieldEnum[]
+  }
+
+  /**
+   * BlogPost findFirstOrThrow
+   */
+  export type BlogPostFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlogPost
+     */
+    select?: BlogPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlogPost
+     */
+    omit?: BlogPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlogPostInclude<ExtArgs> | null
+    /**
+     * Filter, which BlogPost to fetch.
+     */
+    where?: BlogPostWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BlogPosts to fetch.
+     */
+    orderBy?: BlogPostOrderByWithRelationInput | BlogPostOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BlogPosts.
+     */
+    cursor?: BlogPostWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BlogPosts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BlogPosts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BlogPosts.
+     */
+    distinct?: BlogPostScalarFieldEnum | BlogPostScalarFieldEnum[]
+  }
+
+  /**
+   * BlogPost findMany
+   */
+  export type BlogPostFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlogPost
+     */
+    select?: BlogPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlogPost
+     */
+    omit?: BlogPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlogPostInclude<ExtArgs> | null
+    /**
+     * Filter, which BlogPosts to fetch.
+     */
+    where?: BlogPostWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BlogPosts to fetch.
+     */
+    orderBy?: BlogPostOrderByWithRelationInput | BlogPostOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BlogPosts.
+     */
+    cursor?: BlogPostWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BlogPosts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BlogPosts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BlogPosts.
+     */
+    distinct?: BlogPostScalarFieldEnum | BlogPostScalarFieldEnum[]
+  }
+
+  /**
+   * BlogPost create
+   */
+  export type BlogPostCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlogPost
+     */
+    select?: BlogPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlogPost
+     */
+    omit?: BlogPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlogPostInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BlogPost.
+     */
+    data: XOR<BlogPostCreateInput, BlogPostUncheckedCreateInput>
+  }
+
+  /**
+   * BlogPost createMany
+   */
+  export type BlogPostCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BlogPosts.
+     */
+    data: BlogPostCreateManyInput | BlogPostCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BlogPost update
+   */
+  export type BlogPostUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlogPost
+     */
+    select?: BlogPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlogPost
+     */
+    omit?: BlogPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlogPostInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BlogPost.
+     */
+    data: XOR<BlogPostUpdateInput, BlogPostUncheckedUpdateInput>
+    /**
+     * Choose, which BlogPost to update.
+     */
+    where: BlogPostWhereUniqueInput
+  }
+
+  /**
+   * BlogPost updateMany
+   */
+  export type BlogPostUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BlogPosts.
+     */
+    data: XOR<BlogPostUpdateManyMutationInput, BlogPostUncheckedUpdateManyInput>
+    /**
+     * Filter which BlogPosts to update
+     */
+    where?: BlogPostWhereInput
+    /**
+     * Limit how many BlogPosts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BlogPost upsert
+   */
+  export type BlogPostUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlogPost
+     */
+    select?: BlogPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlogPost
+     */
+    omit?: BlogPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlogPostInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BlogPost to update in case it exists.
+     */
+    where: BlogPostWhereUniqueInput
+    /**
+     * In case the BlogPost found by the `where` argument doesn't exist, create a new BlogPost with this data.
+     */
+    create: XOR<BlogPostCreateInput, BlogPostUncheckedCreateInput>
+    /**
+     * In case the BlogPost was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BlogPostUpdateInput, BlogPostUncheckedUpdateInput>
+  }
+
+  /**
+   * BlogPost delete
+   */
+  export type BlogPostDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlogPost
+     */
+    select?: BlogPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlogPost
+     */
+    omit?: BlogPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlogPostInclude<ExtArgs> | null
+    /**
+     * Filter which BlogPost to delete.
+     */
+    where: BlogPostWhereUniqueInput
+  }
+
+  /**
+   * BlogPost deleteMany
+   */
+  export type BlogPostDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BlogPosts to delete
+     */
+    where?: BlogPostWhereInput
+    /**
+     * Limit how many BlogPosts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * BlogPost.author
+   */
+  export type BlogPost$authorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * BlogPost without action
+   */
+  export type BlogPostDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlogPost
+     */
+    select?: BlogPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlogPost
+     */
+    omit?: BlogPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlogPostInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model ContactSubmission
    */
 
@@ -64274,6 +65468,28 @@ export namespace Prisma {
   export type ContentRevisionScalarFieldEnum = (typeof ContentRevisionScalarFieldEnum)[keyof typeof ContentRevisionScalarFieldEnum]
 
 
+  export const BlogPostScalarFieldEnum: {
+    id: 'id',
+    publicId: 'publicId',
+    authorId: 'authorId',
+    title: 'title',
+    slug: 'slug',
+    excerpt: 'excerpt',
+    body: 'body',
+    coverImageUrl: 'coverImageUrl',
+    coverImageAlt: 'coverImageAlt',
+    seoTitle: 'seoTitle',
+    seoDescription: 'seoDescription',
+    status: 'status',
+    publishedAt: 'publishedAt',
+    archivedAt: 'archivedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type BlogPostScalarFieldEnum = (typeof BlogPostScalarFieldEnum)[keyof typeof BlogPostScalarFieldEnum]
+
+
   export const ContactSubmissionScalarFieldEnum: {
     id: 'id',
     customerProfileId: 'customerProfileId',
@@ -64939,6 +66155,23 @@ export namespace Prisma {
   export type ContentRevisionOrderByRelevanceFieldEnum = (typeof ContentRevisionOrderByRelevanceFieldEnum)[keyof typeof ContentRevisionOrderByRelevanceFieldEnum]
 
 
+  export const BlogPostOrderByRelevanceFieldEnum: {
+    id: 'id',
+    publicId: 'publicId',
+    authorId: 'authorId',
+    title: 'title',
+    slug: 'slug',
+    excerpt: 'excerpt',
+    body: 'body',
+    coverImageUrl: 'coverImageUrl',
+    coverImageAlt: 'coverImageAlt',
+    seoTitle: 'seoTitle',
+    seoDescription: 'seoDescription'
+  };
+
+  export type BlogPostOrderByRelevanceFieldEnum = (typeof BlogPostOrderByRelevanceFieldEnum)[keyof typeof BlogPostOrderByRelevanceFieldEnum]
+
+
   export const ContactSubmissionOrderByRelevanceFieldEnum: {
     id: 'id',
     customerProfileId: 'customerProfileId',
@@ -65210,6 +66443,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventListRelationFilter
     auditLogs?: AuditLogListRelationFilter
     contentRevisions?: ContentRevisionListRelationFilter
+    blogPosts?: BlogPostListRelationFilter
     reviewsModerated?: ReviewListRelationFilter
   }
 
@@ -65235,6 +66469,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventOrderByRelationAggregateInput
     auditLogs?: AuditLogOrderByRelationAggregateInput
     contentRevisions?: ContentRevisionOrderByRelationAggregateInput
+    blogPosts?: BlogPostOrderByRelationAggregateInput
     reviewsModerated?: ReviewOrderByRelationAggregateInput
     _relevance?: UserOrderByRelevanceInput
   }
@@ -65264,6 +66499,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventListRelationFilter
     auditLogs?: AuditLogListRelationFilter
     contentRevisions?: ContentRevisionListRelationFilter
+    blogPosts?: BlogPostListRelationFilter
     reviewsModerated?: ReviewListRelationFilter
   }, "id" | "publicId" | "email" | "phone">
 
@@ -68784,6 +70020,117 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"ContentRevision"> | Date | string
   }
 
+  export type BlogPostWhereInput = {
+    AND?: BlogPostWhereInput | BlogPostWhereInput[]
+    OR?: BlogPostWhereInput[]
+    NOT?: BlogPostWhereInput | BlogPostWhereInput[]
+    id?: StringFilter<"BlogPost"> | string
+    publicId?: StringFilter<"BlogPost"> | string
+    authorId?: StringNullableFilter<"BlogPost"> | string | null
+    title?: StringFilter<"BlogPost"> | string
+    slug?: StringFilter<"BlogPost"> | string
+    excerpt?: StringFilter<"BlogPost"> | string
+    body?: StringFilter<"BlogPost"> | string
+    coverImageUrl?: StringNullableFilter<"BlogPost"> | string | null
+    coverImageAlt?: StringNullableFilter<"BlogPost"> | string | null
+    seoTitle?: StringNullableFilter<"BlogPost"> | string | null
+    seoDescription?: StringNullableFilter<"BlogPost"> | string | null
+    status?: EnumPublishStatusFilter<"BlogPost"> | $Enums.PublishStatus
+    publishedAt?: DateTimeNullableFilter<"BlogPost"> | Date | string | null
+    archivedAt?: DateTimeNullableFilter<"BlogPost"> | Date | string | null
+    createdAt?: DateTimeFilter<"BlogPost"> | Date | string
+    updatedAt?: DateTimeFilter<"BlogPost"> | Date | string
+    author?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type BlogPostOrderByWithRelationInput = {
+    id?: SortOrder
+    publicId?: SortOrder
+    authorId?: SortOrderInput | SortOrder
+    title?: SortOrder
+    slug?: SortOrder
+    excerpt?: SortOrder
+    body?: SortOrder
+    coverImageUrl?: SortOrderInput | SortOrder
+    coverImageAlt?: SortOrderInput | SortOrder
+    seoTitle?: SortOrderInput | SortOrder
+    seoDescription?: SortOrderInput | SortOrder
+    status?: SortOrder
+    publishedAt?: SortOrderInput | SortOrder
+    archivedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    author?: UserOrderByWithRelationInput
+    _relevance?: BlogPostOrderByRelevanceInput
+  }
+
+  export type BlogPostWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    publicId?: string
+    slug?: string
+    AND?: BlogPostWhereInput | BlogPostWhereInput[]
+    OR?: BlogPostWhereInput[]
+    NOT?: BlogPostWhereInput | BlogPostWhereInput[]
+    authorId?: StringNullableFilter<"BlogPost"> | string | null
+    title?: StringFilter<"BlogPost"> | string
+    excerpt?: StringFilter<"BlogPost"> | string
+    body?: StringFilter<"BlogPost"> | string
+    coverImageUrl?: StringNullableFilter<"BlogPost"> | string | null
+    coverImageAlt?: StringNullableFilter<"BlogPost"> | string | null
+    seoTitle?: StringNullableFilter<"BlogPost"> | string | null
+    seoDescription?: StringNullableFilter<"BlogPost"> | string | null
+    status?: EnumPublishStatusFilter<"BlogPost"> | $Enums.PublishStatus
+    publishedAt?: DateTimeNullableFilter<"BlogPost"> | Date | string | null
+    archivedAt?: DateTimeNullableFilter<"BlogPost"> | Date | string | null
+    createdAt?: DateTimeFilter<"BlogPost"> | Date | string
+    updatedAt?: DateTimeFilter<"BlogPost"> | Date | string
+    author?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id" | "publicId" | "slug">
+
+  export type BlogPostOrderByWithAggregationInput = {
+    id?: SortOrder
+    publicId?: SortOrder
+    authorId?: SortOrderInput | SortOrder
+    title?: SortOrder
+    slug?: SortOrder
+    excerpt?: SortOrder
+    body?: SortOrder
+    coverImageUrl?: SortOrderInput | SortOrder
+    coverImageAlt?: SortOrderInput | SortOrder
+    seoTitle?: SortOrderInput | SortOrder
+    seoDescription?: SortOrderInput | SortOrder
+    status?: SortOrder
+    publishedAt?: SortOrderInput | SortOrder
+    archivedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: BlogPostCountOrderByAggregateInput
+    _max?: BlogPostMaxOrderByAggregateInput
+    _min?: BlogPostMinOrderByAggregateInput
+  }
+
+  export type BlogPostScalarWhereWithAggregatesInput = {
+    AND?: BlogPostScalarWhereWithAggregatesInput | BlogPostScalarWhereWithAggregatesInput[]
+    OR?: BlogPostScalarWhereWithAggregatesInput[]
+    NOT?: BlogPostScalarWhereWithAggregatesInput | BlogPostScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"BlogPost"> | string
+    publicId?: StringWithAggregatesFilter<"BlogPost"> | string
+    authorId?: StringNullableWithAggregatesFilter<"BlogPost"> | string | null
+    title?: StringWithAggregatesFilter<"BlogPost"> | string
+    slug?: StringWithAggregatesFilter<"BlogPost"> | string
+    excerpt?: StringWithAggregatesFilter<"BlogPost"> | string
+    body?: StringWithAggregatesFilter<"BlogPost"> | string
+    coverImageUrl?: StringNullableWithAggregatesFilter<"BlogPost"> | string | null
+    coverImageAlt?: StringNullableWithAggregatesFilter<"BlogPost"> | string | null
+    seoTitle?: StringNullableWithAggregatesFilter<"BlogPost"> | string | null
+    seoDescription?: StringNullableWithAggregatesFilter<"BlogPost"> | string | null
+    status?: EnumPublishStatusWithAggregatesFilter<"BlogPost"> | $Enums.PublishStatus
+    publishedAt?: DateTimeNullableWithAggregatesFilter<"BlogPost"> | Date | string | null
+    archivedAt?: DateTimeNullableWithAggregatesFilter<"BlogPost"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"BlogPost"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"BlogPost"> | Date | string
+  }
+
   export type ContactSubmissionWhereInput = {
     AND?: ContactSubmissionWhereInput | ContactSubmissionWhereInput[]
     OR?: ContactSubmissionWhereInput[]
@@ -69482,6 +70829,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventCreateNestedManyWithoutActorInput
     auditLogs?: AuditLogCreateNestedManyWithoutActorInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutAuthorInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
     reviewsModerated?: ReviewCreateNestedManyWithoutModeratedByInput
   }
 
@@ -69507,6 +70855,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventUncheckedCreateNestedManyWithoutActorInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutAuthorInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
     reviewsModerated?: ReviewUncheckedCreateNestedManyWithoutModeratedByInput
   }
 
@@ -69532,6 +70881,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventUpdateManyWithoutActorNestedInput
     auditLogs?: AuditLogUpdateManyWithoutActorNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutAuthorNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
     reviewsModerated?: ReviewUpdateManyWithoutModeratedByNestedInput
   }
 
@@ -69557,6 +70907,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventUncheckedUpdateManyWithoutActorNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutAuthorNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
     reviewsModerated?: ReviewUncheckedUpdateManyWithoutModeratedByNestedInput
   }
 
@@ -73271,6 +74622,138 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type BlogPostCreateInput = {
+    id?: string
+    publicId?: string
+    title: string
+    slug: string
+    excerpt: string
+    body: string
+    coverImageUrl?: string | null
+    coverImageAlt?: string | null
+    seoTitle?: string | null
+    seoDescription?: string | null
+    status?: $Enums.PublishStatus
+    publishedAt?: Date | string | null
+    archivedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    author?: UserCreateNestedOneWithoutBlogPostsInput
+  }
+
+  export type BlogPostUncheckedCreateInput = {
+    id?: string
+    publicId?: string
+    authorId?: string | null
+    title: string
+    slug: string
+    excerpt: string
+    body: string
+    coverImageUrl?: string | null
+    coverImageAlt?: string | null
+    seoTitle?: string | null
+    seoDescription?: string | null
+    status?: $Enums.PublishStatus
+    publishedAt?: Date | string | null
+    archivedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BlogPostUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    publicId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    excerpt?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    coverImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImageAlt?: NullableStringFieldUpdateOperationsInput | string | null
+    seoTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    seoDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    author?: UserUpdateOneWithoutBlogPostsNestedInput
+  }
+
+  export type BlogPostUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    publicId?: StringFieldUpdateOperationsInput | string
+    authorId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    excerpt?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    coverImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImageAlt?: NullableStringFieldUpdateOperationsInput | string | null
+    seoTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    seoDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BlogPostCreateManyInput = {
+    id?: string
+    publicId?: string
+    authorId?: string | null
+    title: string
+    slug: string
+    excerpt: string
+    body: string
+    coverImageUrl?: string | null
+    coverImageAlt?: string | null
+    seoTitle?: string | null
+    seoDescription?: string | null
+    status?: $Enums.PublishStatus
+    publishedAt?: Date | string | null
+    archivedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BlogPostUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    publicId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    excerpt?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    coverImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImageAlt?: NullableStringFieldUpdateOperationsInput | string | null
+    seoTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    seoDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BlogPostUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    publicId?: StringFieldUpdateOperationsInput | string
+    authorId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    excerpt?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    coverImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImageAlt?: NullableStringFieldUpdateOperationsInput | string | null
+    seoTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    seoDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ContactSubmissionCreateInput = {
     id?: string
     name: string
@@ -74117,6 +75600,12 @@ export namespace Prisma {
     none?: ContentRevisionWhereInput
   }
 
+  export type BlogPostListRelationFilter = {
+    every?: BlogPostWhereInput
+    some?: BlogPostWhereInput
+    none?: BlogPostWhereInput
+  }
+
   export type ReviewListRelationFilter = {
     every?: ReviewWhereInput
     some?: ReviewWhereInput
@@ -74153,6 +75642,10 @@ export namespace Prisma {
   }
 
   export type ContentRevisionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BlogPostOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -76995,6 +78488,69 @@ export namespace Prisma {
     revisionNo?: SortOrder
   }
 
+  export type BlogPostOrderByRelevanceInput = {
+    fields: BlogPostOrderByRelevanceFieldEnum | BlogPostOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type BlogPostCountOrderByAggregateInput = {
+    id?: SortOrder
+    publicId?: SortOrder
+    authorId?: SortOrder
+    title?: SortOrder
+    slug?: SortOrder
+    excerpt?: SortOrder
+    body?: SortOrder
+    coverImageUrl?: SortOrder
+    coverImageAlt?: SortOrder
+    seoTitle?: SortOrder
+    seoDescription?: SortOrder
+    status?: SortOrder
+    publishedAt?: SortOrder
+    archivedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BlogPostMaxOrderByAggregateInput = {
+    id?: SortOrder
+    publicId?: SortOrder
+    authorId?: SortOrder
+    title?: SortOrder
+    slug?: SortOrder
+    excerpt?: SortOrder
+    body?: SortOrder
+    coverImageUrl?: SortOrder
+    coverImageAlt?: SortOrder
+    seoTitle?: SortOrder
+    seoDescription?: SortOrder
+    status?: SortOrder
+    publishedAt?: SortOrder
+    archivedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BlogPostMinOrderByAggregateInput = {
+    id?: SortOrder
+    publicId?: SortOrder
+    authorId?: SortOrder
+    title?: SortOrder
+    slug?: SortOrder
+    excerpt?: SortOrder
+    body?: SortOrder
+    coverImageUrl?: SortOrder
+    coverImageAlt?: SortOrder
+    seoTitle?: SortOrder
+    seoDescription?: SortOrder
+    status?: SortOrder
+    publishedAt?: SortOrder
+    archivedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type EnumContactStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ContactStatus | EnumContactStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ContactStatus[]
@@ -77577,6 +79133,13 @@ export namespace Prisma {
     connect?: ContentRevisionWhereUniqueInput | ContentRevisionWhereUniqueInput[]
   }
 
+  export type BlogPostCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<BlogPostCreateWithoutAuthorInput, BlogPostUncheckedCreateWithoutAuthorInput> | BlogPostCreateWithoutAuthorInput[] | BlogPostUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: BlogPostCreateOrConnectWithoutAuthorInput | BlogPostCreateOrConnectWithoutAuthorInput[]
+    createMany?: BlogPostCreateManyAuthorInputEnvelope
+    connect?: BlogPostWhereUniqueInput | BlogPostWhereUniqueInput[]
+  }
+
   export type ReviewCreateNestedManyWithoutModeratedByInput = {
     create?: XOR<ReviewCreateWithoutModeratedByInput, ReviewUncheckedCreateWithoutModeratedByInput> | ReviewCreateWithoutModeratedByInput[] | ReviewUncheckedCreateWithoutModeratedByInput[]
     connectOrCreate?: ReviewCreateOrConnectWithoutModeratedByInput | ReviewCreateOrConnectWithoutModeratedByInput[]
@@ -77643,6 +79206,13 @@ export namespace Prisma {
     connectOrCreate?: ContentRevisionCreateOrConnectWithoutAuthorInput | ContentRevisionCreateOrConnectWithoutAuthorInput[]
     createMany?: ContentRevisionCreateManyAuthorInputEnvelope
     connect?: ContentRevisionWhereUniqueInput | ContentRevisionWhereUniqueInput[]
+  }
+
+  export type BlogPostUncheckedCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<BlogPostCreateWithoutAuthorInput, BlogPostUncheckedCreateWithoutAuthorInput> | BlogPostCreateWithoutAuthorInput[] | BlogPostUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: BlogPostCreateOrConnectWithoutAuthorInput | BlogPostCreateOrConnectWithoutAuthorInput[]
+    createMany?: BlogPostCreateManyAuthorInputEnvelope
+    connect?: BlogPostWhereUniqueInput | BlogPostWhereUniqueInput[]
   }
 
   export type ReviewUncheckedCreateNestedManyWithoutModeratedByInput = {
@@ -77794,6 +79364,20 @@ export namespace Prisma {
     deleteMany?: ContentRevisionScalarWhereInput | ContentRevisionScalarWhereInput[]
   }
 
+  export type BlogPostUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<BlogPostCreateWithoutAuthorInput, BlogPostUncheckedCreateWithoutAuthorInput> | BlogPostCreateWithoutAuthorInput[] | BlogPostUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: BlogPostCreateOrConnectWithoutAuthorInput | BlogPostCreateOrConnectWithoutAuthorInput[]
+    upsert?: BlogPostUpsertWithWhereUniqueWithoutAuthorInput | BlogPostUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: BlogPostCreateManyAuthorInputEnvelope
+    set?: BlogPostWhereUniqueInput | BlogPostWhereUniqueInput[]
+    disconnect?: BlogPostWhereUniqueInput | BlogPostWhereUniqueInput[]
+    delete?: BlogPostWhereUniqueInput | BlogPostWhereUniqueInput[]
+    connect?: BlogPostWhereUniqueInput | BlogPostWhereUniqueInput[]
+    update?: BlogPostUpdateWithWhereUniqueWithoutAuthorInput | BlogPostUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: BlogPostUpdateManyWithWhereWithoutAuthorInput | BlogPostUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: BlogPostScalarWhereInput | BlogPostScalarWhereInput[]
+  }
+
   export type ReviewUpdateManyWithoutModeratedByNestedInput = {
     create?: XOR<ReviewCreateWithoutModeratedByInput, ReviewUncheckedCreateWithoutModeratedByInput> | ReviewCreateWithoutModeratedByInput[] | ReviewUncheckedCreateWithoutModeratedByInput[]
     connectOrCreate?: ReviewCreateOrConnectWithoutModeratedByInput | ReviewCreateOrConnectWithoutModeratedByInput[]
@@ -77924,6 +79508,20 @@ export namespace Prisma {
     update?: ContentRevisionUpdateWithWhereUniqueWithoutAuthorInput | ContentRevisionUpdateWithWhereUniqueWithoutAuthorInput[]
     updateMany?: ContentRevisionUpdateManyWithWhereWithoutAuthorInput | ContentRevisionUpdateManyWithWhereWithoutAuthorInput[]
     deleteMany?: ContentRevisionScalarWhereInput | ContentRevisionScalarWhereInput[]
+  }
+
+  export type BlogPostUncheckedUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<BlogPostCreateWithoutAuthorInput, BlogPostUncheckedCreateWithoutAuthorInput> | BlogPostCreateWithoutAuthorInput[] | BlogPostUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: BlogPostCreateOrConnectWithoutAuthorInput | BlogPostCreateOrConnectWithoutAuthorInput[]
+    upsert?: BlogPostUpsertWithWhereUniqueWithoutAuthorInput | BlogPostUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: BlogPostCreateManyAuthorInputEnvelope
+    set?: BlogPostWhereUniqueInput | BlogPostWhereUniqueInput[]
+    disconnect?: BlogPostWhereUniqueInput | BlogPostWhereUniqueInput[]
+    delete?: BlogPostWhereUniqueInput | BlogPostWhereUniqueInput[]
+    connect?: BlogPostWhereUniqueInput | BlogPostWhereUniqueInput[]
+    update?: BlogPostUpdateWithWhereUniqueWithoutAuthorInput | BlogPostUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: BlogPostUpdateManyWithWhereWithoutAuthorInput | BlogPostUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: BlogPostScalarWhereInput | BlogPostScalarWhereInput[]
   }
 
   export type ReviewUncheckedUpdateManyWithoutModeratedByNestedInput = {
@@ -80936,6 +82534,22 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutContentRevisionsInput, UserUpdateWithoutContentRevisionsInput>, UserUncheckedUpdateWithoutContentRevisionsInput>
   }
 
+  export type UserCreateNestedOneWithoutBlogPostsInput = {
+    create?: XOR<UserCreateWithoutBlogPostsInput, UserUncheckedCreateWithoutBlogPostsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBlogPostsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneWithoutBlogPostsNestedInput = {
+    create?: XOR<UserCreateWithoutBlogPostsInput, UserUncheckedCreateWithoutBlogPostsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBlogPostsInput
+    upsert?: UserUpsertWithoutBlogPostsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBlogPostsInput, UserUpdateWithoutBlogPostsInput>, UserUncheckedUpdateWithoutBlogPostsInput>
+  }
+
   export type CustomerProfileCreateNestedOneWithoutContactLinksInput = {
     create?: XOR<CustomerProfileCreateWithoutContactLinksInput, CustomerProfileUncheckedCreateWithoutContactLinksInput>
     connectOrCreate?: CustomerProfileCreateOrConnectWithoutContactLinksInput
@@ -81995,6 +83609,52 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type BlogPostCreateWithoutAuthorInput = {
+    id?: string
+    publicId?: string
+    title: string
+    slug: string
+    excerpt: string
+    body: string
+    coverImageUrl?: string | null
+    coverImageAlt?: string | null
+    seoTitle?: string | null
+    seoDescription?: string | null
+    status?: $Enums.PublishStatus
+    publishedAt?: Date | string | null
+    archivedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BlogPostUncheckedCreateWithoutAuthorInput = {
+    id?: string
+    publicId?: string
+    title: string
+    slug: string
+    excerpt: string
+    body: string
+    coverImageUrl?: string | null
+    coverImageAlt?: string | null
+    seoTitle?: string | null
+    seoDescription?: string | null
+    status?: $Enums.PublishStatus
+    publishedAt?: Date | string | null
+    archivedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BlogPostCreateOrConnectWithoutAuthorInput = {
+    where: BlogPostWhereUniqueInput
+    create: XOR<BlogPostCreateWithoutAuthorInput, BlogPostUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type BlogPostCreateManyAuthorInputEnvelope = {
+    data: BlogPostCreateManyAuthorInput | BlogPostCreateManyAuthorInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ReviewCreateWithoutModeratedByInput = {
     id?: string
     rating: number
@@ -82331,6 +83991,44 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"ContentRevision"> | Date | string
   }
 
+  export type BlogPostUpsertWithWhereUniqueWithoutAuthorInput = {
+    where: BlogPostWhereUniqueInput
+    update: XOR<BlogPostUpdateWithoutAuthorInput, BlogPostUncheckedUpdateWithoutAuthorInput>
+    create: XOR<BlogPostCreateWithoutAuthorInput, BlogPostUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type BlogPostUpdateWithWhereUniqueWithoutAuthorInput = {
+    where: BlogPostWhereUniqueInput
+    data: XOR<BlogPostUpdateWithoutAuthorInput, BlogPostUncheckedUpdateWithoutAuthorInput>
+  }
+
+  export type BlogPostUpdateManyWithWhereWithoutAuthorInput = {
+    where: BlogPostScalarWhereInput
+    data: XOR<BlogPostUpdateManyMutationInput, BlogPostUncheckedUpdateManyWithoutAuthorInput>
+  }
+
+  export type BlogPostScalarWhereInput = {
+    AND?: BlogPostScalarWhereInput | BlogPostScalarWhereInput[]
+    OR?: BlogPostScalarWhereInput[]
+    NOT?: BlogPostScalarWhereInput | BlogPostScalarWhereInput[]
+    id?: StringFilter<"BlogPost"> | string
+    publicId?: StringFilter<"BlogPost"> | string
+    authorId?: StringNullableFilter<"BlogPost"> | string | null
+    title?: StringFilter<"BlogPost"> | string
+    slug?: StringFilter<"BlogPost"> | string
+    excerpt?: StringFilter<"BlogPost"> | string
+    body?: StringFilter<"BlogPost"> | string
+    coverImageUrl?: StringNullableFilter<"BlogPost"> | string | null
+    coverImageAlt?: StringNullableFilter<"BlogPost"> | string | null
+    seoTitle?: StringNullableFilter<"BlogPost"> | string | null
+    seoDescription?: StringNullableFilter<"BlogPost"> | string | null
+    status?: EnumPublishStatusFilter<"BlogPost"> | $Enums.PublishStatus
+    publishedAt?: DateTimeNullableFilter<"BlogPost"> | Date | string | null
+    archivedAt?: DateTimeNullableFilter<"BlogPost"> | Date | string | null
+    createdAt?: DateTimeFilter<"BlogPost"> | Date | string
+    updatedAt?: DateTimeFilter<"BlogPost"> | Date | string
+  }
+
   export type ReviewUpsertWithWhereUniqueWithoutModeratedByInput = {
     where: ReviewWhereUniqueInput
     update: XOR<ReviewUpdateWithoutModeratedByInput, ReviewUncheckedUpdateWithoutModeratedByInput>
@@ -82386,6 +84084,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventCreateNestedManyWithoutActorInput
     auditLogs?: AuditLogCreateNestedManyWithoutActorInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutAuthorInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
     reviewsModerated?: ReviewCreateNestedManyWithoutModeratedByInput
   }
 
@@ -82410,6 +84109,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventUncheckedCreateNestedManyWithoutActorInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutAuthorInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
     reviewsModerated?: ReviewUncheckedCreateNestedManyWithoutModeratedByInput
   }
 
@@ -82450,6 +84150,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventUpdateManyWithoutActorNestedInput
     auditLogs?: AuditLogUpdateManyWithoutActorNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutAuthorNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
     reviewsModerated?: ReviewUpdateManyWithoutModeratedByNestedInput
   }
 
@@ -82474,6 +84175,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventUncheckedUpdateManyWithoutActorNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutAuthorNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
     reviewsModerated?: ReviewUncheckedUpdateManyWithoutModeratedByNestedInput
   }
 
@@ -82498,6 +84200,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventCreateNestedManyWithoutActorInput
     auditLogs?: AuditLogCreateNestedManyWithoutActorInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutAuthorInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
     reviewsModerated?: ReviewCreateNestedManyWithoutModeratedByInput
   }
 
@@ -82522,6 +84225,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventUncheckedCreateNestedManyWithoutActorInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutAuthorInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
     reviewsModerated?: ReviewUncheckedCreateNestedManyWithoutModeratedByInput
   }
 
@@ -82562,6 +84266,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventUpdateManyWithoutActorNestedInput
     auditLogs?: AuditLogUpdateManyWithoutActorNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutAuthorNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
     reviewsModerated?: ReviewUpdateManyWithoutModeratedByNestedInput
   }
 
@@ -82586,6 +84291,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventUncheckedUpdateManyWithoutActorNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutAuthorNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
     reviewsModerated?: ReviewUncheckedUpdateManyWithoutModeratedByNestedInput
   }
 
@@ -82610,6 +84316,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventCreateNestedManyWithoutActorInput
     auditLogs?: AuditLogCreateNestedManyWithoutActorInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutAuthorInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
     reviewsModerated?: ReviewCreateNestedManyWithoutModeratedByInput
   }
 
@@ -82634,6 +84341,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventUncheckedCreateNestedManyWithoutActorInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutAuthorInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
     reviewsModerated?: ReviewUncheckedCreateNestedManyWithoutModeratedByInput
   }
 
@@ -82674,6 +84382,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventUpdateManyWithoutActorNestedInput
     auditLogs?: AuditLogUpdateManyWithoutActorNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutAuthorNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
     reviewsModerated?: ReviewUpdateManyWithoutModeratedByNestedInput
   }
 
@@ -82698,6 +84407,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventUncheckedUpdateManyWithoutActorNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutAuthorNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
     reviewsModerated?: ReviewUncheckedUpdateManyWithoutModeratedByNestedInput
   }
 
@@ -82839,6 +84549,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventCreateNestedManyWithoutActorInput
     auditLogs?: AuditLogCreateNestedManyWithoutActorInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutAuthorInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
     reviewsModerated?: ReviewCreateNestedManyWithoutModeratedByInput
   }
 
@@ -82863,6 +84574,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventUncheckedCreateNestedManyWithoutActorInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutAuthorInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
     reviewsModerated?: ReviewUncheckedCreateNestedManyWithoutModeratedByInput
   }
 
@@ -82930,6 +84642,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventUpdateManyWithoutActorNestedInput
     auditLogs?: AuditLogUpdateManyWithoutActorNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutAuthorNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
     reviewsModerated?: ReviewUpdateManyWithoutModeratedByNestedInput
   }
 
@@ -82954,6 +84667,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventUncheckedUpdateManyWithoutActorNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutAuthorNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
     reviewsModerated?: ReviewUncheckedUpdateManyWithoutModeratedByNestedInput
   }
 
@@ -83119,6 +84833,7 @@ export namespace Prisma {
     invitationsSent?: AdminInvitationCreateNestedManyWithoutInviterInput
     auditLogs?: AuditLogCreateNestedManyWithoutActorInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutAuthorInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
     reviewsModerated?: ReviewCreateNestedManyWithoutModeratedByInput
   }
 
@@ -83143,6 +84858,7 @@ export namespace Prisma {
     invitationsSent?: AdminInvitationUncheckedCreateNestedManyWithoutInviterInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutAuthorInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
     reviewsModerated?: ReviewUncheckedCreateNestedManyWithoutModeratedByInput
   }
 
@@ -83183,6 +84899,7 @@ export namespace Prisma {
     invitationsSent?: AdminInvitationUpdateManyWithoutInviterNestedInput
     auditLogs?: AuditLogUpdateManyWithoutActorNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutAuthorNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
     reviewsModerated?: ReviewUpdateManyWithoutModeratedByNestedInput
   }
 
@@ -83207,6 +84924,7 @@ export namespace Prisma {
     invitationsSent?: AdminInvitationUncheckedUpdateManyWithoutInviterNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutAuthorNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
     reviewsModerated?: ReviewUncheckedUpdateManyWithoutModeratedByNestedInput
   }
 
@@ -83231,6 +84949,7 @@ export namespace Prisma {
     invitationsSent?: AdminInvitationCreateNestedManyWithoutInviterInput
     securityEvents?: SecurityEventCreateNestedManyWithoutActorInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutAuthorInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
     reviewsModerated?: ReviewCreateNestedManyWithoutModeratedByInput
   }
 
@@ -83255,6 +84974,7 @@ export namespace Prisma {
     invitationsSent?: AdminInvitationUncheckedCreateNestedManyWithoutInviterInput
     securityEvents?: SecurityEventUncheckedCreateNestedManyWithoutActorInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutAuthorInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
     reviewsModerated?: ReviewUncheckedCreateNestedManyWithoutModeratedByInput
   }
 
@@ -83295,6 +85015,7 @@ export namespace Prisma {
     invitationsSent?: AdminInvitationUpdateManyWithoutInviterNestedInput
     securityEvents?: SecurityEventUpdateManyWithoutActorNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutAuthorNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
     reviewsModerated?: ReviewUpdateManyWithoutModeratedByNestedInput
   }
 
@@ -83319,6 +85040,7 @@ export namespace Prisma {
     invitationsSent?: AdminInvitationUncheckedUpdateManyWithoutInviterNestedInput
     securityEvents?: SecurityEventUncheckedUpdateManyWithoutActorNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutAuthorNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
     reviewsModerated?: ReviewUncheckedUpdateManyWithoutModeratedByNestedInput
   }
 
@@ -86355,6 +88077,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventCreateNestedManyWithoutActorInput
     auditLogs?: AuditLogCreateNestedManyWithoutActorInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutAuthorInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
     reviewsModerated?: ReviewCreateNestedManyWithoutModeratedByInput
   }
 
@@ -86379,6 +88102,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventUncheckedCreateNestedManyWithoutActorInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutAuthorInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
     reviewsModerated?: ReviewUncheckedCreateNestedManyWithoutModeratedByInput
   }
 
@@ -86613,6 +88337,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventUpdateManyWithoutActorNestedInput
     auditLogs?: AuditLogUpdateManyWithoutActorNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutAuthorNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
     reviewsModerated?: ReviewUpdateManyWithoutModeratedByNestedInput
   }
 
@@ -86637,6 +88362,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventUncheckedUpdateManyWithoutActorNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutAuthorNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
     reviewsModerated?: ReviewUncheckedUpdateManyWithoutModeratedByNestedInput
   }
 
@@ -86949,6 +88675,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventCreateNestedManyWithoutActorInput
     auditLogs?: AuditLogCreateNestedManyWithoutActorInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutAuthorInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
     reviewsModerated?: ReviewCreateNestedManyWithoutModeratedByInput
   }
 
@@ -86973,6 +88700,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventUncheckedCreateNestedManyWithoutActorInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutAuthorInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
     reviewsModerated?: ReviewUncheckedCreateNestedManyWithoutModeratedByInput
   }
 
@@ -87179,6 +88907,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventUpdateManyWithoutActorNestedInput
     auditLogs?: AuditLogUpdateManyWithoutActorNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutAuthorNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
     reviewsModerated?: ReviewUpdateManyWithoutModeratedByNestedInput
   }
 
@@ -87203,6 +88932,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventUncheckedUpdateManyWithoutActorNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutAuthorNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
     reviewsModerated?: ReviewUncheckedUpdateManyWithoutModeratedByNestedInput
   }
 
@@ -89670,6 +91400,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventCreateNestedManyWithoutActorInput
     auditLogs?: AuditLogCreateNestedManyWithoutActorInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutAuthorInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutReviewsModeratedInput = {
@@ -89694,6 +91425,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventUncheckedCreateNestedManyWithoutActorInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutAuthorInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutReviewsModeratedInput = {
@@ -89828,6 +91560,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventUpdateManyWithoutActorNestedInput
     auditLogs?: AuditLogUpdateManyWithoutActorNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutAuthorNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewsModeratedInput = {
@@ -89852,6 +91585,7 @@ export namespace Prisma {
     securityEvents?: SecurityEventUncheckedUpdateManyWithoutActorNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutAuthorNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type CouponRedemptionCreateWithoutCouponInput = {
@@ -90767,6 +92501,7 @@ export namespace Prisma {
     invitationsSent?: AdminInvitationCreateNestedManyWithoutInviterInput
     securityEvents?: SecurityEventCreateNestedManyWithoutActorInput
     auditLogs?: AuditLogCreateNestedManyWithoutActorInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
     reviewsModerated?: ReviewCreateNestedManyWithoutModeratedByInput
   }
 
@@ -90791,6 +92526,7 @@ export namespace Prisma {
     invitationsSent?: AdminInvitationUncheckedCreateNestedManyWithoutInviterInput
     securityEvents?: SecurityEventUncheckedCreateNestedManyWithoutActorInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
     reviewsModerated?: ReviewUncheckedCreateNestedManyWithoutModeratedByInput
   }
 
@@ -90868,6 +92604,7 @@ export namespace Prisma {
     invitationsSent?: AdminInvitationUpdateManyWithoutInviterNestedInput
     securityEvents?: SecurityEventUpdateManyWithoutActorNestedInput
     auditLogs?: AuditLogUpdateManyWithoutActorNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
     reviewsModerated?: ReviewUpdateManyWithoutModeratedByNestedInput
   }
 
@@ -90892,6 +92629,123 @@ export namespace Prisma {
     invitationsSent?: AdminInvitationUncheckedUpdateManyWithoutInviterNestedInput
     securityEvents?: SecurityEventUncheckedUpdateManyWithoutActorNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    reviewsModerated?: ReviewUncheckedUpdateManyWithoutModeratedByNestedInput
+  }
+
+  export type UserCreateWithoutBlogPostsInput = {
+    id?: string
+    publicId?: string
+    email?: string | null
+    phone?: string | null
+    name: string
+    accountType: $Enums.AccountType
+    status?: $Enums.UserStatus
+    emailVerifiedAt?: Date | string | null
+    phoneVerifiedAt?: Date | string | null
+    lastLoginAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    authAccounts?: AuthAccountCreateNestedManyWithoutUserInput
+    authSessions?: AuthSessionCreateNestedManyWithoutUserInput
+    userRoles?: UserRoleCreateNestedManyWithoutUserInput
+    customerProfile?: CustomerProfileCreateNestedOneWithoutUserInput
+    staffProfile?: StaffProfileCreateNestedOneWithoutUserInput
+    invitationsSent?: AdminInvitationCreateNestedManyWithoutInviterInput
+    securityEvents?: SecurityEventCreateNestedManyWithoutActorInput
+    auditLogs?: AuditLogCreateNestedManyWithoutActorInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutAuthorInput
+    reviewsModerated?: ReviewCreateNestedManyWithoutModeratedByInput
+  }
+
+  export type UserUncheckedCreateWithoutBlogPostsInput = {
+    id?: string
+    publicId?: string
+    email?: string | null
+    phone?: string | null
+    name: string
+    accountType: $Enums.AccountType
+    status?: $Enums.UserStatus
+    emailVerifiedAt?: Date | string | null
+    phoneVerifiedAt?: Date | string | null
+    lastLoginAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    authAccounts?: AuthAccountUncheckedCreateNestedManyWithoutUserInput
+    authSessions?: AuthSessionUncheckedCreateNestedManyWithoutUserInput
+    userRoles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    customerProfile?: CustomerProfileUncheckedCreateNestedOneWithoutUserInput
+    staffProfile?: StaffProfileUncheckedCreateNestedOneWithoutUserInput
+    invitationsSent?: AdminInvitationUncheckedCreateNestedManyWithoutInviterInput
+    securityEvents?: SecurityEventUncheckedCreateNestedManyWithoutActorInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutAuthorInput
+    reviewsModerated?: ReviewUncheckedCreateNestedManyWithoutModeratedByInput
+  }
+
+  export type UserCreateOrConnectWithoutBlogPostsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutBlogPostsInput, UserUncheckedCreateWithoutBlogPostsInput>
+  }
+
+  export type UserUpsertWithoutBlogPostsInput = {
+    update: XOR<UserUpdateWithoutBlogPostsInput, UserUncheckedUpdateWithoutBlogPostsInput>
+    create: XOR<UserCreateWithoutBlogPostsInput, UserUncheckedCreateWithoutBlogPostsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutBlogPostsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutBlogPostsInput, UserUncheckedUpdateWithoutBlogPostsInput>
+  }
+
+  export type UserUpdateWithoutBlogPostsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    publicId?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    accountType?: EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    emailVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    authAccounts?: AuthAccountUpdateManyWithoutUserNestedInput
+    authSessions?: AuthSessionUpdateManyWithoutUserNestedInput
+    userRoles?: UserRoleUpdateManyWithoutUserNestedInput
+    customerProfile?: CustomerProfileUpdateOneWithoutUserNestedInput
+    staffProfile?: StaffProfileUpdateOneWithoutUserNestedInput
+    invitationsSent?: AdminInvitationUpdateManyWithoutInviterNestedInput
+    securityEvents?: SecurityEventUpdateManyWithoutActorNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutActorNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutAuthorNestedInput
+    reviewsModerated?: ReviewUpdateManyWithoutModeratedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutBlogPostsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    publicId?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    accountType?: EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    emailVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    authAccounts?: AuthAccountUncheckedUpdateManyWithoutUserNestedInput
+    authSessions?: AuthSessionUncheckedUpdateManyWithoutUserNestedInput
+    userRoles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    customerProfile?: CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
+    staffProfile?: StaffProfileUncheckedUpdateOneWithoutUserNestedInput
+    invitationsSent?: AdminInvitationUncheckedUpdateManyWithoutInviterNestedInput
+    securityEvents?: SecurityEventUncheckedUpdateManyWithoutActorNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutAuthorNestedInput
     reviewsModerated?: ReviewUncheckedUpdateManyWithoutModeratedByNestedInput
   }
 
@@ -91614,6 +93468,24 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type BlogPostCreateManyAuthorInput = {
+    id?: string
+    publicId?: string
+    title: string
+    slug: string
+    excerpt: string
+    body: string
+    coverImageUrl?: string | null
+    coverImageAlt?: string | null
+    seoTitle?: string | null
+    seoDescription?: string | null
+    status?: $Enums.PublishStatus
+    publishedAt?: Date | string | null
+    archivedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type ReviewCreateManyModeratedByInput = {
     id?: string
     bookingId: string
@@ -91842,6 +93714,60 @@ export namespace Prisma {
     bodyText?: NullableStringFieldUpdateOperationsInput | string | null
     revisionNo?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BlogPostUpdateWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    publicId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    excerpt?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    coverImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImageAlt?: NullableStringFieldUpdateOperationsInput | string | null
+    seoTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    seoDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BlogPostUncheckedUpdateWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    publicId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    excerpt?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    coverImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImageAlt?: NullableStringFieldUpdateOperationsInput | string | null
+    seoTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    seoDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BlogPostUncheckedUpdateManyWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    publicId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    excerpt?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    coverImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImageAlt?: NullableStringFieldUpdateOperationsInput | string | null
+    seoTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    seoDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReviewUpdateWithoutModeratedByInput = {

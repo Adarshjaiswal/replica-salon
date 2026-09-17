@@ -392,6 +392,39 @@ export const adminImageUploadRequestSchema = z.object({
   altText: z.string().trim().max(240).optional(),
 });
 
+export const adminBlogListQuerySchema = paginationQuerySchema.extend({
+  status: publishStatusSchema.optional(),
+  sort: z
+    .enum([
+      "updatedAt_desc",
+      "updatedAt_asc",
+      "title_asc",
+      "title_desc",
+      "publishedAt_desc",
+    ])
+    .default("updatedAt_desc"),
+});
+
+export const adminCreateBlogRequestSchema = z.object({
+  title: z.string().trim().min(3).max(180),
+  slug: z
+    .string()
+    .trim()
+    .min(3)
+    .max(180)
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
+    .optional(),
+  excerpt: z.string().trim().min(10).max(500),
+  body: z.string().trim().min(50).max(100_000),
+  coverImageUrl: z.string().trim().max(1000).optional(),
+  coverImageAlt: z.string().trim().max(240).optional(),
+  seoTitle: z.string().trim().max(180).optional(),
+  seoDescription: z.string().trim().max(320).optional(),
+  status: publishStatusSchema.default("DRAFT"),
+});
+
+export const adminUpdateBlogRequestSchema = adminCreateBlogRequestSchema;
+
 export type AdminListQuery = z.infer<typeof adminListQuerySchema>;
 export type AdminStaffListQuery = z.infer<typeof adminStaffListQuerySchema>;
 export type AdminStaffSort = z.infer<typeof adminStaffSortSchema>;
@@ -464,4 +497,11 @@ export type AdminUpdateUserRequest = z.infer<
 >;
 export type AdminImageUploadRequest = z.infer<
   typeof adminImageUploadRequestSchema
+>;
+export type AdminBlogListQuery = z.infer<typeof adminBlogListQuerySchema>;
+export type AdminCreateBlogRequest = z.infer<
+  typeof adminCreateBlogRequestSchema
+>;
+export type AdminUpdateBlogRequest = z.infer<
+  typeof adminUpdateBlogRequestSchema
 >;

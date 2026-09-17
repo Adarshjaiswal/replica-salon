@@ -1565,6 +1565,112 @@ export function createCustomerRouter(env: AppEnv): Router {
   });
 
   router.get(
+    "/blogs",
+    asyncHandler(async (req, res) => {
+      const pageValue = Number(req.query.page ?? 1);
+      const page =
+        Number.isInteger(pageValue) && pageValue > 0
+          ? Math.min(pageValue, 10_000)
+          : 1;
+      const pageSize = 12;
+      const where: Prisma.BlogPostWhereInput = {
+        status: "PUBLISHED",
+        publishedAt: { lte: new Date() },
+        archivedAt: null,
+      };
+      const [totalCount, posts] = await Promise.all([
+        prisma.blogPost.count({ where }),
+        prisma.blogPost.findMany({
+          where,
+          orderBy: { publishedAt: "desc" },
+          skip: (page - 1) * pageSize,
+          take: pageSize,
+          select: {
+            publicId: true,
+            title: true,
+            slug: true,
+            excerpt: true,
+            coverImageUrl: true,
+            coverImageAlt: true,
+            publishedAt: true,
+            updatedAt: true,
+            author: { select: { name: true } },
+          },
+        }),
+      ]);
+      res.json(
+        successEnvelope(
+          {
+            posts: posts.map((post) => ({
+              ...post,
+              authorName: post.author?.name ?? null,
+              author: undefined,
+              publishedAt: post.publishedAt?.toISOString() ?? null,
+              updatedAt: post.updatedAt.toISOString(),
+            })),
+            pagination: {
+              page,
+              pageSize,
+              totalCount,
+              totalPages: Math.max(1, Math.ceil(totalCount / pageSize)),
+            },
+          },
+          getRequestId(res),
+        ),
+      );
+    }),
+  );
+
+  router.get(
+    "/blogs/:slug",
+    asyncHandler(async (req, res) => {
+      const slug = getRouteParam(req.params.slug);
+      const post = slug
+        ? await prisma.blogPost.findFirst({
+            where: {
+              slug,
+              status: "PUBLISHED",
+              publishedAt: { lte: new Date() },
+              archivedAt: null,
+            },
+            select: {
+              publicId: true,
+              title: true,
+              slug: true,
+              excerpt: true,
+              body: true,
+              coverImageUrl: true,
+              coverImageAlt: true,
+              seoTitle: true,
+              seoDescription: true,
+              publishedAt: true,
+              updatedAt: true,
+              author: { select: { name: true } },
+            },
+          })
+        : null;
+      if (!post) {
+        sendError(res, 404, "NOT_FOUND", "Blog post was not found.");
+        return;
+      }
+      res.json(
+        successEnvelope(
+          {
+            post: {
+              ...post,
+              authorName: post.author?.name ?? null,
+              author: undefined,
+              publishedAt: post.publishedAt?.toISOString() ?? null,
+              updatedAt: post.updatedAt.toISOString(),
+            },
+          },
+          getRequestId(res),
+        ),
+      );
+    }),
+  );
+
+  router.get(
     "/catalogue",
     asyncHandler(async (req, res) => {
       const parsed = publicCatalogueQuerySchema.safeParse(req.query);
