@@ -1,7 +1,9 @@
 "use client";
 
 import {
+  ArrowRight,
   BadgePercent,
+  BookOpen,
   CalendarCheck,
   ChevronDown,
   CheckCircle2,
@@ -343,6 +345,20 @@ interface PublicReview {
 
 interface PublicReviewsPayload {
   reviews: PublicReview[];
+}
+
+interface PublicBlogPost {
+  publicId: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  coverImageUrl: string | null;
+  coverImageAlt: string | null;
+  publishedAt: string | null;
+}
+
+interface PublicBlogPostsPayload {
+  posts: PublicBlogPost[];
 }
 
 interface CartItem {
@@ -1828,6 +1844,10 @@ export default function CustomerExperience({
   const [publicReviews, setPublicReviews] = useState<PublicReview[]>(
     FALLBACK_PUBLIC_REVIEWS,
   );
+  const [blogPosts, setBlogPosts] = useState<PublicBlogPost[]>([]);
+  const [blogPostsLoading, setBlogPostsLoading] = useState(
+    initialMode === "home",
+  );
   const [reviewSlideIndex, setReviewSlideIndex] = useState(0);
   const [reviewDraft, setReviewDraft] = useState<ReviewDraft>({
     bookingId: null,
@@ -2171,6 +2191,41 @@ export default function CustomerExperience({
       mounted = false;
     };
   }, []);
+
+  useEffect(() => {
+    if (initialMode !== "home") {
+      setBlogPostsLoading(false);
+      return;
+    }
+
+    let mounted = true;
+
+    async function loadBlogPosts(): Promise<void> {
+      try {
+        const payload = await apiFetch<PublicBlogPostsPayload>(
+          "/customer/blogs?page=1",
+        );
+
+        if (mounted) {
+          setBlogPosts(payload.posts.slice(0, 4));
+        }
+      } catch {
+        if (mounted) {
+          setBlogPosts([]);
+        }
+      } finally {
+        if (mounted) {
+          setBlogPostsLoading(false);
+        }
+      }
+    }
+
+    void loadBlogPosts();
+
+    return () => {
+      mounted = false;
+    };
+  }, [initialMode]);
 
   useEffect(() => {
     setReviewSlideIndex(0);
@@ -3494,6 +3549,7 @@ export default function CustomerExperience({
               <a href="/">Home</a>
               <a href="/#categories">Categories</a>
               <a href="/#services">Services</a>
+              <a href="/blog">Blog</a>
               <a href="/#reviews">Reviews</a>
               <a href="/#why-us">Why us</a>
               <a href="/cart">Cart</a>
@@ -3547,11 +3603,13 @@ export default function CustomerExperience({
           {renderHero()}
           {renderCategories()}
           {renderPackagesSection()}
+          {renderWhyChooseSection()}
           {renderHomepageServiceSections()}
           {renderConfidenceStrip()}
           {renderDealOfDaySection()}
           {renderReviews()}
           {renderContactCta()}
+          {renderHomepageBlogSection()}
         </>
       )}
 
@@ -4270,6 +4328,122 @@ export default function CustomerExperience({
           </section>
         ))}
       </div>
+    );
+  }
+
+  function renderWhyChooseSection(): React.ReactElement {
+    const reasons = [
+      {
+        icon: <UserRound size={22} />,
+        title: "Skilled professionals",
+        text: "Book beauty specialists for salon care in the comfort of your home.",
+      },
+      {
+        icon: <ShieldCheck size={22} />,
+        title: "Hygiene-led service",
+        text: "A clean setup and single-use essentials support every appointment.",
+      },
+      {
+        icon: <CalendarCheck size={22} />,
+        title: "Convenient scheduling",
+        text: "Choose an available date and time that works around your day.",
+      },
+      {
+        icon: <CreditCard size={22} />,
+        title: "Clear, secure checkout",
+        text: "Review prices before booking and pay online through Razorpay.",
+      },
+    ];
+
+    return (
+      <section className="customer-why-section" id="why-us">
+        <div className="customer-why-heading">
+          <p className="customer-eyebrow">Beauty care built around you</p>
+          <h2>Why choose Replica Home Salon?</h2>
+          <span>
+            A thoughtful doorstep experience from selecting a service to
+            completing your appointment.
+          </span>
+        </div>
+        <div className="customer-why-grid">
+          {reasons.map((reason) => (
+            <article key={reason.title}>
+              <span aria-hidden="true">{reason.icon}</span>
+              <strong>{reason.title}</strong>
+              <p>{reason.text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  function renderHomepageBlogSection(): React.ReactElement | null {
+    if (!blogPostsLoading && blogPosts.length === 0) {
+      return null;
+    }
+
+    return (
+      <section className="customer-home-blog" aria-labelledby="home-blog-title">
+        <div className="customer-home-blog-heading">
+          <div>
+            <p className="customer-eyebrow">Beauty notes</p>
+            <h2 id="home-blog-title">Salon advice for better self-care</h2>
+          </div>
+          <a className="customer-link-button" href="/blog">
+            View all blogs
+            <ArrowRight size={17} />
+          </a>
+        </div>
+        <div className="customer-home-blog-grid" aria-busy={blogPostsLoading}>
+          {blogPostsLoading
+            ? Array.from({ length: 4 }, (_value, index) => (
+                <article className="customer-home-blog-skeleton" key={index} />
+              ))
+            : blogPosts.map((post) => (
+                <article
+                  className="customer-home-blog-card"
+                  key={post.publicId}
+                >
+                  <a href={`/blog/${post.slug}`} tabIndex={-1}>
+                    {post.coverImageUrl ? (
+                      <img
+                        alt={post.coverImageAlt ?? ""}
+                        src={post.coverImageUrl}
+                      />
+                    ) : (
+                      <span className="customer-home-blog-placeholder">
+                        <BookOpen size={30} />
+                      </span>
+                    )}
+                  </a>
+                  <div>
+                    {post.publishedAt ? (
+                      <time dateTime={post.publishedAt}>
+                        {new Intl.DateTimeFormat("en-IN", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                          timeZone: INDIA_TIME_ZONE,
+                        }).format(new Date(post.publishedAt))}
+                      </time>
+                    ) : null}
+                    <h3>
+                      <a href={`/blog/${post.slug}`}>{post.title}</a>
+                    </h3>
+                    <p>{post.excerpt}</p>
+                    <a
+                      className="customer-home-blog-read"
+                      href={`/blog/${post.slug}`}
+                    >
+                      Read more
+                      <ArrowRight size={15} />
+                    </a>
+                  </div>
+                </article>
+              ))}
+        </div>
+      </section>
     );
   }
 

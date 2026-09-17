@@ -13387,6 +13387,186 @@ body {
 .blog-card > div:last-child {
   padding: 22px;
 }
+
+.customer-why-section {
+  padding: 72px clamp(20px, 6vw, 92px);
+  background: #34273a;
+  color: #fff;
+  display: grid;
+  grid-template-columns: minmax(240px, 0.72fr) minmax(0, 1.6fr);
+  gap: clamp(36px, 6vw, 90px);
+  align-items: center;
+}
+.customer-why-heading h2,
+.customer-home-blog-heading h2 {
+  margin: 8px 0 14px;
+  font:
+    700 clamp(30px, 4vw, 48px) / 1.1 Georgia,
+    serif;
+  letter-spacing: 0;
+}
+.customer-why-heading > span {
+  display: block;
+  max-width: 520px;
+  color: #ddd1e0;
+  line-height: 1.7;
+}
+.customer-why-section .customer-eyebrow {
+  color: #e9b765;
+}
+.customer-why-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid #695a6f;
+  border-left: 1px solid #695a6f;
+}
+.customer-why-grid article {
+  min-height: 190px;
+  padding: 28px;
+  border-right: 1px solid #695a6f;
+  border-bottom: 1px solid #695a6f;
+}
+.customer-why-grid article > span {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 22px;
+  background: #f0bf6f;
+  color: #34273a;
+  border-radius: 6px;
+}
+.customer-why-grid strong {
+  display: block;
+  font-size: 17px;
+}
+.customer-why-grid p {
+  color: #d6cad9;
+  line-height: 1.55;
+  margin: 8px 0 0;
+}
+
+.customer-home-blog {
+  padding: 76px clamp(20px, 6vw, 92px) 90px;
+  background: #faf7fb;
+}
+.customer-home-blog-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 30px;
+}
+.customer-home-blog-heading h2 {
+  color: #35283b;
+  max-width: 720px;
+}
+.customer-home-blog-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+.customer-home-blog-card {
+  min-width: 0;
+  background: #fff;
+  border: 1px solid #e5dce8;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.customer-home-blog-card > a {
+  display: block;
+}
+.customer-home-blog-card img,
+.customer-home-blog-placeholder {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+.customer-home-blog-placeholder {
+  display: grid;
+  place-items: center;
+  background: #eee3f3;
+  color: #74478a;
+}
+.customer-home-blog-card > div {
+  padding: 20px;
+}
+.customer-home-blog-card time {
+  color: #7c6d80;
+  font-size: 12px;
+  font-weight: 700;
+}
+.customer-home-blog-card h3 {
+  margin: 10px 0;
+  font:
+    700 21px / 1.25 Georgia,
+    serif;
+  letter-spacing: 0;
+}
+.customer-home-blog-card h3 a {
+  color: #35283b;
+  text-decoration: none;
+}
+.customer-home-blog-card p {
+  color: #6e6470;
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+.customer-home-blog-read {
+  color: #69377e;
+  font-weight: 800;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.customer-home-blog-skeleton {
+  min-height: 390px;
+  border: 1px solid #eadfec;
+  border-radius: 8px;
+  background: linear-gradient(100deg, #f0e9f2 30%, #faf7fb 50%, #f0e9f2 70%);
+  background-size: 220% 100%;
+  animation: customer-blog-loading 1.4s ease-in-out infinite;
+}
+@keyframes customer-blog-loading {
+  to {
+    background-position-x: -220%;
+  }
+}
+
+@media (max-width: 1100px) {
+  .customer-home-blog-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .customer-why-section {
+    grid-template-columns: 1fr;
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+  .customer-why-grid {
+    grid-template-columns: 1fr;
+  }
+  .customer-why-grid article {
+    min-height: 0;
+  }
+  .customer-home-blog {
+    padding-top: 56px;
+    padding-bottom: 68px;
+  }
+  .customer-home-blog-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .customer-home-blog-grid {
+    grid-template-columns: 1fr;
+  }
+}
 .blog-card time {
   font-size: 12px;
   color: #7c6d80;
