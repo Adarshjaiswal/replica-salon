@@ -21,7 +21,6 @@ import {
   Home,
   ImagePlus,
   Italic,
-  KeyRound,
   LayoutDashboard,
   List,
   LogIn,
@@ -30,6 +29,7 @@ import {
   Plus,
   Quote,
   RefreshCw,
+  Save,
   Search,
   ShieldCheck,
   Scissors,
@@ -1426,6 +1426,8 @@ export default function AdminApp(): React.ReactElement {
   >([]);
   const [homepageServiceOptionsLoading, setHomepageServiceOptionsLoading] =
     useState(false);
+  const [homepageServiceOptionsError, setHomepageServiceOptionsError] =
+    useState<string | null>(null);
   const [bookingRows, setBookingRows] = useState<BookingRow[]>([]);
   const [bookingTotalCount, setBookingTotalCount] = useState(0);
   const [bookingPage, setBookingPage] = useState(1);
@@ -3379,6 +3381,7 @@ export default function AdminApp(): React.ReactElement {
     }
 
     setHomepageServiceOptionsLoading(true);
+    setHomepageServiceOptionsError(null);
 
     try {
       const payload = await apiFetch<ServiceListPayload>(
@@ -3387,7 +3390,7 @@ export default function AdminApp(): React.ReactElement {
       setHomepageServiceOptions(payload.services);
     } catch (serviceOptionError) {
       setHomepageServiceOptions([]);
-      setError(getErrorMessage(serviceOptionError));
+      setHomepageServiceOptionsError(getErrorMessage(serviceOptionError));
     } finally {
       setHomepageServiceOptionsLoading(false);
     }
@@ -7251,6 +7254,19 @@ export default function AdminApp(): React.ReactElement {
                       <RefreshCw aria-hidden="true" size={18} />
                       <span>Loading published services...</span>
                     </div>
+                  ) : homepageServiceOptionsError ? (
+                    <div className="homepage-picker-error">
+                      <AlertTriangle aria-hidden="true" size={18} />
+                      <span>Published services could not be loaded.</span>
+                      <button
+                        className="secondary-action-button"
+                        onClick={() => void loadHomepageServiceOptions()}
+                        type="button"
+                      >
+                        <RefreshCw aria-hidden="true" size={15} />
+                        <span>Retry</span>
+                      </button>
+                    </div>
                   ) : homepageServiceOptions.length === 0 ? (
                     <div className="empty-table-state">
                       <Scissors aria-hidden="true" size={18} />
@@ -7332,9 +7348,23 @@ export default function AdminApp(): React.ReactElement {
     if (!homepageConfig) {
       return (
         <section className="staff-page" aria-label="Homepage unavailable">
-          <div className="empty-table-state">
+          <div className="homepage-unavailable-state">
             <AlertTriangle aria-hidden="true" size={22} />
-            <span>Homepage content is not available.</span>
+            <div>
+              <strong>Homepage content could not be loaded</strong>
+              <span>
+                Check that the local API is running, then try loading the
+                editor again.
+              </span>
+            </div>
+            <button
+              className="secondary-action-button"
+              onClick={() => void loadHomepageConfig()}
+              type="button"
+            >
+              <RefreshCw aria-hidden="true" size={16} />
+              <span>Try again</span>
+            </button>
           </div>
         </section>
       );
@@ -7346,9 +7376,9 @@ export default function AdminApp(): React.ReactElement {
           className="staff-record-form homepage-editor-form"
           onSubmit={handleSaveHomepage}
         >
-          <div className="table-toolbar">
-            <div>
-              <p>Public website</p>
+          <div className="homepage-editor-toolbar">
+            <div className="homepage-editor-heading">
+              <p className="section-kicker">Public website</p>
               <h2>Homepage content</h2>
               <span>
                 {homepageUpdatedAt
@@ -7357,13 +7387,17 @@ export default function AdminApp(): React.ReactElement {
               </span>
             </div>
             <button
-              className="primary-action-button"
+              className="primary-action-button homepage-save-button"
               disabled={
                 !canUpdateHomepage || actionSubmitting === "homepage-update"
               }
               type="submit"
             >
-              <RefreshCw aria-hidden="true" size={18} />
+              {actionSubmitting === "homepage-update" ? (
+                <RefreshCw aria-hidden="true" size={18} />
+              ) : (
+                <Save aria-hidden="true" size={18} />
+              )}
               <span>
                 {actionSubmitting === "homepage-update"
                   ? "Saving..."
@@ -7860,26 +7894,6 @@ export default function AdminApp(): React.ReactElement {
                   </div>
                 )}
               </div>
-            </div>
-          </article>
-
-          <article className="operation-panel">
-            <div className="panel-heading">
-              <div>
-                <p className="eyebrow">Provider state</p>
-                <h2>Integrations</h2>
-              </div>
-              <KeyRound aria-hidden="true" className="panel-icon" size={20} />
-            </div>
-            <div className="provider-list">
-              {dashboard?.providerReadiness.map((provider) => (
-                <div className="provider-row" key={provider.key}>
-                  <span>{provider.label}</span>
-                  <span className={`status-badge status-${provider.status}`}>
-                    {provider.status}
-                  </span>
-                </div>
-              ))}
             </div>
           </article>
         </section>
@@ -9309,28 +9323,30 @@ export default function AdminApp(): React.ReactElement {
                       size={15}
                     />
                   </button>
-                  <div className="admin-subnav" aria-label="Catalogue pages">
-                    {CATALOGUE_NAV_ITEMS.map((childItem) => {
-                      const ChildIcon = childItem.icon;
+                  {isCatalogueRoute ? (
+                    <div className="admin-subnav" aria-label="Catalogue pages">
+                      {CATALOGUE_NAV_ITEMS.map((childItem) => {
+                        const ChildIcon = childItem.icon;
 
-                      return (
-                        <button
-                          aria-current={
-                            isCatalogueRoute && childItem.key === catalogueArea
-                              ? "page"
-                              : undefined
-                          }
-                          className="admin-module-button admin-subnav-button"
-                          key={childItem.key}
-                          onClick={() => selectCatalogueArea(childItem.key)}
-                          type="button"
-                        >
-                          <ChildIcon aria-hidden="true" size={15} />
-                          <span>{childItem.label}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
+                        return (
+                          <button
+                            aria-current={
+                              childItem.key === catalogueArea
+                                ? "page"
+                                : undefined
+                            }
+                            className="admin-module-button admin-subnav-button"
+                            key={childItem.key}
+                            onClick={() => selectCatalogueArea(childItem.key)}
+                            type="button"
+                          >
+                            <ChildIcon aria-hidden="true" size={15} />
+                            <span>{childItem.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  ) : null}
                 </div>
               );
             }
@@ -9375,34 +9391,48 @@ export default function AdminApp(): React.ReactElement {
                 size={15}
               />
             </button>
-            <div className="admin-subnav" aria-label="User management pages">
-              {USER_MANAGEMENT_NAV_ITEMS.map((childItem) => {
-                const ChildIcon = childItem.icon;
+            {isUserManagementRoute ? (
+              <div className="admin-subnav" aria-label="User management pages">
+                {USER_MANAGEMENT_NAV_ITEMS.map((childItem) => {
+                  const ChildIcon = childItem.icon;
 
-                return (
-                  <button
-                    aria-current={
-                      isUserManagementRoute &&
-                      childItem.key === userManagementArea
-                        ? "page"
-                        : undefined
-                    }
-                    className="admin-module-button admin-subnav-button"
-                    key={childItem.key}
-                    onClick={() => selectUserManagementArea(childItem.key)}
-                    type="button"
-                  >
-                    <ChildIcon aria-hidden="true" size={15} />
-                    <span>{childItem.label}</span>
-                  </button>
-                );
-              })}
-            </div>
+                  return (
+                    <button
+                      aria-current={
+                        childItem.key === userManagementArea
+                          ? "page"
+                          : undefined
+                      }
+                      className="admin-module-button admin-subnav-button"
+                      key={childItem.key}
+                      onClick={() => selectUserManagementArea(childItem.key)}
+                      type="button"
+                    >
+                      <ChildIcon aria-hidden="true" size={15} />
+                      <span>{childItem.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            ) : null}
           </div>
         </nav>
       </aside>
 
-      <main className="admin-workspace">
+      {navOpen ? (
+        <button
+          aria-label="Close navigation"
+          className="admin-nav-backdrop"
+          onClick={() => setNavOpen(false)}
+          type="button"
+        />
+      ) : null}
+
+      <main
+        className={`admin-workspace ${
+          isDashboardRoute ? "admin-dashboard-workspace" : ""
+        }`}
+      >
         <header className="admin-topbar">
           <button
             aria-label="Open navigation"
