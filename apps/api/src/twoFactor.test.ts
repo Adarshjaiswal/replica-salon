@@ -8,7 +8,7 @@ const env = {
 } as AppEnv;
 
 describe("2Factor OTP adapter", () => {
-  it("encodes provider path values and accepts a successful response", async () => {
+  it("requests the SMS-only channel and accepts a successful response", async () => {
     const providerFetch = vi.fn<typeof fetch>().mockResolvedValue(
       new Response(JSON.stringify({ Status: "Success", Details: "session" }), {
         status: 200,
@@ -24,8 +24,37 @@ describe("2Factor OTP adapter", () => {
 
     expect(providerFetch).toHaveBeenCalledOnce();
     expect(providerFetch.mock.calls[0]?.[0]).toBe(
-      "https://2factor.in/API/V1/server-secret-key/SMS/%2B919999999999/123456/Template1",
+      "https://2factor.in/API/V1/OTP/SEND",
     );
+    expect(providerFetch.mock.calls[0]?.[1]).toMatchObject({
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-api-key": "server-secret-key",
+      },
+      body: JSON.stringify({
+        to: "+919999999999",
+        channel: "SMS",
+        template_name: "Template1",
+        var1: "123456",
+      }),
+    });
+  });
+
+  it("accepts the current lowercase sent response", async () => {
+    const providerFetch = vi.fn<typeof fetch>().mockResolvedValue(
+      new Response(JSON.stringify({ status: "sent", session_id: "session" }), {
+        status: 200,
+      }),
+    );
+
+    await expect(
+      sendOtpWithTwoFactor(
+        env,
+        { phone: "+919999999999", otp: "123456" },
+        providerFetch,
+      ),
+    ).resolves.toBeUndefined();
   });
 
   it("rejects provider errors without exposing provider details", async () => {
