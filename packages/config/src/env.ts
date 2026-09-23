@@ -21,6 +21,7 @@ export const appEnvSchema = z.object({
   RAZORPAY_KEY_SECRET: z.string().optional(),
   RAZORPAY_WEBHOOK_SECRET: z.string().optional(),
   SMS_PROVIDER_API_KEY: z.string().optional(),
+  SMS_PROVIDER_TEMPLATE_NAME: z.string().trim().min(1).default("Template1"),
   EMAIL_SMTP_URL: z.string().optional(),
   WHATSAPP_PROVIDER_TOKEN: z.string().optional(),
   MAPS_API_KEY: z.string().optional(),

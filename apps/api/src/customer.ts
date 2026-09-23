@@ -55,6 +55,7 @@ import {
   verifyRazorpayWebhookSignature,
   type RazorpayPaymentEntity,
 } from "./razorpay.js";
+import { OtpDeliveryError, sendOtpWithTwoFactor } from "./twoFactor.js";
 
 const CUSTOMER_SESSION_COOKIE_NAME = "replica_customer_session";
 const CUSTOMER_SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000;
@@ -2067,6 +2068,28 @@ export function createCustomerRouter(env: AppEnv): Router {
       const otp = createOtp();
       const now = new Date();
       const expiresAt = new Date(now.getTime() + OTP_TTL_MS);
+
+      if (env.SMS_PROVIDER_API_KEY) {
+        try {
+          await sendOtpWithTwoFactor(env, { phone, otp });
+        } catch (error) {
+          if (error instanceof OtpDeliveryError) {
+            logger.warn(
+              { phone: maskPhone(phone) },
+              "Customer OTP provider delivery failed.",
+            );
+            sendError(
+              res,
+              503,
+              "INTERNAL_ERROR",
+              "OTP could not be delivered. Please try again shortly.",
+            );
+            return;
+          }
+
+          throw error;
+        }
+      }
 
       await prisma.$transaction(async (transaction) => {
         await transaction.authVerification.updateMany({
