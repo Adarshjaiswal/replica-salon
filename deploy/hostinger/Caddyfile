@@ -3,7 +3,7 @@
 }
 
 replicahomesalon.com, www.replicahomesalon.com, replicahomesalon.online, www.replicahomesalon.online, replicahomesalon.in, www.replicahomesalon.in {
-	redir https://{$DOMAIN}{uri} permanent
+	redir https://replicahomesaloonservice.in{uri} permanent
 }
 
 {$DOMAIN} {
