@@ -2,8 +2,8 @@
 	email {$TLS_EMAIL}
 }
 
-replicahomesalon.com, www.replicahomesalon.com, replicahomesalon.online, www.replicahomesalon.online, replicahomesalon.in, www.replicahomesalon.in {
-	redir https://replicahomesaloonservice.in{uri} permanent
+replicahomesaloonservice.in, www.replicahomesaloonservice.in, replicahomesalon.online, www.replicahomesalon.online, replicahomesalon.in, www.replicahomesalon.in {
+	redir https://replicahomesalon.com{uri} permanent
 }
 
 {$DOMAIN} {
