@@ -17,8 +17,16 @@ describe("PWA manifest", () => {
     });
     expect(value.icons).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ purpose: "any" }),
-        expect.objectContaining({ purpose: "maskable" }),
+        expect.objectContaining({
+          sizes: "192x192",
+          type: "image/png",
+          purpose: "any",
+        }),
+        expect.objectContaining({
+          sizes: "512x512",
+          type: "image/png",
+          purpose: "maskable",
+        }),
       ]),
     );
     expect(value.shortcuts).toHaveLength(2);

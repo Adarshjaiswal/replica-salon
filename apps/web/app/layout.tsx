@@ -19,8 +19,25 @@ export const metadata: Metadata = {
     telephone: false,
   },
   icons: {
-    icon: [{ url: "/icons/replica-icon.svg", type: "image/svg+xml" }],
-    apple: [{ url: "/icons/replica-icon.svg", type: "image/svg+xml" }],
+    icon: [
+      {
+        url: "/icons/replica-icon-192.png",
+        type: "image/png",
+        sizes: "192x192",
+      },
+      {
+        url: "/icons/replica-icon-512.png",
+        type: "image/png",
+        sizes: "512x512",
+      },
+    ],
+    apple: [
+      {
+        url: "/icons/apple-touch-icon.png",
+        type: "image/png",
+        sizes: "180x180",
+      },
+    ],
   },
   robots: {
     index: true,

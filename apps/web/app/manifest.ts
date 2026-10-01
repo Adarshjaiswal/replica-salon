@@ -16,15 +16,21 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ["beauty", "lifestyle", "shopping"],
     icons: [
       {
-        src: "/icons/replica-icon.svg",
-        sizes: "any",
-        type: "image/svg+xml",
+        src: "/icons/replica-icon-192.png",
+        sizes: "192x192",
+        type: "image/png",
         purpose: "any",
       },
       {
-        src: "/icons/replica-icon-maskable.svg",
-        sizes: "any",
-        type: "image/svg+xml",
+        src: "/icons/replica-icon-512.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "any",
+      },
+      {
+        src: "/icons/replica-icon-maskable-512.png",
+        sizes: "512x512",
+        type: "image/png",
         purpose: "maskable",
       },
     ],
@@ -33,13 +39,13 @@ export default function manifest(): MetadataRoute.Manifest {
         name: "Browse services",
         short_name: "Services",
         url: "/services",
-        icons: [{ src: "/icons/replica-icon.svg", sizes: "any" }],
+        icons: [{ src: "/icons/replica-icon-192.png", sizes: "192x192" }],
       },
       {
         name: "View bookings",
         short_name: "Bookings",
         url: "/orders",
-        icons: [{ src: "/icons/replica-icon.svg", sizes: "any" }],
+        icons: [{ src: "/icons/replica-icon-192.png", sizes: "192x192" }],
       },
     ],
   };
