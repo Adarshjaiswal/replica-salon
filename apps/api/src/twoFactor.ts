@@ -1,6 +1,6 @@
 import type { AppEnv } from "@replica/config";
 
-const TWO_FACTOR_SEND_OTP_URL = "https://2factor.in/API/V1/OTP/SEND";
+const TWO_FACTOR_API_BASE = "https://2factor.in/API/V1";
 const PROVIDER_TIMEOUT_MS = 8_000;
 
 interface TwoFactorResponse {
@@ -44,23 +44,24 @@ export async function sendOtpWithTwoFactor(
 
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), PROVIDER_TIMEOUT_MS);
+  const path = [
+    env.SMS_PROVIDER_API_KEY,
+    "SMS",
+    input.phone,
+    input.otp,
+    env.SMS_PROVIDER_TEMPLATE_NAME,
+  ]
+    .map(encodeURIComponent)
+    .join("/");
 
   try {
     const response = await fetchImplementation(
-      TWO_FACTOR_SEND_OTP_URL,
+      `${TWO_FACTOR_API_BASE}/${path}`,
       {
         method: "POST",
         headers: {
           accept: "application/json",
-          "content-type": "application/json",
-          "x-api-key": env.SMS_PROVIDER_API_KEY,
         },
-        body: JSON.stringify({
-          to: input.phone,
-          channel: "SMS",
-          template_name: env.SMS_PROVIDER_TEMPLATE_NAME,
-          var1: input.otp,
-        }),
         signal: controller.signal,
       },
     );

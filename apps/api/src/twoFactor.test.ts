@@ -8,7 +8,7 @@ const env = {
 } as AppEnv;
 
 describe("2Factor OTP adapter", () => {
-  it("requests the SMS-only channel and accepts a successful response", async () => {
+  it("posts to the provider SMS route and accepts a successful response", async () => {
     const providerFetch = vi.fn<typeof fetch>().mockResolvedValue(
       new Response(JSON.stringify({ Status: "Success", Details: "session" }), {
         status: 200,
@@ -24,20 +24,10 @@ describe("2Factor OTP adapter", () => {
 
     expect(providerFetch).toHaveBeenCalledOnce();
     expect(providerFetch.mock.calls[0]?.[0]).toBe(
-      "https://2factor.in/API/V1/OTP/SEND",
+      "https://2factor.in/API/V1/server-secret-key/SMS/%2B919999999999/123456/Template1",
     );
     expect(providerFetch.mock.calls[0]?.[1]).toMatchObject({
       method: "POST",
-      headers: {
-        "content-type": "application/json",
-        "x-api-key": "server-secret-key",
-      },
-      body: JSON.stringify({
-        to: "+919999999999",
-        channel: "SMS",
-        template_name: "Template1",
-        var1: "123456",
-      }),
     });
   });
 
@@ -58,12 +48,14 @@ describe("2Factor OTP adapter", () => {
   });
 
   it("rejects provider errors without exposing provider details", async () => {
-    const providerFetch = vi.fn<typeof fetch>().mockResolvedValue(
-      new Response(
-        JSON.stringify({ Status: "Error", Details: "invalid api key" }),
-        { status: 401 },
-      ),
-    );
+    const providerFetch = vi
+      .fn<typeof fetch>()
+      .mockResolvedValue(
+        new Response(
+          JSON.stringify({ Status: "Error", Details: "invalid api key" }),
+          { status: 401 },
+        ),
+      );
 
     await expect(
       sendOtpWithTwoFactor(
