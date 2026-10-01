@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { PwaRegistration } from "./PwaRegistration";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -7,6 +8,20 @@ export const metadata: Metadata = {
     template: "%s | Replica Home Saloon Service",
   },
   description: "Professional beauty and grooming services at home in Lucknow.",
+  applicationName: "Replica Home Saloon Service",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Replica Salon",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  icons: {
+    icon: [{ url: "/icons/replica-icon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/icons/replica-icon.svg", type: "image/svg+xml" }],
+  },
   robots: {
     index: true,
     follow: true,
@@ -40,7 +55,10 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <PwaRegistration />
+      </body>
     </html>
   );
 }

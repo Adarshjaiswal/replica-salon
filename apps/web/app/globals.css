@@ -21,6 +21,60 @@
   --shadow-panel: 0 14px 34px rgb(91 50 140 / 8%);
   --shadow-soft: 0 20px 60px rgb(91 50 140 / 13%);
 }
+
+.pwa-offline-shell {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #f8f4fb;
+  color: #25172d;
+}
+
+.pwa-offline-panel {
+  width: min(100%, 520px);
+  text-align: center;
+}
+
+.pwa-offline-mark {
+  display: grid;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 24px;
+  place-items: center;
+  border-radius: 8px;
+  background: #6d3c8a;
+  color: #ffffff;
+  font-family: Georgia, serif;
+  font-size: 40px;
+  font-weight: 700;
+}
+
+.pwa-offline-panel h1 {
+  margin: 8px 0 12px;
+  font-size: clamp(2rem, 8vw, 3.5rem);
+  letter-spacing: 0;
+}
+
+.pwa-offline-panel p:not(.eyebrow) {
+  max-width: 440px;
+  margin: 0 auto 28px;
+  color: #625669;
+  line-height: 1.7;
+}
+
+.pwa-offline-panel a {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+  border-radius: 6px;
+  background: #6d3c8a;
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+}
 * {
   box-sizing: border-box;
 }
@@ -1062,7 +1116,8 @@ button:disabled {
   grid-template-columns: auto minmax(0, 1fr) auto;
   gap: 14px;
   max-width: 760px;
-  border: 1px solid color-mix(in srgb, var(--color-danger) 25%, var(--color-line));
+  border: 1px solid
+    color-mix(in srgb, var(--color-danger) 25%, var(--color-line));
   border-radius: 8px;
   background: color-mix(in srgb, var(--color-danger) 5%, var(--color-surface));
   color: var(--color-danger);
@@ -1150,7 +1205,8 @@ button:disabled {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  border: 1px solid color-mix(in srgb, var(--color-danger) 20%, var(--color-line));
+  border: 1px solid
+    color-mix(in srgb, var(--color-danger) 20%, var(--color-line));
   border-radius: 7px;
   background: color-mix(in srgb, var(--color-danger) 5%, var(--color-surface));
   color: var(--color-danger);
