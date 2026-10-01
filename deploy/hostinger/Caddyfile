@@ -2,6 +2,10 @@
 	email {$TLS_EMAIL}
 }
 
+replicahomesalon.com, www.replicahomesalon.com, replicahomesalon.online, www.replicahomesalon.online, replicahomesalon.in, www.replicahomesalon.in {
+	redir https://{$DOMAIN}{uri} permanent
+}
+
 {$DOMAIN} {
 	encode zstd gzip
 
