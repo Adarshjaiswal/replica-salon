@@ -58,7 +58,7 @@ export async function sendOtpWithTwoFactor(
     const response = await fetchImplementation(
       `${TWO_FACTOR_API_BASE}/${path}`,
       {
-        method: "POST",
+        method: "GET",
         headers: {
           accept: "application/json",
         },

@@ -8,7 +8,7 @@ const env = {
 } as AppEnv;
 
 describe("2Factor OTP adapter", () => {
-  it("posts to the provider SMS route and accepts a successful response", async () => {
+  it("gets the provider SMS route and accepts a successful response", async () => {
     const providerFetch = vi.fn<typeof fetch>().mockResolvedValue(
       new Response(JSON.stringify({ Status: "Success", Details: "session" }), {
         status: 200,
@@ -27,7 +27,7 @@ describe("2Factor OTP adapter", () => {
       "https://2factor.in/API/V1/server-secret-key/SMS/%2B919999999999/123456/Template1",
     );
     expect(providerFetch.mock.calls[0]?.[1]).toMatchObject({
-      method: "POST",
+      method: "GET",
     });
   });
 
