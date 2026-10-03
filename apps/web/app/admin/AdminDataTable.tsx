@@ -58,7 +58,11 @@ export default function AdminDataTable<TRow>({
               rows.map((row) => (
                 <tr key={getRowId(row)}>
                   {columns.map((column) => (
-                    <td className={column.className} key={column.key}>
+                    <td
+                      className={column.className}
+                      data-label={column.header}
+                      key={column.key}
+                    >
                       {column.render(row)}
                     </td>
                   ))}
@@ -66,7 +70,11 @@ export default function AdminDataTable<TRow>({
               ))
             ) : (
               <tr>
-                <td className="table-empty-cell" colSpan={columns.length}>
+                <td
+                  className="table-empty-cell"
+                  colSpan={columns.length}
+                  data-label="Status"
+                >
                   {loading ? "Loading records" : emptyMessage}
                 </td>
               </tr>

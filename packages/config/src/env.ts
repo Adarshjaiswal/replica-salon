@@ -20,6 +20,18 @@ export const appEnvSchema = z.object({
   RAZORPAY_KEY_ID: z.string().optional(),
   RAZORPAY_KEY_SECRET: z.string().optional(),
   RAZORPAY_WEBHOOK_SECRET: z.string().optional(),
+  RAZORPAY_REVIEW_OTP_ENABLED: z
+    .enum(["true", "false"])
+    .default("false")
+    .transform((value) => value === "true"),
+  RAZORPAY_REVIEW_PHONE: z
+    .string()
+    .regex(/^\+91\d{10}$/)
+    .default("+916386851855"),
+  RAZORPAY_REVIEW_OTP: z
+    .string()
+    .regex(/^\d{6}$/)
+    .default("123456"),
   SMS_PROVIDER_API_KEY: z.string().optional(),
   SMS_PROVIDER_TEMPLATE_NAME: z.string().trim().min(1).default("Template1"),
   EMAIL_SMTP_URL: z.string().optional(),

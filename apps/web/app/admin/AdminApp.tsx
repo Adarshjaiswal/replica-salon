@@ -24,8 +24,6 @@ import {
   LayoutDashboard,
   List,
   LogIn,
-  LogOut,
-  Menu,
   Plus,
   Quote,
   RefreshCw,
@@ -55,6 +53,9 @@ import {
   type FormEvent,
 } from "react";
 import AdminDataTable, { type AdminDataTableColumn } from "./AdminDataTable";
+import type { AdminCommand } from "./adminCommands";
+import AdminHeader from "./AdminHeader";
+import AdminSidebar from "./AdminSidebar";
 
 const API_BASE = (
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000/api/v1"
@@ -101,6 +102,54 @@ const USER_MANAGEMENT_NAV_ITEMS: Array<{
 }> = [
   { key: "users", label: "Users", icon: Users },
   { key: "roles", label: "Roles", icon: ShieldCheck },
+];
+
+const ADMIN_COMMANDS: AdminCommand[] = [
+  { label: "Dashboard", group: "Workspace", path: "/admin" },
+  { label: "Bookings", group: "Operations", path: "/admin/bookings" },
+  { label: "Customers", group: "Operations", path: "/admin/customers" },
+  { label: "Staff", group: "Operations", path: "/admin/staff" },
+  {
+    label: "Categories",
+    group: "Catalogue",
+    path: "/admin/catalogue/categories",
+  },
+  {
+    label: "Services",
+    group: "Catalogue",
+    path: "/admin/catalogue/services",
+  },
+  {
+    label: "Packages",
+    group: "Catalogue",
+    path: "/admin/catalogue/packages",
+  },
+  {
+    label: "Homepage",
+    group: "Catalogue",
+    path: "/admin/catalogue/homepage",
+  },
+  { label: "Payments", group: "Finance", path: "/admin/payments" },
+  { label: "Reviews", group: "Content", path: "/admin/reviews" },
+  { label: "Reports", group: "Insights", path: "/admin/reports" },
+  {
+    label: "Notifications",
+    group: "System",
+    path: "/admin/notifications",
+  },
+  { label: "Blogs", group: "Content", path: "/admin/blogs" },
+  {
+    label: "Admin users",
+    group: "User management",
+    path: "/admin/user-management/users",
+    keywords: "access accounts administrators",
+  },
+  {
+    label: "Roles and permissions",
+    group: "User management",
+    path: "/admin/user-management/roles",
+    keywords: "access control rbac",
+  },
 ];
 
 type StaffEngagementType = "SALARIED" | "GIG";
@@ -1504,8 +1553,30 @@ export default function AdminApp(): React.ReactElement {
   const [refreshing, setRefreshing] = useState(false);
   const [moduleLoading, setModuleLoading] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setSidebarCollapsed(
+      window.localStorage.getItem("replica-admin-sidebar-collapsed") === "true",
+    );
+  }, []);
+
+  useEffect(() => {
+    if (!bookingDetail) {
+      return;
+    }
+
+    function closeBookingDialog(event: KeyboardEvent): void {
+      if (event.key === "Escape") {
+        setBookingDetail(null);
+      }
+    }
+
+    window.addEventListener("keydown", closeBookingDialog);
+    return () => window.removeEventListener("keydown", closeBookingDialog);
+  }, [bookingDetail]);
 
   const activeModuleLabel = useMemo(
     () =>
@@ -7353,8 +7424,8 @@ export default function AdminApp(): React.ReactElement {
             <div>
               <strong>Homepage content could not be loaded</strong>
               <span>
-                Check that the local API is running, then try loading the
-                editor again.
+                Check that the local API is running, then try loading the editor
+                again.
               </span>
             </div>
             <button
@@ -7958,141 +8029,160 @@ export default function AdminApp(): React.ReactElement {
           );
 
     return (
-      <aside className="booking-assignment-panel" aria-label="Booking detail">
-        <div className="panel-heading booking-panel-heading">
-          <div>
-            <p className="eyebrow">
-              Booking #{bookingDetail.publicId.slice(-8)}
-            </p>
-            <h2>Assignment</h2>
-          </div>
-          <button
-            aria-label="Close booking detail"
-            className="icon-button"
-            onClick={() => setBookingDetail(null)}
-            type="button"
-          >
-            <X aria-hidden="true" size={16} />
-          </button>
-        </div>
-
-        <div className="booking-summary-grid">
-          <div>
-            <span>Customer</span>
-            <strong>{bookingDetail.customerName}</strong>
-            {bookingDetail.customerPhone ? (
-              <small>{bookingDetail.customerPhone}</small>
-            ) : null}
-          </div>
-          <div>
-            <span>Status</span>
-            <strong>{formatLabel(bookingDetail.status)}</strong>
-          </div>
-          <div>
-            <span>Payment</span>
-            <strong>{formatLabel(bookingDetail.paymentStatus)}</strong>
-          </div>
-          <div>
-            <span>Total</span>
-            <strong>{formatInrPaise(bookingDetail.totalPaise)}</strong>
-          </div>
-        </div>
-
-        <div className="booking-detail-block">
-          <span className="field-label">Address</span>
-          <p>{bookingDetail.addressSummary || "Address not captured"}</p>
-        </div>
-
-        <div className="booking-detail-block">
-          <span className="field-label">Booked services</span>
-          <ul className="booking-service-list">
-            {bookingDetail.serviceNames.map((serviceName) => (
-              <li key={serviceName}>{serviceName}</li>
-            ))}
-          </ul>
-        </div>
-
-        <form
-          className="admin-form booking-assignment-form"
-          key={bookingDetail.id}
-          onSubmit={handleSaveBookingAssignment}
+      <div
+        className="modal-backdrop booking-modal-backdrop"
+        onMouseDown={(event) => {
+          if (event.target === event.currentTarget) {
+            setBookingDetail(null);
+          }
+        }}
+      >
+        <section
+          aria-labelledby="booking-assignment-title"
+          aria-modal="true"
+          className="booking-assignment-panel booking-assignment-modal"
+          role="dialog"
         >
-          <div className="field-group">
-            <label className="field-label" htmlFor="booking-scheduled-start">
-              Slot start
-            </label>
-            <input
-              className="text-field"
-              defaultValue={formatDateTimeLocalValue(
-                bookingDetail.scheduledStartAt,
-              )}
-              id="booking-scheduled-start"
-              name="booking-scheduled-start"
-              required
-              type="datetime-local"
-            />
-          </div>
-
-          <div className="field-group">
-            <label className="field-label" htmlFor="booking-staff-profile-id">
-              Professional assignment
-            </label>
-            <select
-              className="text-field"
-              defaultValue={bookingDetail.staff?.id ?? ""}
-              disabled={!canAssignBookings || bookingStaffOptionsLoading}
-              id="booking-staff-profile-id"
-              name="booking-staff-profile-id"
+          <div className="panel-heading booking-panel-heading">
+            <div>
+              <p className="eyebrow">
+                Booking #{bookingDetail.publicId.slice(-8)}
+              </p>
+              <h2 id="booking-assignment-title">Manage booking</h2>
+            </div>
+            <button
+              aria-label="Close booking detail"
+              className="icon-button"
+              onClick={() => setBookingDetail(null)}
+              type="button"
             >
-              <option value="">Auto assign least-loaded eligible staff</option>
-              {bookingDetail.staff && !currentStaffAlreadyListed ? (
-                <option value={bookingDetail.staff.id}>
-                  {bookingDetail.staff.name} ·{" "}
-                  {bookingDetail.staff.employeeCode}
-                </option>
+              <X aria-hidden="true" size={16} />
+            </button>
+          </div>
+
+          <div className="booking-summary-grid">
+            <div>
+              <span>Customer</span>
+              <strong>{bookingDetail.customerName}</strong>
+              {bookingDetail.customerPhone ? (
+                <small>{bookingDetail.customerPhone}</small>
               ) : null}
-              {bookingStaffOptions.map((staff) => (
-                <option key={staff.id} value={staff.id}>
-                  {staff.name} · {staff.employeeCode}
-                </option>
+            </div>
+            <div>
+              <span>Status</span>
+              <strong>{formatLabel(bookingDetail.status)}</strong>
+            </div>
+            <div>
+              <span>Payment</span>
+              <strong>{formatLabel(bookingDetail.paymentStatus)}</strong>
+            </div>
+            <div>
+              <span>Total</span>
+              <strong>{formatInrPaise(bookingDetail.totalPaise)}</strong>
+            </div>
+          </div>
+
+          <div className="booking-detail-block">
+            <span className="field-label">Address</span>
+            <p>{bookingDetail.addressSummary || "Address not captured"}</p>
+          </div>
+
+          <div className="booking-detail-block">
+            <span className="field-label">Booked services</span>
+            <ul className="booking-service-list">
+              {bookingDetail.serviceNames.map((serviceName) => (
+                <li key={serviceName}>{serviceName}</li>
               ))}
-            </select>
-            <p className="form-help-text">
-              The backend checks service eligibility, schedule windows and
-              overlapping work before saving.
-            </p>
+            </ul>
           </div>
 
-          <div className="field-group">
-            <label className="field-label" htmlFor="booking-assignment-reason">
-              Change note
-            </label>
-            <textarea
-              className="text-field text-area"
-              id="booking-assignment-reason"
-              maxLength={500}
-              name="booking-assignment-reason"
-              placeholder="Reason for changing slot or professional"
-            />
-          </div>
-
-          <button
-            className="primary-button"
-            disabled={
-              !canAssignBookings ||
-              actionSubmitting === "booking-assignment-update"
-            }
-            type="submit"
+          <form
+            className="admin-form booking-assignment-form"
+            key={bookingDetail.id}
+            onSubmit={handleSaveBookingAssignment}
           >
-            <CalendarCheck aria-hidden="true" size={16} />
-            <span>
-              {actionSubmitting === "booking-assignment-update"
-                ? "Saving"
-                : "Save assignment"}
-            </span>
-          </button>
-        </form>
-      </aside>
+            <div className="field-group">
+              <label className="field-label" htmlFor="booking-scheduled-start">
+                Slot start
+              </label>
+              <input
+                className="text-field"
+                defaultValue={formatDateTimeLocalValue(
+                  bookingDetail.scheduledStartAt,
+                )}
+                id="booking-scheduled-start"
+                name="booking-scheduled-start"
+                required
+                type="datetime-local"
+              />
+            </div>
+
+            <div className="field-group">
+              <label className="field-label" htmlFor="booking-staff-profile-id">
+                Professional assignment
+              </label>
+              <select
+                className="text-field"
+                defaultValue={bookingDetail.staff?.id ?? ""}
+                disabled={!canAssignBookings || bookingStaffOptionsLoading}
+                id="booking-staff-profile-id"
+                name="booking-staff-profile-id"
+              >
+                <option value="">
+                  Auto assign least-loaded eligible staff
+                </option>
+                {bookingDetail.staff && !currentStaffAlreadyListed ? (
+                  <option value={bookingDetail.staff.id}>
+                    {bookingDetail.staff.name} ·{" "}
+                    {bookingDetail.staff.employeeCode}
+                  </option>
+                ) : null}
+                {bookingStaffOptions.map((staff) => (
+                  <option key={staff.id} value={staff.id}>
+                    {staff.name} · {staff.employeeCode}
+                  </option>
+                ))}
+              </select>
+              <p className="form-help-text">
+                The backend checks service eligibility, schedule windows and
+                overlapping work before saving.
+              </p>
+            </div>
+
+            <div className="field-group">
+              <label
+                className="field-label"
+                htmlFor="booking-assignment-reason"
+              >
+                Change note
+              </label>
+              <textarea
+                className="text-field text-area"
+                id="booking-assignment-reason"
+                maxLength={500}
+                name="booking-assignment-reason"
+                placeholder="Reason for changing slot or professional"
+              />
+            </div>
+
+            <button
+              className="primary-button"
+              disabled={
+                !canAssignBookings ||
+                actionSubmitting === "booking-assignment-update"
+              }
+              type="submit"
+            >
+              <CalendarCheck aria-hidden="true" size={16} />
+              <span>
+                {actionSubmitting === "booking-assignment-update"
+                  ? "Saving"
+                  : "Save assignment"}
+              </span>
+            </button>
+          </form>
+        </section>
+      </div>
     );
   }
 
@@ -8184,7 +8274,7 @@ export default function AdminApp(): React.ReactElement {
           </div>
         </div>
 
-        <div className="booking-desk-layout">
+        <div className="booking-list-layout">
           <AdminDataTable
             columns={bookingColumns}
             emptyMessage={
@@ -8202,8 +8292,8 @@ export default function AdminApp(): React.ReactElement {
             rows={bookingRows}
             totalCount={bookingTotalCount}
           />
-          {renderBookingAssignmentPanel()}
         </div>
+        {renderBookingAssignmentPanel()}
       </section>
     );
   }
@@ -9271,27 +9361,17 @@ export default function AdminApp(): React.ReactElement {
   }
 
   return (
-    <div className="admin-app-shell">
-      <aside
-        className={`admin-sidebar ${navOpen ? "admin-sidebar-open" : ""}`}
-        aria-label="Admin navigation"
+    <div
+      className={`admin-app-shell ${sidebarCollapsed ? "admin-app-shell-collapsed" : ""}`}
+    >
+      <AdminSidebar
+        collapsed={sidebarCollapsed}
+        onClose={() => setNavOpen(false)}
+        open={navOpen}
+        userName={user.name}
       >
-        <div className="admin-brand-row">
-          <div className="auth-brand">
-            <span className="brand-mark">R</span>
-            <span>Replica Saloon Admin</span>
-          </div>
-          <button
-            aria-label="Close navigation"
-            className="icon-button mobile-only"
-            onClick={() => setNavOpen(false)}
-            title="Close navigation"
-            type="button"
-          >
-            <X aria-hidden="true" size={18} />
-          </button>
-        </div>
         <nav className="admin-module-nav">
+          <p className="admin-nav-section-label">Workspace</p>
           <button
             aria-current={isDashboardRoute ? "page" : undefined}
             className="admin-module-button"
@@ -9375,6 +9455,9 @@ export default function AdminApp(): React.ReactElement {
             <BookOpen aria-hidden="true" size={16} />
             <span>Blogs</span>
           </button>
+          <p className="admin-nav-section-label admin-nav-section-spacer">
+            Access control
+          </p>
           <div className="admin-nav-group">
             <button
               aria-expanded={isUserManagementRoute}
@@ -9417,7 +9500,7 @@ export default function AdminApp(): React.ReactElement {
             ) : null}
           </div>
         </nav>
-      </aside>
+      </AdminSidebar>
 
       {navOpen ? (
         <button
@@ -9433,45 +9516,50 @@ export default function AdminApp(): React.ReactElement {
           isDashboardRoute ? "admin-dashboard-workspace" : ""
         }`}
       >
-        <header className="admin-topbar">
-          <button
-            aria-label="Open navigation"
-            className="icon-button mobile-only"
-            onClick={() => setNavOpen(true)}
-            title="Open navigation"
-            type="button"
-          >
-            <Menu aria-hidden="true" size={18} />
-          </button>
+        <AdminHeader
+          collapsed={sidebarCollapsed}
+          commands={ADMIN_COMMANDS}
+          onCommand={(path) => router.push(path)}
+          onLogout={() => void handleLogout()}
+          onOpenMobileNavigation={() => setNavOpen(true)}
+          onRefresh={() => void handleRefresh()}
+          onToggleCollapsed={() => {
+            const nextValue = !sidebarCollapsed;
+            setSidebarCollapsed(nextValue);
+            window.localStorage.setItem(
+              "replica-admin-sidebar-collapsed",
+              String(nextValue),
+            );
+          }}
+          refreshing={refreshing}
+          title={workspaceTitle}
+          userName={user.name}
+          userRole={
+            user.roles[0] ? formatLabel(user.roles[0]) : "Administrator"
+          }
+        />
+
+        <div
+          className={`admin-page-titlebar ${isDashboardRoute ? "admin-dashboard-welcome" : ""}`}
+        >
           <div>
-            <p className="eyebrow">Admin operations</p>
-            <h1 className="workspace-title">{workspaceTitle}</h1>
+            {isDashboardRoute ? (
+              <>
+                <h1 className="workspace-title">
+                  Welcome back, {user.name.split(" ")[0]}
+                </h1>
+                <p className="admin-page-subtitle">
+                  Bookings, customers and salon operations at a glance.
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="eyebrow">Admin operations</p>
+                <h1 className="workspace-title">{workspaceTitle}</h1>
+              </>
+            )}
           </div>
-          <div className="topbar-actions">
-            <div className="session-pill">
-              <ShieldCheck aria-hidden="true" size={16} />
-              <span>{user.name}</span>
-            </div>
-            <button
-              className="secondary-button"
-              disabled={refreshing}
-              onClick={() => void handleRefresh()}
-              type="button"
-            >
-              <RefreshCw aria-hidden="true" size={16} />
-              <span>{refreshing ? "Refreshing" : "Refresh"}</span>
-            </button>
-            <button
-              className="secondary-button"
-              disabled={refreshing}
-              onClick={() => void handleLogout()}
-              type="button"
-            >
-              <LogOut aria-hidden="true" size={16} />
-              <span>Logout</span>
-            </button>
-          </div>
-        </header>
+        </div>
 
         {error ? <div className="message message-error">{error}</div> : null}
         {notice ? (

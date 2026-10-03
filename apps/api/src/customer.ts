@@ -56,6 +56,7 @@ import {
   type RazorpayPaymentEntity,
 } from "./razorpay.js";
 import { OtpDeliveryError, sendOtpWithTwoFactor } from "./twoFactor.js";
+import { getRazorpayReviewOtp } from "./reviewOtp.js";
 
 const CUSTOMER_SESSION_COOKIE_NAME = "replica_customer_session";
 const CUSTOMER_SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000;
@@ -2065,11 +2066,12 @@ export function createCustomerRouter(env: AppEnv): Router {
       }
 
       const identifier = `customer-login:${phone}`;
-      const otp = createOtp();
+      const reviewOtp = getRazorpayReviewOtp(env, phone);
+      const otp = reviewOtp ?? createOtp();
       const now = new Date();
       const expiresAt = new Date(now.getTime() + OTP_TTL_MS);
 
-      if (env.SMS_PROVIDER_API_KEY) {
+      if (env.SMS_PROVIDER_API_KEY && !reviewOtp) {
         try {
           await sendOtpWithTwoFactor(env, { phone, otp });
         } catch (error) {
@@ -2115,6 +2117,7 @@ export function createCustomerRouter(env: AppEnv): Router {
         {
           phone: maskPhone(phone),
           developmentOtpReturned: isLocalDevelopment(env),
+          razorpayReviewMode: Boolean(reviewOtp),
         },
         "Customer OTP generated.",
       );
@@ -2124,9 +2127,10 @@ export function createCustomerRouter(env: AppEnv): Router {
           {
             phone,
             expiresAt: expiresAt.toISOString(),
-            delivery: env.SMS_PROVIDER_API_KEY
-              ? "sms_provider"
-              : "development_preview",
+            delivery:
+              env.SMS_PROVIDER_API_KEY && !reviewOtp
+                ? "sms_provider"
+                : "development_preview",
             developmentOtp: isLocalDevelopment(env) ? otp : null,
           },
           getRequestId(res),
