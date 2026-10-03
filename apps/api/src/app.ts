@@ -120,6 +120,11 @@ function sameOriginMutationGuard(env: AppEnv) {
 export function createApp(env: AppEnv): express.Express {
   const app = express();
 
+  if (env.APP_ENV === "production") {
+    // Caddy is the single private-network proxy in the production stack.
+    app.set("trust proxy", 1);
+  }
+
   app.disable("x-powered-by");
   app.use(requestIdMiddleware);
   app.use(corsMiddleware(env));
