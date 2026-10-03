@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Replica Salon">
+  <rect width="512" height="512" rx="96" fill="#6D3C8A"/>
+  <path fill="#FFFFFF" d="M142 112h133c82 0 131 43 131 111 0 48-27 84-71 101l88 76h-90l-75-66h-41v66h-75V112Zm75 65v94h53c38 0 59-16 59-47 0-32-21-47-59-47h-53Z"/>
+  <path fill="#F4C76B" d="M361 351h42v49h-42z"/>
+</svg>

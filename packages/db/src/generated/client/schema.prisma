@@ -1,0 +1,1020 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum AccountType {
+  CUSTOMER
+  STAFF
+  ADMIN
+}
+
+enum UserStatus {
+  INVITED
+  ACTIVE
+  SUSPENDED
+  DISABLED
+}
+
+enum StaffEngagementType {
+  SALARIED
+  GIG
+}
+
+enum PublishStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum ServiceTierType {
+  PREMIUM
+  LUXURY
+}
+
+enum BookingStatus {
+  DRAFT
+  CONFIRMED
+  ASSIGNMENT_PENDING
+  ASSIGNED
+  ACCEPTED
+  EN_ROUTE
+  ARRIVED
+  IN_SERVICE
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  AUTHORIZED
+  CAPTURED
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+}
+
+enum ContactStatus {
+  NEW
+  IN_PROGRESS
+  RESOLVED
+  SPAM
+}
+
+enum ReviewModerationStatus {
+  PENDING
+  APPROVED
+  HIDDEN
+  REJECTED
+}
+
+enum OutboxStatus {
+  PENDING
+  PROCESSING
+  SENT
+  FAILED
+  DEAD
+}
+
+enum WebhookProcessingStatus {
+  RECEIVED
+  PROCESSED
+  FAILED
+  IGNORED
+}
+
+model User {
+  id              String      @id @default(cuid())
+  publicId        String      @unique @default(cuid())
+  email           String?     @unique @db.VarChar(254)
+  phone           String?     @unique @db.VarChar(32)
+  name            String      @db.VarChar(160)
+  accountType     AccountType
+  status          UserStatus  @default(INVITED)
+  emailVerifiedAt DateTime?
+  phoneVerifiedAt DateTime?
+  lastLoginAt     DateTime?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  authAccounts     AuthAccount[]
+  authSessions     AuthSession[]
+  userRoles        UserRole[]
+  customerProfile  CustomerProfile?
+  staffProfile     StaffProfile?
+  invitationsSent  AdminInvitation[] @relation("AdminInvitationInviter")
+  securityEvents   SecurityEvent[]   @relation("SecurityEventActor")
+  auditLogs        AuditLog[]        @relation("AuditLogActor")
+  contentRevisions ContentRevision[] @relation("ContentRevisionAuthor")
+  blogPosts        BlogPost[]        @relation("BlogPostAuthor")
+  reviewsModerated Review[]          @relation("ReviewModerator")
+
+  @@index([accountType, status])
+}
+
+model AuthAccount {
+  id                    String    @id @default(cuid())
+  userId                String
+  providerId            String    @db.VarChar(80)
+  accountId             String    @db.VarChar(191)
+  accessToken           String?   @db.Text
+  refreshToken          String?   @db.Text
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  passwordHash          String?   @db.Text
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, accountId])
+  @@index([userId])
+}
+
+model AuthSession {
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String    @unique @db.VarChar(191)
+  expiresAt DateTime
+  ipHash    String?   @db.VarChar(128)
+  userAgent String?   @db.VarChar(512)
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, revokedAt])
+  @@index([expiresAt])
+}
+
+model AuthVerification {
+  id         String    @id @default(cuid())
+  identifier String    @db.VarChar(191)
+  valueHash  String    @db.VarChar(191)
+  expiresAt  DateTime
+  usedAt     DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([identifier])
+  @@index([expiresAt])
+}
+
+model AdminInvitation {
+  id         String    @id @default(cuid())
+  email      String    @db.VarChar(254)
+  name       String    @db.VarChar(160)
+  tokenHash  String    @unique @db.VarChar(191)
+  status     String    @default("PENDING") @db.VarChar(40)
+  inviterId  String
+  acceptedAt DateTime?
+  expiresAt  DateTime
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  inviter User @relation("AdminInvitationInviter", fields: [inviterId], references: [id])
+
+  @@index([email, status])
+  @@index([expiresAt])
+}
+
+model Role {
+  id          String    @id @default(cuid())
+  name        String    @unique @db.VarChar(120)
+  description String?   @db.VarChar(500)
+  isSystem    Boolean   @default(false)
+  archivedAt  DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  users       UserRole[]
+  permissions RolePermission[]
+}
+
+model Permission {
+  id          String   @id @default(cuid())
+  resource    String   @db.VarChar(80)
+  action      String   @db.VarChar(80)
+  description String?  @db.VarChar(500)
+  createdAt   DateTime @default(now())
+
+  roles RolePermission[]
+
+  @@unique([resource, action])
+}
+
+model UserRole {
+  userId    String
+  roleId    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+  createdAt    DateTime @default(now())
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+}
+
+model SecurityEvent {
+  id        String   @id @default(cuid())
+  actorId   String?
+  event     String   @db.VarChar(120)
+  ipHash    String?  @db.VarChar(128)
+  userAgent String?  @db.VarChar(512)
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  actor User? @relation("SecurityEventActor", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([actorId, createdAt])
+  @@index([event, createdAt])
+}
+
+model AuditLog {
+  id           String   @id @default(cuid())
+  actorId      String?
+  action       String   @db.VarChar(120)
+  resourceType String   @db.VarChar(120)
+  resourceId   String?  @db.VarChar(191)
+  before       Json?
+  after        Json?
+  requestId    String   @db.VarChar(128)
+  ipHash       String?  @db.VarChar(128)
+  userAgent    String?  @db.VarChar(512)
+  createdAt    DateTime @default(now())
+
+  actor User? @relation("AuditLogActor", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([actorId, createdAt])
+  @@index([resourceType, resourceId])
+  @@index([requestId])
+}
+
+model Category {
+  id             String        @id @default(cuid())
+  publicId       String        @unique @default(cuid())
+  parentId       String?
+  name           String        @db.VarChar(160)
+  slug           String        @db.VarChar(160)
+  description    String?       @db.Text
+  imageAssetId   String?
+  seoTitle       String?       @db.VarChar(180)
+  seoDescription String?       @db.VarChar(320)
+  status         PublishStatus @default(DRAFT)
+  sortOrder      Int           @default(0)
+  archivedAt     DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  parent     Category?        @relation("CategoryChildren", fields: [parentId], references: [id], onDelete: Restrict)
+  children   Category[]       @relation("CategoryChildren")
+  services   Service[]
+  imageAsset MediaAsset?      @relation(fields: [imageAssetId], references: [id], onDelete: SetNull)
+  packages   ServicePackage[]
+
+  @@unique([parentId, slug])
+  @@index([parentId])
+  @@index([status, sortOrder])
+}
+
+model Service {
+  id                  String        @id @default(cuid())
+  publicId            String        @unique @default(cuid())
+  categoryId          String
+  name                String        @db.VarChar(180)
+  slug                String        @unique @db.VarChar(180)
+  shortDescription    String?       @db.VarChar(320)
+  fullDescription     String?       @db.Text
+  durationMinutes     Int
+  pricePaise          Int
+  compareAtPricePaise Int?
+  gstRateBps          Int?
+  dealEnabled         Boolean       @default(false)
+  dealPricePaise      Int?
+  dealStartsAt        DateTime?
+  dealEndsAt          DateTime?
+  inclusions          Json?
+  exclusions          Json?
+  status              PublishStatus @default(DRAFT)
+  featured            Boolean       @default(false)
+  sortOrder           Int           @default(0)
+  seoTitle            String?       @db.VarChar(180)
+  seoDescription      String?       @db.VarChar(320)
+  publishedAt         DateTime?
+  archivedAt          DateTime?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  category     Category             @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  images       ServiceImage[]
+  addons       ServiceAddon[]
+  tiers        ServiceTier[]
+  packageItems ServicePackageItem[]
+  staff        StaffService[]
+  skills       ServiceSkill[]
+  zones        ServiceZone[]
+  bookingItems BookingItem[]
+
+  @@index([categoryId, status])
+  @@index([dealEnabled, dealStartsAt, dealEndsAt])
+  @@index([featured, sortOrder])
+}
+
+model ServiceTier {
+  id                  String          @id @default(cuid())
+  publicId            String          @unique @default(cuid())
+  serviceId           String
+  tierType            ServiceTierType
+  name                String          @db.VarChar(120)
+  description         String?         @db.VarChar(500)
+  durationMinutes     Int?
+  pricePaise          Int
+  compareAtPricePaise Int?
+  productsUsed        Json?
+  status              PublishStatus   @default(PUBLISHED)
+  sortOrder           Int             @default(0)
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+
+  service      Service              @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  bookingItems BookingItem[]
+  packageItems ServicePackageItem[]
+
+  @@unique([serviceId, tierType])
+  @@index([serviceId, status])
+}
+
+model ServicePackage {
+  id                  String        @id @default(cuid())
+  publicId            String        @unique @default(cuid())
+  categoryId          String
+  name                String        @db.VarChar(180)
+  slug                String        @unique @db.VarChar(180)
+  description         String?       @db.VarChar(700)
+  minPricePaise       Int
+  compareAtPricePaise Int?
+  discountBps         Int           @default(0)
+  durationMinutes     Int
+  inclusions          Json?
+  status              PublishStatus @default(DRAFT)
+  sortOrder           Int           @default(0)
+  publishedAt         DateTime?
+  archivedAt          DateTime?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  category     Category             @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  items        ServicePackageItem[]
+  bookingItems BookingItem[]
+
+  @@index([categoryId, status, sortOrder])
+}
+
+model ServicePackageItem {
+  id            String   @id @default(cuid())
+  packageId     String
+  serviceId     String
+  serviceTierId String?
+  label         String?  @db.VarChar(180)
+  quantity      Int      @default(1)
+  minQuantity   Int      @default(1)
+  sortOrder     Int      @default(0)
+  createdAt     DateTime @default(now())
+
+  package     ServicePackage @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  service     Service        @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+  serviceTier ServiceTier?   @relation(fields: [serviceTierId], references: [id], onDelete: SetNull)
+
+  @@index([packageId, sortOrder])
+  @@index([serviceId])
+  @@index([serviceTierId])
+}
+
+model MediaAsset {
+  id          String   @id @default(cuid())
+  publicId    String   @unique @default(cuid())
+  bucket      String   @db.VarChar(120)
+  objectKey   String   @unique @db.VarChar(512)
+  contentType String   @db.VarChar(120)
+  sizeBytes   Int
+  altText     String?  @db.VarChar(240)
+  createdAt   DateTime @default(now())
+
+  categories     Category[]
+  serviceImage   ServiceImage[]
+  staffDocuments StaffDocument[]
+  contentPages   ContentPage[]
+}
+
+model ServiceImage {
+  id           String @id @default(cuid())
+  serviceId    String
+  mediaAssetId String
+  altText      String @db.VarChar(240)
+  sortOrder    Int    @default(0)
+
+  service    Service    @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  mediaAsset MediaAsset @relation(fields: [mediaAssetId], references: [id], onDelete: Restrict)
+
+  @@index([serviceId, sortOrder])
+}
+
+model ServiceAddon {
+  id         String        @id @default(cuid())
+  serviceId  String
+  name       String        @db.VarChar(160)
+  pricePaise Int
+  status     PublishStatus @default(DRAFT)
+  sortOrder  Int           @default(0)
+
+  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@index([serviceId, status])
+}
+
+model Skill {
+  id        String        @id @default(cuid())
+  name      String        @unique @db.VarChar(120)
+  status    PublishStatus @default(PUBLISHED)
+  createdAt DateTime      @default(now())
+
+  services ServiceSkill[]
+  staff    StaffSkill[]
+}
+
+model Zone {
+  id        String        @id @default(cuid())
+  name      String        @unique @db.VarChar(140)
+  status    PublishStatus @default(PUBLISHED)
+  metadata  Json?
+  createdAt DateTime      @default(now())
+
+  services ServiceZone[]
+  staff    StaffZone[]
+}
+
+model ServiceSkill {
+  serviceId String
+  skillId   String
+
+  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  skill   Skill   @relation(fields: [skillId], references: [id], onDelete: Restrict)
+
+  @@id([serviceId, skillId])
+}
+
+model ServiceZone {
+  serviceId String
+  zoneId    String
+
+  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  zone    Zone    @relation(fields: [zoneId], references: [id], onDelete: Restrict)
+
+  @@id([serviceId, zoneId])
+}
+
+model CustomerProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  displayName String   @db.VarChar(160)
+  segment     String?  @db.VarChar(80)
+  notes       String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  addresses    Address[]
+  bookings     Booking[]
+  coupons      CouponRedemption[]
+  reviews      Review[]
+  contactLinks ContactSubmission[]
+}
+
+model Address {
+  id                String    @id @default(cuid())
+  customerProfileId String
+  label             String    @db.VarChar(80)
+  line1             String    @db.VarChar(220)
+  line2             String?   @db.VarChar(220)
+  city              String    @db.VarChar(120)
+  region            String    @db.VarChar(120)
+  postalCode        String    @db.VarChar(20)
+  latitude          Decimal?  @db.Decimal(10, 7)
+  longitude         Decimal?  @db.Decimal(10, 7)
+  isDefault         Boolean   @default(false)
+  archivedAt        DateTime?
+  createdAt         DateTime  @default(now())
+
+  customerProfile CustomerProfile @relation(fields: [customerProfileId], references: [id], onDelete: Cascade)
+  bookings        Booking[]
+}
+
+model StaffProfile {
+  id             String              @id @default(cuid())
+  userId         String              @unique
+  employeeCode   String              @unique @db.VarChar(80)
+  engagementType StaffEngagementType
+  emergencyPhone String?             @db.VarChar(32)
+  ratingAverage  Decimal?            @db.Decimal(3, 2)
+  status         UserStatus          @default(INVITED)
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+
+  user        User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skills      StaffSkill[]
+  services    StaffService[]
+  zones       StaffZone[]
+  documents   StaffDocument[]
+  schedules   StaffSchedule[]
+  exceptions  AvailabilityException[]
+  assignments StaffAssignment[]
+}
+
+model StaffSkill {
+  staffProfileId String
+  skillId        String
+
+  staffProfile StaffProfile @relation(fields: [staffProfileId], references: [id], onDelete: Cascade)
+  skill        Skill        @relation(fields: [skillId], references: [id], onDelete: Restrict)
+
+  @@id([staffProfileId, skillId])
+}
+
+model StaffService {
+  staffProfileId String
+  serviceId      String
+  createdAt      DateTime @default(now())
+
+  staffProfile StaffProfile @relation(fields: [staffProfileId], references: [id], onDelete: Cascade)
+  service      Service      @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+
+  @@id([staffProfileId, serviceId])
+  @@index([serviceId])
+}
+
+model StaffZone {
+  staffProfileId String
+  zoneId         String
+
+  staffProfile StaffProfile @relation(fields: [staffProfileId], references: [id], onDelete: Cascade)
+  zone         Zone         @relation(fields: [zoneId], references: [id], onDelete: Restrict)
+
+  @@id([staffProfileId, zoneId])
+}
+
+model StaffDocument {
+  id             String    @id @default(cuid())
+  staffProfileId String
+  type           String    @db.VarChar(80)
+  mediaAssetId   String?
+  expiresAt      DateTime?
+  verifiedAt     DateTime?
+  status         String    @default("PENDING") @db.VarChar(40)
+  createdAt      DateTime  @default(now())
+
+  staffProfile StaffProfile @relation(fields: [staffProfileId], references: [id], onDelete: Cascade)
+  mediaAsset   MediaAsset?  @relation(fields: [mediaAssetId], references: [id], onDelete: SetNull)
+
+  @@index([staffProfileId, status])
+  @@index([expiresAt])
+}
+
+model StaffSchedule {
+  id             String   @id @default(cuid())
+  staffProfileId String
+  weekday        Int
+  startsAtMinute Int
+  endsAtMinute   Int
+  createdAt      DateTime @default(now())
+
+  staffProfile StaffProfile @relation(fields: [staffProfileId], references: [id], onDelete: Cascade)
+
+  @@index([staffProfileId, weekday])
+}
+
+model AvailabilityException {
+  id             String   @id @default(cuid())
+  staffProfileId String
+  startsAt       DateTime
+  endsAt         DateTime
+  reason         String?  @db.VarChar(240)
+  createdAt      DateTime @default(now())
+
+  staffProfile StaffProfile @relation(fields: [staffProfileId], references: [id], onDelete: Cascade)
+
+  @@index([staffProfileId, startsAt, endsAt])
+}
+
+model Booking {
+  id                String        @id @default(cuid())
+  publicId          String        @unique @default(cuid())
+  customerProfileId String
+  addressId         String
+  status            BookingStatus @default(DRAFT)
+  scheduledStartAt  DateTime
+  scheduledEndAt    DateTime
+  subtotalPaise     Int
+  discountPaise     Int           @default(0)
+  taxPaise          Int           @default(0)
+  totalPaise        Int
+  notes             String?       @db.Text
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  customerProfile CustomerProfile        @relation(fields: [customerProfileId], references: [id], onDelete: Restrict)
+  address         Address                @relation(fields: [addressId], references: [id], onDelete: Restrict)
+  items           BookingItem[]
+  statusHistory   BookingStatusHistory[]
+  assignments     StaffAssignment[]
+  startOtps       ServiceStartOtp[]
+  reviews         Review[]
+  payments        Payment[]
+
+  @@index([customerProfileId, createdAt])
+  @@index([status, scheduledStartAt])
+}
+
+model BookingItem {
+  id              String  @id @default(cuid())
+  bookingId       String
+  serviceId       String
+  serviceTierId   String?
+  packageId       String?
+  serviceName     String  @db.VarChar(180)
+  serviceTierName String? @db.VarChar(120)
+  packageName     String? @db.VarChar(180)
+  quantity        Int     @default(1)
+  unitPaise       Int
+  taxPaise        Int     @default(0)
+  totalPaise      Int
+
+  booking     Booking         @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  service     Service         @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+  serviceTier ServiceTier?    @relation(fields: [serviceTierId], references: [id], onDelete: SetNull)
+  package     ServicePackage? @relation(fields: [packageId], references: [id], onDelete: SetNull)
+
+  @@index([serviceTierId])
+  @@index([packageId])
+}
+
+model BookingStatusHistory {
+  id        String        @id @default(cuid())
+  bookingId String
+  status    BookingStatus
+  actorId   String?
+  reason    String?       @db.VarChar(300)
+  createdAt DateTime      @default(now())
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId, createdAt])
+}
+
+model StaffAssignment {
+  id             String    @id @default(cuid())
+  bookingId      String
+  staffProfileId String
+  status         String    @default("ASSIGNED") @db.VarChar(40)
+  assignedAt     DateTime  @default(now())
+  acceptedAt     DateTime?
+  rejectedAt     DateTime?
+
+  booking      Booking      @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  staffProfile StaffProfile @relation(fields: [staffProfileId], references: [id], onDelete: Restrict)
+
+  @@index([staffProfileId, assignedAt])
+}
+
+model ServiceStartOtp {
+  id         String    @id @default(cuid())
+  bookingId  String
+  otpHash    String    @db.VarChar(191)
+  expiresAt  DateTime
+  verifiedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId, expiresAt])
+}
+
+model Review {
+  id                String                 @id @default(cuid())
+  bookingId         String
+  customerProfileId String
+  rating            Int
+  comment           String?                @db.Text
+  highlights        Json?
+  status            ReviewModerationStatus @default(PENDING)
+  showOnHomepage    Boolean                @default(false)
+  moderatedById     String?
+  moderatedAt       DateTime?
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+
+  booking         Booking         @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  customerProfile CustomerProfile @relation(fields: [customerProfileId], references: [id], onDelete: Cascade)
+  moderatedBy     User?           @relation("ReviewModerator", fields: [moderatedById], references: [id], onDelete: SetNull)
+
+  @@unique([bookingId])
+  @@index([status, showOnHomepage, createdAt])
+  @@index([customerProfileId, createdAt])
+}
+
+model Coupon {
+  id          String        @id @default(cuid())
+  code        String        @unique @db.VarChar(80)
+  description String?       @db.VarChar(300)
+  status      PublishStatus @default(DRAFT)
+  startsAt    DateTime?
+  endsAt      DateTime?
+  createdAt   DateTime      @default(now())
+
+  redemptions CouponRedemption[]
+}
+
+model CouponRedemption {
+  id                String   @id @default(cuid())
+  couponId          String
+  customerProfileId String
+  redeemedAt        DateTime @default(now())
+
+  coupon          Coupon          @relation(fields: [couponId], references: [id], onDelete: Restrict)
+  customerProfile CustomerProfile @relation(fields: [customerProfileId], references: [id], onDelete: Cascade)
+}
+
+model Payment {
+  id                String        @id @default(cuid())
+  bookingId         String
+  provider          String        @db.VarChar(60)
+  providerRef       String?       @db.VarChar(191)
+  providerOrderId   String?       @db.VarChar(191)
+  providerPaymentId String?       @db.VarChar(191)
+  providerStatus    String?       @db.VarChar(80)
+  status            PaymentStatus @default(PENDING)
+  amountPaise       Int
+  currency          String        @default("INR") @db.VarChar(3)
+  idempotencyKey    String?       @db.VarChar(191)
+  verifiedAt        DateTime?
+  capturedAt        DateTime?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  booking       Booking        @relation(fields: [bookingId], references: [id], onDelete: Restrict)
+  refunds       RefundRecord[]
+  invoice       Invoice?
+  webhookEvents WebhookEvent[]
+
+  @@unique([provider, providerRef])
+  @@unique([provider, providerOrderId])
+  @@unique([provider, providerPaymentId])
+  @@index([bookingId, status])
+  @@index([idempotencyKey])
+  @@index([provider, status, updatedAt])
+}
+
+model WebhookEvent {
+  id               String                  @id @default(cuid())
+  provider         String                  @db.VarChar(60)
+  providerEventId  String                  @db.VarChar(191)
+  eventName        String                  @db.VarChar(120)
+  payloadHash      String                  @db.VarChar(128)
+  processingStatus WebhookProcessingStatus @default(RECEIVED)
+  attempts         Int                     @default(0)
+  paymentId        String?
+  lastError        String?                 @db.VarChar(500)
+  receivedAt       DateTime                @default(now())
+  processedAt      DateTime?
+  createdAt        DateTime                @default(now())
+  updatedAt        DateTime                @updatedAt
+
+  payment Payment? @relation(fields: [paymentId], references: [id], onDelete: SetNull)
+
+  @@unique([provider, providerEventId])
+  @@index([provider, eventName, receivedAt])
+  @@index([processingStatus, receivedAt])
+  @@index([paymentId, receivedAt])
+}
+
+model RefundRecord {
+  id          String   @id @default(cuid())
+  paymentId   String
+  amountPaise Int
+  status      String   @db.VarChar(40)
+  reason      String?  @db.VarChar(300)
+  providerRef String?  @db.VarChar(191)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  payment Payment @relation(fields: [paymentId], references: [id], onDelete: Restrict)
+}
+
+model Invoice {
+  id         String   @id @default(cuid())
+  paymentId  String   @unique
+  invoiceNo  String   @unique @db.VarChar(80)
+  totalPaise Int
+  taxPaise   Int
+  pdfAssetId String?
+  issuedAt   DateTime @default(now())
+
+  payment Payment @relation(fields: [paymentId], references: [id], onDelete: Restrict)
+}
+
+model ContentPage {
+  id             String        @id @default(cuid())
+  slug           String        @unique @db.VarChar(160)
+  title          String        @db.VarChar(180)
+  status         PublishStatus @default(DRAFT)
+  seoTitle       String?       @db.VarChar(180)
+  seoDescription String?       @db.VarChar(320)
+  mediaAssetId   String?
+  publishedAt    DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  mediaAsset MediaAsset?       @relation(fields: [mediaAssetId], references: [id], onDelete: SetNull)
+  revisions  ContentRevision[]
+}
+
+model ContentRevision {
+  id            String   @id @default(cuid())
+  contentPageId String
+  authorId      String?
+  bodyHtml      String   @db.LongText
+  bodyText      String?  @db.Text
+  revisionNo    Int
+  createdAt     DateTime @default(now())
+
+  contentPage ContentPage @relation(fields: [contentPageId], references: [id], onDelete: Cascade)
+  author      User?       @relation("ContentRevisionAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@unique([contentPageId, revisionNo])
+}
+
+model BlogPost {
+  id             String        @id @default(cuid())
+  publicId       String        @unique @default(cuid())
+  authorId       String?
+  title          String        @db.VarChar(180)
+  slug           String        @unique @db.VarChar(180)
+  excerpt        String        @db.VarChar(500)
+  body           String        @db.LongText
+  coverImageUrl  String?       @db.VarChar(1000)
+  coverImageAlt  String?       @db.VarChar(240)
+  seoTitle       String?       @db.VarChar(180)
+  seoDescription String?       @db.VarChar(320)
+  status         PublishStatus @default(DRAFT)
+  publishedAt    DateTime?
+  archivedAt     DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  author User? @relation("BlogPostAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([status, publishedAt])
+  @@index([updatedAt])
+}
+
+model ContactSubmission {
+  id                String        @id @default(cuid())
+  customerProfileId String?
+  name              String        @db.VarChar(160)
+  email             String?       @db.VarChar(254)
+  phone             String?       @db.VarChar(32)
+  source            String        @default("public_contact") @db.VarChar(80)
+  status            ContactStatus @default(NEW)
+  message           String        @db.Text
+  assignedToUserId  String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  customerProfile CustomerProfile?  @relation(fields: [customerProfileId], references: [id], onDelete: SetNull)
+  activities      ContactActivity[]
+
+  @@index([status, createdAt])
+  @@index([assignedToUserId])
+}
+
+model ContactActivity {
+  id                  String   @id @default(cuid())
+  contactSubmissionId String
+  actorId             String?
+  type                String   @db.VarChar(80)
+  note                String?  @db.Text
+  createdAt           DateTime @default(now())
+
+  contactSubmission ContactSubmission @relation(fields: [contactSubmissionId], references: [id], onDelete: Cascade)
+}
+
+model SupportTicket {
+  id        String   @id @default(cuid())
+  subject   String   @db.VarChar(180)
+  status    String   @default("OPEN") @db.VarChar(40)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  messages TicketMessage[]
+}
+
+model TicketMessage {
+  id              String   @id @default(cuid())
+  supportTicketId String
+  authorUserId    String?
+  body            String   @db.Text
+  createdAt       DateTime @default(now())
+
+  supportTicket SupportTicket @relation(fields: [supportTicketId], references: [id], onDelete: Cascade)
+}
+
+model NotificationTemplate {
+  id        String        @id @default(cuid())
+  name      String        @unique @db.VarChar(160)
+  channel   String        @db.VarChar(40)
+  subject   String?       @db.VarChar(180)
+  body      String        @db.Text
+  status    PublishStatus @default(DRAFT)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  rules NotificationRule[]
+}
+
+model NotificationRule {
+  id         String   @id @default(cuid())
+  templateId String
+  eventName  String   @db.VarChar(120)
+  audience   String   @db.VarChar(80)
+  enabled    Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  template   NotificationTemplate   @relation(fields: [templateId], references: [id], onDelete: Restrict)
+  deliveries NotificationDelivery[]
+}
+
+model NotificationDelivery {
+  id          String    @id @default(cuid())
+  ruleId      String
+  outboxId    String?
+  recipient   String    @db.VarChar(254)
+  channel     String    @db.VarChar(40)
+  status      String    @db.VarChar(40)
+  providerRef String?   @db.VarChar(191)
+  sentAt      DateTime?
+  createdAt   DateTime  @default(now())
+
+  rule   NotificationRule @relation(fields: [ruleId], references: [id], onDelete: Restrict)
+  outbox OutboxEvent?     @relation(fields: [outboxId], references: [id], onDelete: SetNull)
+}
+
+model OutboxEvent {
+  id          String       @id @default(cuid())
+  eventName   String       @db.VarChar(120)
+  payload     Json
+  status      OutboxStatus @default(PENDING)
+  attempts    Int          @default(0)
+  availableAt DateTime     @default(now())
+  lastError   String?      @db.Text
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  deliveries NotificationDelivery[]
+
+  @@index([status, availableAt])
+}
+
+model IdempotencyKey {
+  id           String   @id @default(cuid())
+  scope        String   @db.VarChar(120)
+  key          String   @db.VarChar(191)
+  requestHash  String   @db.VarChar(128)
+  status       String   @db.VarChar(40)
+  responseJson Json?
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([scope, key])
+  @@index([expiresAt])
+}
+
+model AppSetting {
+  key       String   @id @db.VarChar(120)
+  value     Json
+  updatedAt DateTime @updatedAt
+}

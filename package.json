@@ -1,0 +1,32 @@
+{
+  "name": "replica-home-salon",
+  "private": true,
+  "packageManager": "pnpm@10.21.0",
+  "engines": {
+    "node": ">=24 <25",
+    "pnpm": ">=10"
+  },
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "type-check": "turbo type-check",
+    "test": "turbo test",
+    "format": "prettier --check .",
+    "format:write": "prettier --write .",
+    "db:generate": "pnpm --filter @replica/db prisma:generate",
+    "db:migrate": "pnpm --filter @replica/db prisma:migrate",
+    "db:deploy": "pnpm --filter @replica/db prisma:deploy",
+    "db:seed": "pnpm --filter @replica/db db:seed"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.61.1",
+    "@types/node": "26.1.1",
+    "eslint": "10.8.0",
+    "prettier": "3.9.6",
+    "tsx": "4.23.1",
+    "turbo": "2.10.7",
+    "typescript": "7.0.2",
+    "vitest": "4.1.10"
+  }
+}
