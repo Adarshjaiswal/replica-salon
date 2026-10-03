@@ -31,6 +31,10 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import {
+  CategoryExplorer,
+  type CategoryExplorerGroup,
+} from "./CategoryExplorer";
 
 const CONFIGURED_API_BASE = (
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000/api/v1"
@@ -49,6 +53,8 @@ const BUSINESS_ADDRESS =
   "C04 Gayatri Nagar (Pani Gao), Indira Nagar, near Peepal Tree, Lucknow 226016";
 const BUSINESS_SUPPORT_EMAIL = "support@replicahomesaloonservice.in";
 const BUSINESS_WEBSITE_URL = "https://replicahomesaloonservice.in";
+const SPA_CATEGORY_TERMS = ["spa", "facial", "body", "hair", "mani", "pedi"];
+const HYDRA_CATEGORY_TERMS = ["hydra", "facial", "glow", "skin"];
 const DEFAULT_CUSTOMER_ADDRESS_FORM = {
   label: "Home",
   line1: "",
@@ -1982,6 +1988,69 @@ export default function CustomerExperience({
     () => resolvedCatalogue.categories.filter((category) => !category.parentId),
     [resolvedCatalogue],
   );
+  const categoryExplorerGroups = useMemo<CategoryExplorerGroup[]>(() => {
+    const categoryOptions = rootCategories.map((category) => {
+      const representativeService = resolvedCatalogue.services.find(
+        (service) =>
+          service.categoryId === category.id ||
+          service.categorySlug === category.slug,
+      );
+
+      return {
+        id: category.id,
+        name: category.name,
+        href: `/categories/${category.slug}`,
+        imageUrl:
+          category.imageUrl ?? representativeService?.mainImage?.url ?? null,
+      };
+    });
+    const matchingOptions = (terms: string[]) => {
+      const matches = categoryOptions.filter((option) => {
+        const searchable = `${option.name} ${option.href}`.toLowerCase();
+        return terms.some((term) => searchable.includes(term));
+      });
+
+      return matches.length > 0 ? matches : categoryOptions;
+    };
+    const salonImage = categoryOptions[0]?.imageUrl ?? null;
+    const spaOptions = matchingOptions(SPA_CATEGORY_TERMS);
+    const hydraOptions = matchingOptions(HYDRA_CATEGORY_TERMS);
+    const spaArtwork = categoryOptions.find((option) => {
+      const searchable = option.name.toLowerCase();
+      return searchable.includes("spa") || searchable.includes("body");
+    });
+    const hydraService = resolvedCatalogue.services.find((service) => {
+      const searchable = `${service.name} ${service.slug}`.toLowerCase();
+      return searchable.includes("hydra") || searchable.includes("glow");
+    });
+
+    return [
+      {
+        id: "salon-for-women",
+        name: "Salon for Women",
+        href: "/services",
+        imageUrl: salonImage,
+        options: categoryOptions,
+      },
+      {
+        id: "spa-for-women",
+        name: "Spa for Women",
+        href: spaOptions[0]?.href ?? "/services",
+        imageUrl: spaArtwork?.imageUrl ?? spaOptions[0]?.imageUrl ?? salonImage,
+        options: spaOptions,
+      },
+      {
+        id: "hydra-glow-facials",
+        name: "Hydra Glow Facials",
+        href: hydraOptions[0]?.href ?? "/services",
+        imageUrl:
+          hydraService?.mainImage?.url ??
+          hydraOptions[0]?.imageUrl ??
+          salonImage,
+        options: hydraOptions,
+      },
+    ];
+  }, [resolvedCatalogue, rootCategories]);
   const serviceById = useMemo(
     () =>
       new Map(
@@ -3626,7 +3695,6 @@ export default function CustomerExperience({
   );
 
   function renderHero(): React.ReactElement {
-    const heroCategories = rootCategories.slice(0, 8);
     const heroServices = (
       resolvedCatalogue.featuredServices.length > 0
         ? resolvedCatalogue.featuredServices
@@ -3642,7 +3710,7 @@ export default function CustomerExperience({
         <section className="customer-hero">
           <div className="customer-hero-copy">
             <p className="customer-eyebrow">Serving Lucknow</p>
-            <h1>Private salon care, brought home.</h1>
+            <h1>Salon services at home in Lucknow.</h1>
           </div>
         </section>
       );
@@ -3666,45 +3734,41 @@ export default function CustomerExperience({
             <MapPin size={16} />
             Serving Lucknow
           </p>
-          <h1>Private salon care, brought home.</h1>
+          <h1>Salon services at home in Lucknow.</h1>
           <p>
-            Curated facials, waxing, hair spa, manicures and makeup by trained
-            professionals, with clear pricing and refined doorstep service
-            across Lucknow.
+            Book trained beauty professionals for facials, waxing, hair care,
+            manicure, pedicure and makeup, all with clear pricing.
           </p>
 
-          <form
-            className="customer-hero-search"
-            onSubmit={handleHeaderSearchSubmit}
-            role="search"
-          >
-            <Search size={20} />
-            <label className="sr-only" htmlFor="customer-hero-search">
-              Search services
-            </label>
-            <input
-              id="customer-hero-search"
-              onChange={(event) => setSearch(event.target.value)}
-              placeholder="Search for facial, waxing, hair spa..."
-              type="search"
-              value={search}
-            />
-          </form>
-
-          <div className="customer-hero-category-grid">
-            {heroCategories.map((category, index) => (
-              <a href={`/categories/${category.slug}`} key={category.id}>
-                <span>
-                  {category.imageUrl ? (
-                    <img alt="" src={category.imageUrl} />
-                  ) : (
-                    <Sparkles size={20 + (index % 2) * 2} />
-                  )}
-                </span>
-                <strong>{category.name}</strong>
-              </a>
-            ))}
+          <div className="customer-hero-actions">
+            <a href="/#categories">
+              Explore services
+              <ArrowRight size={17} />
+            </a>
+            <a href="/#why-us">Why Replica</a>
           </div>
+
+          <div
+            aria-label="Service highlights"
+            className="customer-hero-proof"
+          >
+            <span>
+              <ShieldCheck size={19} />
+              <strong>Hygiene first</strong>
+              <small>Clean tools and single-use essentials</small>
+            </span>
+            <span>
+              <CalendarCheck size={19} />
+              <strong>Easy scheduling</strong>
+              <small>Choose a date and time that suits you</small>
+            </span>
+            <span>
+              <Star size={19} />
+              <strong>Trusted care</strong>
+              <small>Clear prices and verified professionals</small>
+            </span>
+          </div>
+
         </div>
         <aside
           className="customer-hero-media-grid"
@@ -3823,74 +3887,7 @@ export default function CustomerExperience({
   }
 
   function renderCategories(): React.ReactElement {
-    const categories = rootCategories;
-    const hasSelectedCategory = Boolean(selectedCategorySlug);
-
-    return (
-      <section
-        className="customer-section customer-category-section"
-        id="categories"
-      >
-        <div className="customer-category-section-head">
-          <div className="customer-category-title-row">
-            <span className="customer-category-icon-tile" aria-hidden="true">
-              <span />
-              <span />
-              <span />
-              <span />
-            </span>
-            <span className="customer-category-kicker">Salon menu</span>
-          </div>
-          <div className="customer-category-heading-copy">
-            <div>
-              <h2>Choose your ritual</h2>
-              <span className="customer-section-underline" aria-hidden="true" />
-              <p>
-                Browse curated categories and open the full menu for prices,
-                duration and inclusions.
-              </p>
-            </div>
-            {hasSelectedCategory ? (
-              <button
-                className="customer-category-reset"
-                onClick={() => setSelectedCategorySlug(null)}
-                type="button"
-              >
-                Show all services
-              </button>
-            ) : null}
-          </div>
-        </div>
-        <div className="customer-category-grid">
-          {categories.map((category) => (
-            <a
-              aria-current={
-                selectedCategorySlug === category.slug ? "page" : undefined
-              }
-              className={`customer-category-card${
-                selectedCategorySlug === category.slug ? " is-selected" : ""
-              }`}
-              href={`/categories/${category.slug}`}
-              key={category.id}
-            >
-              <span className="customer-category-card-media">
-                {category.imageUrl ? (
-                  <img alt="" src={category.imageUrl} />
-                ) : (
-                  <span className="customer-category-card-initials">
-                    {category.name.slice(0, 2)}
-                  </span>
-                )}
-              </span>
-              <span className="customer-category-card-label">
-                <strong>{category.name}</strong>
-                <ChevronRight size={18} strokeWidth={2.5} />
-              </span>
-            </a>
-          ))}
-        </div>
-      </section>
-    );
+    return <CategoryExplorer groups={categoryExplorerGroups} />;
   }
 
   function renderPackagesSection(
