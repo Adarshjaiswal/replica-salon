@@ -18,6 +18,7 @@ import {
   Menu,
   MessageCircle,
   Minus,
+  PartyPopper,
   Phone,
   PlayCircle,
   Plus,
@@ -1828,6 +1829,7 @@ export default function CustomerExperience({
   const [catalogueLoading, setCatalogueLoading] = useState(true);
   const [catalogueOffline, setCatalogueOffline] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authStep, setAuthStep] = useState<AuthStep>("phone");
   const [search, setSearch] = useState("");
@@ -1845,6 +1847,7 @@ export default function CustomerExperience({
   const [availabilityLoading, setAvailabilityLoading] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState<AvailableSlot | null>(null);
   const [user, setUser] = useState<CustomerUser | null>(null);
+  const [sessionResolved, setSessionResolved] = useState(false);
   const [addresses, setAddresses] = useState<CustomerAddress[]>([]);
   const [bookings, setBookings] = useState<CustomerBooking[]>([]);
   const [publicReviews, setPublicReviews] = useState<PublicReview[]>(
@@ -2382,6 +2385,10 @@ export default function CustomerExperience({
   }, [selectedAddressId, user]);
 
   useEffect(() => {
+    if (!sessionResolved) {
+      return;
+    }
+
     if (!user) {
       setSelectedAddressId(null);
       setAddressModalStep(null);
@@ -2407,7 +2414,7 @@ export default function CustomerExperience({
         null
       );
     });
-  }, [addresses, user]);
+  }, [addresses, sessionResolved, user]);
 
   useEffect(() => {
     if (
@@ -2421,6 +2428,17 @@ export default function CustomerExperience({
 
     setCheckoutStep("slot");
   }, [cartHydrated, cartItems.length, checkoutStep, initialMode]);
+
+  useEffect(() => {
+    if (
+      isCheckoutFlowPage &&
+      checkoutStep === "auth" &&
+      sessionResolved &&
+      user
+    ) {
+      setCheckoutStep("address");
+    }
+  }, [checkoutStep, isCheckoutFlowPage, sessionResolved, user]);
 
   useEffect(() => {
     void refreshMe(false);
@@ -2459,6 +2477,8 @@ export default function CustomerExperience({
       if (showErrors) {
         setError(getErrorMessage(caughtError));
       }
+    } finally {
+      setSessionResolved(true);
     }
   }
 
@@ -3483,6 +3503,17 @@ export default function CustomerExperience({
           { label: "Manicure", href: "/services" },
           { label: "Hair spa", href: "/services" },
         ];
+  const customerAccountLinks: Array<{
+    key: CustomerAccountPage;
+    href: string;
+    label: string;
+  }> = [
+    { key: "account", href: "/account", label: "Overview" },
+    { key: "orders", href: "/orders", label: "Orders" },
+    { key: "payments", href: "/payments", label: "Payments" },
+    { key: "addresses", href: "/addresses", label: "Addresses" },
+    { key: "cart", href: "/cart", label: "Cart" },
+  ];
   const serviceCity = catalogue?.business.city ?? "Lucknow";
   const serviceLocationLabel = serviceCity;
 
@@ -3580,13 +3611,55 @@ export default function CustomerExperience({
                 </a>
               ) : null}
               {user ? (
-                <a
+                <div className="customer-profile-menu">
+                  <button
+                    aria-expanded={accountMenuOpen}
+                    aria-haspopup="menu"
+                    aria-label="Open account menu"
+                    className="customer-pill-button customer-login-button"
+                    onClick={() => setAccountMenuOpen((open) => !open)}
+                    type="button"
+                  >
+                    <UserRound size={18} />
+                    <span>{user.displayName}</span>
+                    <ChevronDown size={15} />
+                  </button>
+                  {accountMenuOpen ? (
+                    <div className="customer-profile-dropdown" role="menu">
+                      <div className="customer-profile-dropdown-head">
+                        <span>
+                          {user.displayName.slice(0, 1).toUpperCase()}
+                        </span>
+                        <div>
+                          <strong>{user.displayName}</strong>
+                          <small>{user.phone}</small>
+                        </div>
+                      </div>
+                      <nav aria-label="Account menu">
+                        {customerAccountLinks.map((item) => (
+                          <a href={item.href} key={item.key} role="menuitem">
+                            {renderAccountIcon(item.key, 17)}
+                            {item.label}
+                          </a>
+                        ))}
+                      </nav>
+                      <button onClick={logout} role="menuitem" type="button">
+                        <LogOut size={17} />
+                        Logout
+                      </button>
+                    </div>
+                  ) : null}
+                </div>
+              ) : !sessionResolved ? (
+                <button
+                  aria-label="Loading account"
                   className="customer-pill-button customer-login-button"
-                  href="/account"
+                  disabled
+                  type="button"
                 >
-                  <UserRound size={18} />
-                  <span>{user.displayName}</span>
-                </a>
+                  <Loader2 className="customer-session-spinner" size={18} />
+                  <span>Account</span>
+                </button>
               ) : (
                 <button
                   className="customer-pill-button customer-login-button"
@@ -3748,10 +3821,7 @@ export default function CustomerExperience({
             <a href="/#why-us">Why Replica</a>
           </div>
 
-          <div
-            aria-label="Service highlights"
-            className="customer-hero-proof"
-          >
+          <div aria-label="Service highlights" className="customer-hero-proof">
             <span>
               <ShieldCheck size={19} />
               <strong>Hygiene first</strong>
@@ -3768,7 +3838,6 @@ export default function CustomerExperience({
               <small>Clear prices and verified professionals</small>
             </span>
           </div>
-
         </div>
         <aside
           className="customer-hero-media-grid"
@@ -4469,6 +4538,11 @@ export default function CustomerExperience({
             <UserRound size={20} />
             <span>Account</span>
           </a>
+        ) : !sessionResolved ? (
+          <button aria-label="Loading account" disabled type="button">
+            <Loader2 className="customer-session-spinner" size={20} />
+            <span>Account</span>
+          </button>
         ) : (
           <button onClick={openAuthDialog} type="button">
             <UserRound size={20} />
@@ -5124,48 +5198,67 @@ export default function CustomerExperience({
             <h1>{title}</h1>
             <p>{subtitle}</p>
           </div>
-          {user ? (
-            <button
-              className="customer-outline-button"
-              onClick={logout}
-              type="button"
-            >
-              <LogOut size={17} />
-              Logout
-            </button>
-          ) : null}
         </div>
         {renderAccountNav(activePage)}
       </>
     );
   }
 
+  function renderAccountIcon(
+    page: CustomerAccountPage,
+    size = 19,
+  ): React.ReactElement {
+    if (page === "orders") {
+      return <CalendarCheck size={size} />;
+    }
+
+    if (page === "payments") {
+      return <CreditCard size={size} />;
+    }
+
+    if (page === "addresses") {
+      return <MapPin size={size} />;
+    }
+
+    if (page === "cart") {
+      return <ShoppingBag size={size} />;
+    }
+
+    return <UserRound size={size} />;
+  }
+
   function renderAccountNav(
     activePage: CustomerAccountPage,
   ): React.ReactElement {
-    const items: Array<{
-      key: CustomerAccountPage;
-      href: string;
-      label: string;
-    }> = [
-      { key: "account", href: "/account", label: "Overview" },
-      { key: "orders", href: "/orders", label: "Orders" },
-      { key: "payments", href: "/payments", label: "Payments" },
-      { key: "addresses", href: "/addresses", label: "Addresses" },
-      { key: "cart", href: "/cart", label: "Cart" },
-    ];
-
     return (
       <nav className="customer-account-nav" aria-label="Customer account pages">
-        {items.map((item) => (
+        {user ? (
+          <div className="customer-account-nav-profile">
+            <span>{user.displayName.slice(0, 1).toUpperCase()}</span>
+            <div>
+              <strong>{user.displayName}</strong>
+              <small>{user.phone}</small>
+            </div>
+          </div>
+        ) : null}
+        <p>My account</p>
+        {customerAccountLinks.map((item) => (
           <a
             className={activePage === item.key ? "is-active" : ""}
             href={item.href}
             key={item.key}
           >
+            {renderAccountIcon(item.key)}
             {item.label}
+            <ChevronRight size={16} />
           </a>
         ))}
+        {user ? (
+          <button onClick={logout} type="button">
+            <LogOut size={18} />
+            Logout
+          </button>
+        ) : null}
       </nav>
     );
   }
@@ -5188,6 +5281,23 @@ export default function CustomerExperience({
             <a className="customer-outline-button" href="/services">
               Browse services
             </a>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  function renderAccountLoadingPanel(): React.ReactElement {
+    return (
+      <div className="customer-account-grid customer-single-panel-grid">
+        <section
+          aria-live="polite"
+          className="customer-panel customer-account-loading"
+        >
+          <Loader2 size={28} />
+          <div>
+            <h2>Loading your account</h2>
+            <p>Fetching your saved details securely.</p>
           </div>
         </section>
       </div>
@@ -6111,7 +6221,9 @@ export default function CustomerExperience({
           "Bookings and profile",
           "Manage your cart, saved addresses, bookings and payment records.",
         )}
-        {!user ? (
+        {!sessionResolved ? (
+          renderAccountLoadingPanel()
+        ) : !user ? (
           renderSignedOutPanel("Sign in to view your customer account.")
         ) : (
           <div className="customer-account-grid">
@@ -6165,7 +6277,9 @@ export default function CustomerExperience({
           "Your service addresses",
           "Addresses used during checkout are saved to make repeat bookings faster.",
         )}
-        {!user ? (
+        {!sessionResolved ? (
+          renderAccountLoadingPanel()
+        ) : !user ? (
           renderSignedOutPanel("Sign in to view saved service addresses.")
         ) : (
           <div className="customer-account-grid customer-single-panel-grid">
@@ -6203,7 +6317,9 @@ export default function CustomerExperience({
           "Your bookings",
           "Review booked services, submit eligible reviews and order again.",
         )}
-        {!user ? (
+        {!sessionResolved ? (
+          renderAccountLoadingPanel()
+        ) : !user ? (
           renderSignedOutPanel("Sign in to view bookings and order again.")
         ) : (
           <div className="customer-orders-layout">
@@ -6227,7 +6343,9 @@ export default function CustomerExperience({
           "Payment history",
           "Track checkout attempts, payment status and confirmed receipts.",
         )}
-        {!user ? (
+        {!sessionResolved ? (
+          renderAccountLoadingPanel()
+        ) : !user ? (
           renderSignedOutPanel("Sign in to view payment history.")
         ) : (
           <div className="customer-account-grid customer-single-panel-grid">
@@ -6554,18 +6672,34 @@ export default function CustomerExperience({
       );
     }
 
+    const checkoutJourney = [
+      { key: "cart", label: "Cart", detail: "Review services" },
+      { key: "slot", label: "Schedule", detail: "Choose a time" },
+      { key: "details", label: "Details", detail: "Login & address" },
+      { key: "payment", label: "Payment", detail: "Pay securely" },
+      { key: "success", label: "Confirmed", detail: "Booking complete" },
+    ] as const;
+    const activeJourneyIndex =
+      checkoutStep === "cart"
+        ? 0
+        : checkoutStep === "slot"
+          ? 1
+          : checkoutStep === "auth" || checkoutStep === "address"
+            ? 2
+            : checkoutStep === "payment"
+              ? 3
+              : 4;
+
     return (
       <section className="customer-checkout-page">
-        <div className="customer-section-head customer-section-head-row">
+        <div className="customer-checkout-page-head">
           <div>
-            <p className="customer-eyebrow">
-              {initialMode === "cart" ? "Cart" : "Checkout"}
-            </p>
-            <h1>Review cart and complete booking</h1>
-            <p>
-              Choose services, pick a Lucknow slot, verify OTP and confirm your
-              payment.
-            </p>
+            <a className="customer-checkout-back" href="/services">
+              <ChevronLeft size={17} />
+              Continue browsing
+            </a>
+            <h1>{initialMode === "cart" ? "Your cart" : "Checkout"}</h1>
+            <p>Complete your booking in a few simple steps.</p>
           </div>
           <a className="customer-outline-button" href="/services">
             <Plus size={17} />
@@ -6573,30 +6707,30 @@ export default function CustomerExperience({
           </a>
         </div>
         <section className="customer-checkout customer-checkout-inline">
-          <header>
-            <div>
-              <p className="customer-eyebrow">Checkout</p>
-              <h2>Complete your booking</h2>
-            </div>
-          </header>
-          <div className="customer-stepper">
-            {[
-              ["cart", "Cart"],
-              ["slot", "Slot"],
-              ["auth", "Login"],
-              ["address", "Address"],
-              ["payment", "Payment"],
-              ["success", "Done"],
-            ].map(([key, label]) => (
-              <span
-                aria-current={checkoutStep === key ? "step" : undefined}
-                className={checkoutStep === key ? "is-active" : ""}
-                key={key}
-              >
-                {label}
-              </span>
-            ))}
-          </div>
+          <nav aria-label="Booking progress" className="customer-stepper">
+            {checkoutJourney.map((step, index) => {
+              const isActive = index === activeJourneyIndex;
+              const isComplete = index < activeJourneyIndex;
+
+              return (
+                <div
+                  aria-current={isActive ? "step" : undefined}
+                  className={`${isActive ? "is-active" : ""} ${
+                    isComplete ? "is-complete" : ""
+                  }`}
+                  key={step.key}
+                >
+                  <b className="customer-stepper-marker">
+                    {isComplete ? <CheckCircle2 size={17} /> : index + 1}
+                  </b>
+                  <div className="customer-stepper-copy">
+                    <strong>{step.label}</strong>
+                    <small>{step.detail}</small>
+                  </div>
+                </div>
+              );
+            })}
+          </nav>
           <div
             className={
               checkoutStep === "success"
@@ -6732,6 +6866,18 @@ export default function CustomerExperience({
   }
 
   function renderAuthStep(): React.ReactElement {
+    if (!sessionResolved) {
+      return (
+        <section className="customer-panel customer-account-loading">
+          <Loader2 size={28} />
+          <div>
+            <h3>Checking your account</h3>
+            <p>Loading your saved login and address details.</p>
+          </div>
+        </section>
+      );
+    }
+
     return (
       <section className="customer-panel customer-auth-required">
         <UserRound size={30} />
@@ -6784,17 +6930,20 @@ export default function CustomerExperience({
         <h3>Payment</h3>
         <div className="customer-pay-options">
           <button
+            aria-pressed={paymentChoice === "RAZORPAY"}
             className={paymentChoice === "RAZORPAY" ? "is-selected" : ""}
             onClick={() => setPaymentChoice("RAZORPAY")}
             type="button"
           >
             <CreditCard size={19} />
             <span>
-              Razorpay
+              <strong>Pay online</strong>
               <small>UPI, card, net banking and wallets</small>
             </span>
+            <span className="customer-payment-radio" aria-hidden="true" />
           </button>
           <button
+            aria-pressed={paymentChoice === "PAY_AFTER_SERVICE"}
             className={
               paymentChoice === "PAY_AFTER_SERVICE" ? "is-selected" : ""
             }
@@ -6803,9 +6952,10 @@ export default function CustomerExperience({
           >
             <Home size={19} />
             <span>
-              Pay after service
-              <small>Operational fallback for cash or direct UPI</small>
+              <strong>Pay after service</strong>
+              <small>Pay when your appointment is complete</small>
             </span>
+            <span className="customer-payment-radio" aria-hidden="true" />
           </button>
         </div>
         {developmentPayment ? (
@@ -6840,7 +6990,9 @@ export default function CustomerExperience({
           >
             {submitting ? <Loader2 size={18} /> : <CreditCard size={18} />}
             {paymentChoice === "RAZORPAY"
-              ? "Continue to Razorpay"
+              ? currentBooking
+                ? `Pay ${formatMoney(currentBooking.totalPaise)} securely`
+                : "Continue to Razorpay"
               : "Place order"}
           </button>
         )}
@@ -6857,31 +7009,53 @@ export default function CustomerExperience({
     return (
       <section aria-live="polite" className="customer-success">
         <div className="customer-success-card">
-          <span className="customer-success-mark">
-            <CheckCircle2 size={38} />
-          </span>
-          <span className="customer-status-chip">Confirmed</span>
-          <h3>Booking confirmed</h3>
-          <p>
-            Your slot is saved. You can review details, payment status and
-            updates from your orders.
-          </p>
+          <div aria-hidden="true" className="customer-success-confetti">
+            {Array.from({ length: 18 }, (_, index) => (
+              <i key={index} />
+            ))}
+          </div>
+          <div className="customer-success-hero">
+            <span className="customer-success-mark">
+              <CheckCircle2 size={38} />
+            </span>
+            <span className="customer-status-chip">
+              <PartyPopper size={15} />
+              Booking confirmed
+            </span>
+            <h3>You&apos;re all set!</h3>
+            <p>
+              Your appointment is confirmed. We&apos;ll keep you updated before
+              your professional arrives.
+            </p>
+          </div>
           {booking ? (
             <dl className="customer-success-summary">
               <div>
-                <dt>Booking ID</dt>
+                <span>
+                  <ShoppingBag size={18} />
+                </span>
+                <dt>Booking reference</dt>
                 <dd>{bookingReference}</dd>
               </div>
               <div>
-                <dt>Slot</dt>
+                <span>
+                  <CalendarCheck size={18} />
+                </span>
+                <dt>Appointment</dt>
                 <dd>{formatBookingDate(booking.scheduledStartAt)}</dd>
               </div>
               <div>
-                <dt>Total</dt>
+                <span>
+                  <CreditCard size={18} />
+                </span>
+                <dt>Amount paid</dt>
                 <dd>{formatMoney(booking.totalPaise)}</dd>
               </div>
               <div>
-                <dt>Address</dt>
+                <span>
+                  <MapPin size={18} />
+                </span>
+                <dt>Service address</dt>
                 <dd>
                   {formatAddressLine(booking.address)}, {booking.address.city}
                 </dd>
@@ -6892,7 +7066,7 @@ export default function CustomerExperience({
           )}
           <div className="customer-success-actions">
             <a className="customer-gold-button" href="/orders">
-              View booking
+              Track booking
               <ChevronRight size={17} />
             </a>
             <a className="customer-outline-button" href="/services">
@@ -6905,36 +7079,78 @@ export default function CustomerExperience({
   }
 
   function renderOrderSummary(): React.ReactElement {
+    const payableSubtotalPaise =
+      currentBooking?.subtotalPaise ?? cartTotalPaise;
+    const payableTaxPaise = currentBooking?.taxPaise ?? null;
+    const payableTotalPaise = currentBooking?.totalPaise ?? cartTotalPaise;
+
     return (
       <aside className="customer-summary">
-        <h3>Order summary</h3>
+        <div className="customer-summary-head">
+          <span>
+            <ShoppingBag size={19} />
+          </span>
+          <div>
+            <h3>Booking summary</h3>
+            <p>
+              {cartItems.length}{" "}
+              {cartItems.length === 1 ? "service" : "services"}
+            </p>
+          </div>
+          <a href="/cart">Edit</a>
+        </div>
         <div className="customer-summary-lines">
           {cartItems.map((item) => (
-            <div key={cartItemKey(item)}>
+            <div className="customer-summary-service" key={cartItemKey(item)}>
               <span>
-                {item.name}
-                {item.tierName ? ` (${item.tierName})` : ""} x {item.quantity}
+                <strong>{item.name}</strong>
+                <small>
+                  {[
+                    item.tierName,
+                    `${item.quantity} × ${formatMoney(item.pricePaise)}`,
+                  ]
+                    .filter(Boolean)
+                    .join(" · ")}
+                </small>
               </span>
               <strong>{formatMoney(item.pricePaise * item.quantity)}</strong>
             </div>
           ))}
-          <div>
+          <div className="customer-summary-meta">
             <span>Estimated duration</span>
             <strong>{cartDuration} min</strong>
           </div>
-          <div>
-            <span>Taxes</span>
-            <strong>Calculated on booking</strong>
+          <div className="customer-summary-meta">
+            <span>Subtotal</span>
+            <strong>{formatMoney(payableSubtotalPaise)}</strong>
+          </div>
+          <div className="customer-summary-meta">
+            <span>GST</span>
+            <strong>
+              {payableTaxPaise === null
+                ? "Calculated on booking"
+                : formatMoney(payableTaxPaise)}
+            </strong>
           </div>
           <div className="customer-summary-total">
-            <span>Subtotal</span>
-            <strong>{formatMoney(cartTotalPaise)}</strong>
+            <span>
+              {payableTaxPaise === null ? "Estimated total" : "Amount payable"}
+              <small>
+                {payableTaxPaise === null
+                  ? "Final total includes applicable GST"
+                  : "Includes applicable GST"}
+              </small>
+            </span>
+            <strong>{formatMoney(payableTotalPaise)}</strong>
           </div>
         </div>
-        <p className="customer-summary-note">
-          Your professional is reserved after slot selection and booking
-          confirmation. Taxes and payment status are finalized during checkout.
-        </p>
+        <div className="customer-summary-assurance">
+          <ShieldCheck size={18} />
+          <span>
+            <strong>Safe and secure booking</strong>
+            <small>Your slot is reserved after confirmation.</small>
+          </span>
+        </div>
       </aside>
     );
   }
