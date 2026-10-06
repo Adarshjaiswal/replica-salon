@@ -1,19 +1,35 @@
 import type { Metadata } from "next";
 import { PwaRegistration } from "./PwaRegistration";
+import { BRAND_NAME } from "./brand";
+import {
+  CORE_KEYWORDS,
+  DEFAULT_SEO_DESCRIPTION,
+  DEFAULT_SEO_TITLE,
+  DEFAULT_SOCIAL_IMAGE,
+  SITE_URL,
+} from "./seo";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "Replica Home Saloon Service",
-    template: "%s | Replica Home Saloon Service",
+    default: DEFAULT_SEO_TITLE,
+    template: `%s | ${BRAND_NAME}`,
   },
-  description: "Professional beauty and grooming services at home in Lucknow.",
-  applicationName: "Replica Home Saloon Service",
+  description: DEFAULT_SEO_DESCRIPTION,
+  keywords: CORE_KEYWORDS,
+  applicationName: BRAND_NAME,
+  category: "beauty",
+  creator: BRAND_NAME,
+  publisher: BRAND_NAME,
+  alternates: {
+    canonical: "/",
+  },
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Replica Salon",
+    title: BRAND_NAME,
   },
   formatDetection: {
     telephone: false,
@@ -21,19 +37,19 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "/icons/replica-icon-192.png",
+        url: "/icons/replica-salon-icon-192.png",
         type: "image/png",
         sizes: "192x192",
       },
       {
-        url: "/icons/replica-icon-512.png",
+        url: "/icons/replica-salon-icon-512.png",
         type: "image/png",
         sizes: "512x512",
       },
     ],
     apple: [
       {
-        url: "/icons/apple-touch-icon.png",
+        url: "/icons/replica-salon-apple-touch-icon.png",
         type: "image/png",
         sizes: "180x180",
       },
@@ -42,14 +58,35 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
   openGraph: {
-    title: "Replica Home Saloon Service",
-    description:
-      "Professional beauty and grooming services at home in Lucknow.",
+    type: "website",
+    locale: "en_IN",
+    url: "/",
+    siteName: BRAND_NAME,
+    title: DEFAULT_SEO_TITLE,
+    description: DEFAULT_SEO_DESCRIPTION,
     images: [
-      "https://images.pexels.com/photos/3992873/pexels-photo-3992873.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      {
+        url: DEFAULT_SOCIAL_IMAGE,
+        width: 1254,
+        height: 1254,
+        alt: `${BRAND_NAME} logo`,
+      },
     ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: DEFAULT_SEO_TITLE,
+    description: DEFAULT_SEO_DESCRIPTION,
+    images: [DEFAULT_SOCIAL_IMAGE],
   },
 };
 

@@ -1,5 +1,7 @@
 import { BookOpen, Home, MapPin, Scissors } from "lucide-react";
 import type { ReactNode } from "react";
+import BrandLogo from "../BrandLogo";
+import { BRAND_NAME } from "../brand";
 
 export default function BlogLayout({
   children,
@@ -9,9 +11,8 @@ export default function BlogLayout({
   return (
     <main className="blog-site">
       <header className="blog-header">
-        <a className="blog-brand" href="/">
-          <strong>Replica</strong>
-          <span>Home Saloon Service</span>
+        <a aria-label={BRAND_NAME} className="blog-brand" href="/">
+          <BrandLogo className="replica-brand-blog" />
         </a>
         <nav aria-label="Main navigation">
           <a href="/">
@@ -38,7 +39,13 @@ export default function BlogLayout({
       {children}
       <footer className="blog-footer">
         <div>
-          <strong>Replica Home Saloon Service</strong>
+          <a
+            aria-label={BRAND_NAME}
+            className="blog-footer-brand"
+            href="/"
+          >
+            <BrandLogo className="replica-brand-blog-footer" />
+          </a>
           <p>Professional salon care at home in Lucknow.</p>
         </div>
         <nav>

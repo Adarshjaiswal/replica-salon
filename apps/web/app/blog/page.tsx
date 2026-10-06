@@ -1,14 +1,20 @@
 import type { Metadata } from "next";
 import { ArrowRight, BookOpen } from "lucide-react";
+import { BRAND_NAME } from "../brand";
+import { createPageMetadata } from "../seo";
 import BlogLayout from "./BlogLayout";
 import { formatBlogDate, getBlogPosts } from "./blog-data";
 
-export const metadata: Metadata = {
-  title: "Salon & Beauty Blog | Replica Home Saloon Service",
-  description:
-    "Salon, beauty care and home salon advice from Replica Home Saloon Service in Lucknow.",
-  alternates: { canonical: "/blog" },
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "Beauty and Home Salon Blog in Lucknow",
+  description: `Salon, beauty care and home salon advice from ${BRAND_NAME} in Lucknow.`,
+  path: "/blog",
+  keywords: [
+    "beauty tips Lucknow",
+    "home salon tips",
+    "skin care and hair care blog",
+  ],
+});
 
 export default async function BlogPage(): Promise<React.ReactElement> {
   const posts = await getBlogPosts();

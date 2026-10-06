@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import PolicyPage from "../PolicyPage";
+import { BRAND_SUPPORT_EMAIL } from "../brand";
+import { createPageMetadata } from "../seo";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy | Replica Home Saloon Service",
+export const metadata: Metadata = createPageMetadata({
+  title: "Privacy Policy",
   description:
-    "Draft privacy policy placeholder for Replica Home Saloon Service customer data and booking workflows.",
-  alternates: {
-    canonical: "/privacy-policy",
-  },
-};
+    "How Replica Home Salon collects, uses and protects customer information.",
+  path: "/privacy-policy",
+});
 
 export default function PrivacyPolicyPage(): React.ReactElement {
   return (
@@ -19,19 +19,19 @@ export default function PrivacyPolicyPage(): React.ReactElement {
       sections={[
         {
           title: "Information collected",
-          body: "Client-approved wording required. This section should cover mobile number, address, booking, payment reference and support information collected during use of the platform.",
+          body: "We collect information needed to provide the service, including your name, mobile number, saved addresses, booking selections, appointment history, reviews and messages sent to support. We also receive transaction references and payment status from our payment provider.",
         },
         {
           title: "Use of information",
-          body: "Client-approved wording required. This section should explain use for OTP login, booking fulfilment, staff assignment, payment records, invoices, support and lawful business operations.",
+          body: "We use this information to authenticate your account, confirm and fulfil bookings, assign professionals, communicate service updates, maintain payment and invoice records, prevent misuse, answer support requests and improve our services.",
         },
         {
-          title: "Data sharing",
-          body: "Client-approved wording required. This section should identify approved providers such as payment gateway, OTP/messaging, maps and hosting infrastructure.",
+          title: "Sharing and payment security",
+          body: "We share only the information reasonably required with assigned service professionals and providers supporting payments, OTP delivery, communications and hosting. Razorpay processes online payment credentials; Replica Home Salon does not store your full card number, UPI PIN or banking password.",
         },
         {
           title: "Retention and rights",
-          body: "Client-approved wording required. This section should cover retention, correction requests, deletion limitations for invoices/bookings and support contact details.",
+          body: `We retain records for as long as needed for bookings, support, fraud prevention, accounting and legal obligations. You may request correction of inaccurate profile information or ask about deletion by emailing ${BRAND_SUPPORT_EMAIL}. Some booking, invoice or payment records may need to be retained where required for legitimate business or legal purposes.`,
         },
       ]}
     />

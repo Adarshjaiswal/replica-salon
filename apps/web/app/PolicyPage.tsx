@@ -1,6 +1,5 @@
 import {
   ChevronDown,
-  FileText,
   Home,
   Mail,
   MapPin,
@@ -8,12 +7,13 @@ import {
   ShieldCheck,
   UserRound,
 } from "lucide-react";
-
-const BUSINESS_NAME = "Replica Home Saloon Service";
-const BUSINESS_LOGO_PRIMARY = "Replica";
-const BUSINESS_LOGO_SECONDARY = "Home Saloon Service";
-const BUSINESS_ADDRESS =
-  "C04 Gayatri Nagar (Pani Gao), Indira Nagar, near Peepal Tree, Lucknow 226016";
+import BrandLogo from "./BrandLogo";
+import CustomerFooter from "./CustomerFooter";
+import {
+  BRAND_ADDRESS,
+  BRAND_NAME,
+  BRAND_SUPPORT_EMAIL,
+} from "./brand";
 
 interface PolicyPageProps {
   eyebrow: string;
@@ -32,14 +32,11 @@ export default function PolicyPage({
   sections,
 }: PolicyPageProps): React.ReactElement {
   return (
-    <main className="customer-site">
+    <main className="customer-site policy-page">
       <header className="customer-header">
         <div className="customer-header-shell">
-          <a className="customer-brand" href="/" aria-label={BUSINESS_NAME}>
-            <span className="customer-brand-logo">
-              <strong>{BUSINESS_LOGO_PRIMARY}</strong>
-              <small>{BUSINESS_LOGO_SECONDARY}</small>
-            </span>
+          <a className="customer-brand" href="/" aria-label={BRAND_NAME}>
+            <BrandLogo className="replica-brand-header" />
           </a>
           <a
             aria-label="Current service location: Lucknow"
@@ -62,7 +59,7 @@ export default function PolicyPage({
             <input
               id="policy-header-search"
               name="search"
-              placeholder="Search facials, waxing, spa..."
+              placeholder="Search services"
               type="search"
             />
           </form>
@@ -90,12 +87,8 @@ export default function PolicyPage({
           {eyebrow}
         </p>
         <h1>{title}</h1>
-        <p>{description}</p>
-        <div className="policy-draft-note">
-          <FileText size={18} />
-          Draft placeholder page. Replace this content with client-approved
-          legal, tax and operating policy text before production launch.
-        </div>
+        <p className="policy-description">{description}</p>
+        <p className="policy-updated">Last updated: 6 October 2026</p>
       </section>
       <section className="policy-content">
         {sections.map((section) => (
@@ -108,13 +101,14 @@ export default function PolicyPage({
       <section className="policy-contact-strip">
         <span>
           <Home size={18} />
-          {BUSINESS_NAME}, {BUSINESS_ADDRESS}
+          {BRAND_NAME}, {BRAND_ADDRESS}
         </span>
-        <a href="/contact">
+        <a href={`mailto:${BRAND_SUPPORT_EMAIL}`}>
           <Mail size={18} />
-          Contact support
+          {BRAND_SUPPORT_EMAIL}
         </a>
       </section>
+      <CustomerFooter />
     </main>
   );
 }

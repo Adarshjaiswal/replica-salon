@@ -1,16 +1,28 @@
 import type { Metadata } from "next";
 import CustomerExperience from "./CustomerExperience";
+import StructuredData from "./StructuredData";
+import {
+  createPageMetadata,
+  DEFAULT_SEO_DESCRIPTION,
+  homeStructuredData,
+} from "./seo";
 
-export const metadata: Metadata = {
-  title:
-    "Replica Home Saloon Service | Professional Beauty Services at Home in Lucknow",
-  description:
-    "Book professional beauty, facial, waxing, makeup and grooming services at home in Lucknow with Replica Home Saloon Service.",
-  alternates: {
-    canonical: "/",
-  },
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "Home Salon Services in Lucknow",
+  description: DEFAULT_SEO_DESCRIPTION,
+  path: "/",
+  keywords: [
+    "home beauty services Lucknow",
+    "professional beautician at home Lucknow",
+    "makeup artist at home Lucknow",
+  ],
+});
 
 export default function HomePage(): React.ReactElement {
-  return <CustomerExperience initialMode="home" />;
+  return (
+    <>
+      <StructuredData data={homeStructuredData} />
+      <CustomerExperience initialMode="home" />
+    </>
+  );
 }

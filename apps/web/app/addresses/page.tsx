@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import CustomerExperience from "../CustomerExperience";
+import { BRAND_NAME } from "../brand";
 
 export const metadata: Metadata = {
-  title: "Addresses | Replica Home Saloon Service",
-  description:
-    "View saved service addresses for Replica Home Saloon Service bookings.",
+  title: "Addresses",
+  description: `View saved service addresses for ${BRAND_NAME} bookings.`,
   robots: {
     index: false,
     follow: false,

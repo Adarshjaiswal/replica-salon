@@ -1,4 +1,4 @@
-const CACHE_VERSION = "replica-public-v2";
+const CACHE_VERSION = "replica-public-v3";
 const OFFLINE_URL = "/offline";
 const PUBLIC_SHELL = [
   "/",
@@ -6,10 +6,10 @@ const PUBLIC_SHELL = [
   "/blog",
   "/contact",
   OFFLINE_URL,
-  "/icons/replica-icon-192.png",
-  "/icons/replica-icon-512.png",
-  "/icons/replica-icon-maskable-512.png",
-  "/icons/apple-touch-icon.png",
+  "/icons/replica-salon-icon-192.png",
+  "/icons/replica-salon-icon-512.png",
+  "/icons/replica-salon-icon-maskable-512.png",
+  "/icons/replica-salon-apple-touch-icon.png",
 ];
 
 const PRIVATE_PATH_PREFIXES = [

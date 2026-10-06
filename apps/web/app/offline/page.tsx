@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { BRAND_NAME } from "../brand";
 
 export const metadata: Metadata = {
   title: "Offline",
@@ -12,7 +13,7 @@ export default function OfflinePage(): React.ReactElement {
         <span className="pwa-offline-mark" aria-hidden="true">
           R
         </span>
-        <p className="eyebrow">Replica Home Saloon Service</p>
+        <p className="eyebrow">{BRAND_NAME}</p>
         <h1 id="offline-title">You are offline</h1>
         <p>
           Reconnect to view live availability, manage bookings, or complete a

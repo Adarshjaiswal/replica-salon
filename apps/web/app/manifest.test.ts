@@ -7,8 +7,8 @@ describe("PWA manifest", () => {
 
     expect(value).toMatchObject({
       id: "/",
-      name: "Replica Home Saloon Service",
-      short_name: "Replica Salon",
+      name: "Replica Home Salon",
+      short_name: "Replica Home Salon",
       start_url: "/",
       scope: "/",
       display: "standalone",

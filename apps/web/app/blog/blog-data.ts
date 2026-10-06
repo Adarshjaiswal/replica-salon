@@ -1,3 +1,5 @@
+import { fetchPublicApi } from "../public-api";
+
 export interface PublicBlogPost {
   publicId: string;
   title: string;
@@ -13,45 +15,51 @@ export interface PublicBlogPost {
   updatedAt: string;
 }
 
-function apiBase(): string {
-  const configured =
-    process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000/api/v1";
-  return configured.startsWith("/")
-    ? `http://api:4000${configured}`
-    : configured.replace(/\/$/, "");
+interface BlogPagination {
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+}
+
+interface BlogPage {
+  posts: PublicBlogPost[];
+  pagination: BlogPagination;
+}
+
+async function getBlogPage(page: number): Promise<BlogPage | null> {
+  return fetchPublicApi<BlogPage>(`/customer/blogs?page=${page}`, 60);
 }
 
 export async function getBlogPosts(): Promise<PublicBlogPost[]> {
-  try {
-    const response = await fetch(`${apiBase()}/customer/blogs`, {
-      next: { revalidate: 60 },
-    });
-    if (!response.ok) return [];
-    const payload = (await response.json()) as {
-      data?: { posts?: PublicBlogPost[] };
-    };
-    return payload.data?.posts ?? [];
-  } catch {
-    return [];
+  const page = await getBlogPage(1);
+  return page?.posts ?? [];
+}
+
+export async function getAllBlogPosts(): Promise<PublicBlogPost[]> {
+  const firstPage = await getBlogPage(1);
+  if (!firstPage) return [];
+
+  const posts = [...firstPage.posts];
+  const totalPages = Math.min(firstPage.pagination.totalPages, 4_167);
+
+  for (let page = 2; page <= totalPages && posts.length < 50_000; page += 1) {
+    const nextPage = await getBlogPage(page);
+    if (!nextPage?.posts.length) break;
+    posts.push(...nextPage.posts);
   }
+
+  return posts.slice(0, 50_000);
 }
 
 export async function getBlogPost(
   slug: string,
 ): Promise<PublicBlogPost | null> {
-  try {
-    const response = await fetch(
-      `${apiBase()}/customer/blogs/${encodeURIComponent(slug)}`,
-      { next: { revalidate: 60 } },
-    );
-    if (!response.ok) return null;
-    const payload = (await response.json()) as {
-      data?: { post?: PublicBlogPost };
-    };
-    return payload.data?.post ?? null;
-  } catch {
-    return null;
-  }
+  const payload = await fetchPublicApi<{ post: PublicBlogPost }>(
+    `/customer/blogs/${encodeURIComponent(slug)}`,
+    60,
+  );
+  return payload?.post ?? null;
 }
 
 export function formatBlogDate(value: string | null): string {

@@ -118,6 +118,9 @@ interface PublicCategory {
   parentSlug: string | null;
   description: string | null;
   imageUrl: string | null;
+  seoTitle: string | null;
+  seoDescription: string | null;
+  updatedAt: string;
 }
 
 interface PublicService {
@@ -130,6 +133,9 @@ interface PublicService {
   slug: string;
   shortDescription: string | null;
   fullDescription: string | null;
+  seoTitle: string | null;
+  seoDescription: string | null;
+  updatedAt: string;
   durationMinutes: number;
   pricePaise: number;
   compareAtPricePaise: number | null;
@@ -613,6 +619,9 @@ function serializePublicCategory(category: CategoryForPublic): PublicCategory {
     parentSlug: category.parent?.slug ?? null,
     description: category.description,
     imageUrl: category.imageAsset?.objectKey ?? null,
+    seoTitle: category.seoTitle,
+    seoDescription: category.seoDescription,
+    updatedAt: category.updatedAt.toISOString(),
   };
 }
 
@@ -686,6 +695,9 @@ function serializePublicService(service: ServiceForPublic): PublicService {
     slug: service.slug,
     shortDescription: service.shortDescription,
     fullDescription: service.fullDescription,
+    seoTitle: service.seoTitle,
+    seoDescription: service.seoDescription,
+    updatedAt: service.updatedAt.toISOString(),
     durationMinutes: service.durationMinutes,
     pricePaise: service.pricePaise,
     compareAtPricePaise: service.compareAtPricePaise,
@@ -1772,13 +1784,13 @@ export function createCustomerRouter(env: AppEnv): Router {
         successEnvelope(
           {
             business: {
-              name: "Replica Home Saloon Service",
+              name: "Replica Home Salon",
               city: "Lucknow",
               area: "Indira Nagar",
               addressLine:
                 "C04 Gayatri Nagar (Pani Gao), Indira Nagar, near Peepal Tree, Lucknow 226016",
-              supportEmail: "support@replicahomesaloonservice.in",
-              websiteUrl: "https://replicahomesaloonservice.in",
+              supportEmail: "support@replicahomesalon.com",
+              websiteUrl: "https://replicahomesalon.com",
               supportPhone: "+91 81128 68347",
               heroImageUrl: FALLBACK_HERO_IMAGE,
               fallbackServiceImages: serializedServices.map((_service, index) =>

@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import PolicyPage from "../PolicyPage";
+import { BRAND_SUPPORT_EMAIL } from "../brand";
+import { createPageMetadata } from "../seo";
 
-export const metadata: Metadata = {
-  title: "Return and Refund Policy | Replica Home Saloon Service",
+export const metadata: Metadata = createPageMetadata({
+  title: "Return and Refund Policy",
   description:
-    "Draft return and refund policy placeholder for Replica Home Saloon Service service bookings and payment issues.",
-  alternates: {
-    canonical: "/return-refund-policy",
-  },
-};
+    "Return and refund terms for Replica Home Salon bookings and payment issues.",
+  path: "/return-refund-policy",
+});
 
 export default function ReturnRefundPolicyPage(): React.ReactElement {
   return (
@@ -19,19 +19,19 @@ export default function ReturnRefundPolicyPage(): React.ReactElement {
       sections={[
         {
           title: "Service returns",
-          body: "Client-approved wording required. This is a home-service business, so this section should explain that physical product return terms only apply where products are separately sold.",
+          body: "Salon appointments are services and cannot be physically returned after completion. If a separately sold product is damaged, incorrect or defective when delivered, contact support promptly and keep the product, packaging and proof of purchase available for review.",
         },
         {
           title: "Refund eligibility",
-          body: "Client-approved wording required. This section should define refund eligibility for failed payments, duplicate payments, cancelled bookings and approved service complaints.",
+          body: "A refund review may apply to duplicate charges, an online payment captured without a confirmed booking, a service cancelled by Replica Home Salon, or a verified service issue reported promptly with the booking details. Customer cancellations are handled under the Cancellation Policy.",
         },
         {
           title: "Refund processing",
-          body: "Client-approved wording required. This section should explain Razorpay refund initiation, banking timelines and required customer verification details.",
+          body: "Approved online-payment refunds are initiated to the original payment method through Razorpay. We will provide confirmation after initiation. The time required for the amount to appear is controlled by the payment provider and your bank and may take several business days.",
         },
         {
           title: "Support",
-          body: "Client-approved wording required. This section should provide the official support path for refund and service-quality disputes.",
+          body: `Email ${BRAND_SUPPORT_EMAIL} with your registered mobile number, booking ID, payment reference and a short explanation. Do not send card numbers, UPI PINs, OTPs or banking passwords.`,
         },
       ]}
     />

@@ -52,6 +52,8 @@ import {
   type DragEvent,
   type FormEvent,
 } from "react";
+import BrandLogo from "../BrandLogo";
+import { BRAND_NAME } from "../brand";
 import AdminDataTable, { type AdminDataTableColumn } from "./AdminDataTable";
 import type { AdminCommand } from "./adminCommands";
 import AdminHeader from "./AdminHeader";
@@ -9231,8 +9233,7 @@ export default function AdminApp(): React.ReactElement {
           aria-label="Checking session"
         >
           <div className="auth-brand">
-            <span className="brand-mark">R</span>
-            <span>Replica Saloon Admin</span>
+            <BrandLogo className="replica-brand-admin-auth" subtitle="Admin" />
           </div>
           <div className="auth-loading">
             <RefreshCw aria-hidden="true" size={18} />
@@ -9249,8 +9250,10 @@ export default function AdminApp(): React.ReactElement {
         <section className="login-visual-panel" aria-label="Operations preview">
           <div className="login-visual-header">
             <div className="auth-brand auth-brand-light">
-              <span className="brand-mark">R</span>
-              <span>Replica Saloon Admin</span>
+              <BrandLogo
+                className="replica-brand-admin-auth"
+                subtitle="Admin"
+              />
             </div>
             <span className="visual-status">Live</span>
           </div>
@@ -9286,7 +9289,7 @@ export default function AdminApp(): React.ReactElement {
           </div>
 
           <div className="visual-copy">
-            <p className="eyebrow">Replica Home Saloon Service</p>
+            <p className="eyebrow">{BRAND_NAME}</p>
             <h2>Operations desk for bookings, staff and service control.</h2>
           </div>
         </section>
@@ -9294,8 +9297,10 @@ export default function AdminApp(): React.ReactElement {
         <section className="auth-panel" aria-labelledby="admin-login-title">
           <div className="auth-panel-heading">
             <div className="auth-brand compact-brand">
-              <span className="brand-mark">R</span>
-              <span>Replica Saloon Admin</span>
+              <BrandLogo
+                className="replica-brand-admin-auth"
+                subtitle="Admin"
+              />
             </div>
             <div>
               <p className="eyebrow">Invite-only access</p>

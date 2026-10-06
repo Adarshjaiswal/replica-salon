@@ -2,6 +2,7 @@
 
 import { ShieldCheck, X } from "lucide-react";
 import type { ReactNode } from "react";
+import BrandLogo from "../BrandLogo";
 
 interface AdminSidebarProps {
   children: ReactNode;
@@ -25,11 +26,7 @@ export default function AdminSidebar({
     >
       <div className="admin-brand-row">
         <div className="auth-brand">
-          <span className="brand-mark">R</span>
-          <span className="admin-brand-copy">
-            <strong>Replica</strong>
-            <small>Admin</small>
-          </span>
+          <BrandLogo className="replica-brand-admin" subtitle="Admin" />
         </div>
         <button
           aria-label="Close navigation"

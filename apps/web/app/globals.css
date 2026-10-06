@@ -8112,20 +8112,6 @@ button:disabled {
   color: #fff;
 }
 
-.policy-draft-note {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  max-width: 1220px;
-  margin: 24px auto 0;
-  border: 1px solid rgb(255 255 255 / 28%);
-  border-radius: 18px;
-  background: rgb(255 255 255 / 12%);
-  padding: 16px 18px;
-  color: rgb(255 255 255 / 86%);
-  font-weight: 800;
-}
-
 .policy-content {
   display: grid;
   gap: 18px;
@@ -17244,4 +17230,567 @@ body {
   border-color: #dfd0ea;
   background: #f4edf8;
   color: #6d3c8a;
+}
+
+/* Shared Replica brand artwork */
+.replica-brand-lockup {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+  color: inherit;
+  line-height: 1;
+  text-transform: none;
+}
+
+.replica-brand-image {
+  display: block;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 auto;
+  border: 1px solid rgb(255 255 255 / 64%);
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 8px 22px rgb(59 35 82 / 20%);
+}
+
+.replica-brand-copy {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+  margin: 0;
+  color: inherit;
+  line-height: 1;
+  text-transform: none;
+}
+
+.replica-brand-copy strong {
+  color: inherit;
+  font-family: var(--customer-font-sans, inherit);
+  font-size: 1.24rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+.replica-brand-copy small,
+.customer-brand .replica-brand-copy small,
+.customer-auth-dialog-brand .replica-brand-copy small {
+  display: block;
+  width: auto;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #6d3c8a;
+  padding: 0;
+  font-family: var(--customer-font-sans, inherit);
+  font-size: 0.52rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.customer-header .replica-brand-header .replica-brand-image {
+  width: 48px;
+  height: 48px;
+}
+
+.customer-brand-light .replica-brand-copy strong,
+.customer-brand-light .replica-brand-copy small,
+.auth-brand-light .replica-brand-copy strong,
+.auth-brand-light .replica-brand-copy small {
+  color: #fff;
+}
+
+.customer-brand-light .replica-brand-copy small,
+.auth-brand-light .replica-brand-copy small {
+  opacity: 0.76;
+}
+
+.replica-brand-footer .replica-brand-image {
+  width: 64px;
+  height: 64px;
+  box-shadow: 0 12px 28px rgb(12 5 18 / 32%);
+}
+
+.replica-brand-footer .replica-brand-copy strong {
+  font-size: 1.4rem;
+}
+
+.customer-auth-dialog-brand .replica-brand-lockup {
+  display: inline-flex;
+  color: var(--customer-theme-900);
+  font-size: inherit;
+}
+
+.customer-auth-dialog-brand .replica-brand-auth {
+  flex-direction: column;
+  gap: 10px;
+}
+
+.replica-brand-auth .replica-brand-image {
+  width: 82px;
+  height: 82px;
+}
+
+.customer-auth-dialog-brand .replica-brand-copy {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  margin: 0;
+  font-size: inherit;
+}
+
+.customer-auth-dialog-brand .replica-brand-copy strong {
+  color: var(--customer-theme-900);
+  font-size: 1.55rem;
+  font-weight: 950;
+}
+
+.auth-brand .replica-brand-admin,
+.auth-brand .replica-brand-admin-auth {
+  color: inherit;
+}
+
+.replica-brand-admin .replica-brand-image,
+.replica-brand-admin-auth .replica-brand-image {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+}
+
+.replica-brand-admin .replica-brand-copy,
+.replica-brand-admin-auth .replica-brand-copy {
+  gap: 2px;
+}
+
+.replica-brand-admin .replica-brand-copy strong,
+.replica-brand-admin-auth .replica-brand-copy strong {
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.replica-brand-admin .replica-brand-copy small,
+.replica-brand-admin-auth .replica-brand-copy small {
+  color: var(--color-muted);
+  font-family: inherit;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+}
+
+.auth-brand-light .replica-brand-admin-auth .replica-brand-copy small {
+  color: #fff;
+}
+
+.admin-sidebar-collapsed .replica-brand-copy {
+  display: none;
+}
+
+.admin-sidebar-collapsed .replica-brand-admin .replica-brand-image {
+  width: 38px;
+  height: 38px;
+}
+
+.blog-brand {
+  flex-direction: row;
+  line-height: 1;
+}
+
+.blog-brand .replica-brand-lockup,
+.blog-brand .replica-brand-copy {
+  display: inline-flex;
+  margin: 0;
+  text-transform: none;
+}
+
+.blog-brand .replica-brand-copy {
+  flex-direction: column;
+}
+
+.blog-brand .replica-brand-copy strong {
+  font-family: var(--customer-font-sans, inherit);
+  font-size: 1.16rem;
+}
+
+.blog-brand .replica-brand-copy small {
+  margin: 0;
+  color: #6d3c8a;
+  font-size: 0.5rem;
+  letter-spacing: 0.07em;
+}
+
+.replica-brand-blog .replica-brand-image {
+  width: 46px;
+  height: 46px;
+}
+
+.blog-footer-brand {
+  display: inline-flex;
+  margin-bottom: 8px;
+}
+
+.replica-brand-blog-footer .replica-brand-image {
+  width: 54px;
+  height: 54px;
+}
+
+.replica-brand-blog-footer .replica-brand-copy strong,
+.replica-brand-blog-footer .replica-brand-copy small {
+  color: #fff;
+}
+
+.replica-brand-blog-footer .replica-brand-copy small {
+  opacity: 0.72;
+}
+
+@media (max-width: 720px) {
+  .customer-header .replica-brand-header {
+    gap: 7px;
+  }
+
+  .customer-header .replica-brand-header .replica-brand-image {
+    width: 38px;
+    height: 38px;
+  }
+
+  .replica-brand-header .replica-brand-copy strong {
+    font-size: 0.98rem;
+  }
+
+  .replica-brand-header .replica-brand-copy small {
+    display: none;
+  }
+
+  .replica-brand-auth .replica-brand-image {
+    width: 70px;
+    height: 70px;
+  }
+
+  .blog-brand .replica-brand-copy {
+    display: none;
+  }
+}
+
+/* Production legal and policy pages */
+.customer-site.policy-page {
+  background: #fff !important;
+}
+
+.policy-page .policy-hero {
+  display: grid;
+  gap: 14px;
+  min-height: 500px;
+  align-content: center;
+  padding: 156px var(--customer-page-gutter) 72px;
+  background:
+    linear-gradient(
+      90deg,
+      rgb(30 16 39 / 96%) 0%,
+      rgb(58 31 73 / 91%) 48%,
+      rgb(109 60 138 / 76%) 100%
+    ),
+    url("https://images.pexels.com/photos/3992874/pexels-photo-3992874.jpeg?auto=compress&cs=tinysrgb&w=1600")
+      center/cover;
+}
+
+.policy-page .policy-hero > * {
+  width: min(100%, 1220px);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.customer-site.policy-page .policy-hero .customer-eyebrow {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgb(255 255 255 / 28%);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 12%);
+  color: #fff !important;
+  padding: 8px 12px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.customer-site.policy-page .policy-hero h1 {
+  max-width: 900px;
+  color: #fff !important;
+  font-size: clamp(2.35rem, 4.4vw, 4.75rem);
+  line-height: 1.03;
+  text-shadow: 0 3px 24px rgb(14 6 20 / 28%);
+}
+
+.customer-site.policy-page .policy-hero .policy-description {
+  max-width: 820px;
+  margin-top: 2px;
+  color: rgb(255 255 255 / 88%) !important;
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  font-weight: 500;
+  line-height: 1.65;
+}
+
+.customer-site.policy-page .policy-hero .policy-updated {
+  margin-top: 6px;
+  color: rgb(255 255 255 / 68%) !important;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.policy-page .policy-content {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  width: min(var(--customer-content-width), 1120px);
+  max-width: none;
+  padding: clamp(44px, 6vw, 76px) 0;
+}
+
+.policy-page .policy-content article {
+  border: 1px solid #e5dbea;
+  border-radius: 8px;
+  background: #fff;
+  padding: clamp(22px, 3vw, 30px);
+  box-shadow: 0 10px 30px rgb(49 27 60 / 6%);
+}
+
+.customer-site.policy-page .policy-content h2 {
+  color: #2b153d !important;
+  font-size: clamp(1.08rem, 1.5vw, 1.28rem);
+  letter-spacing: 0;
+}
+
+.customer-site.policy-page .policy-content p {
+  color: #5e5365 !important;
+  font-size: 0.98rem;
+  font-weight: 500;
+  line-height: 1.75;
+}
+
+.policy-page .policy-contact-strip {
+  gap: 12px;
+  border-top: 1px solid #e8ddec;
+  background: #f8f4fa;
+  padding: 28px var(--customer-page-gutter);
+}
+
+.policy-page .policy-contact-strip span,
+.policy-page .policy-contact-strip a {
+  min-height: 52px;
+  border: 1px solid #ded0e7;
+  border-radius: 8px;
+  background: #fff;
+  color: #3b2352;
+  padding: 14px 18px;
+  font-weight: 700;
+}
+
+.policy-page .policy-contact-strip svg {
+  flex: 0 0 auto;
+  color: #6d3c8a;
+}
+
+@media (max-width: 720px) {
+  .policy-page .policy-hero {
+    min-height: 420px;
+    padding: 132px 16px 52px;
+    background-position: 62% center;
+  }
+
+  .customer-site.policy-page .policy-hero h1 {
+    font-size: clamp(2rem, 11vw, 3.1rem);
+  }
+
+  .policy-page .policy-content {
+    grid-template-columns: 1fr;
+    width: calc(100vw - 32px);
+    padding: 32px 0;
+  }
+
+  .policy-page .policy-contact-strip {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 24px 16px;
+  }
+
+  .policy-page .policy-contact-strip span,
+  .policy-page .policy-contact-strip a {
+    width: 100%;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Footer payment acceptance */
+.customer-footer-copyright {
+  color: #55485c !important;
+  font-weight: 600;
+}
+
+.customer-footer .customer-brand-light .replica-brand-copy strong,
+.customer-footer .customer-brand-light .replica-brand-copy small {
+  color: #2b153d;
+}
+
+.customer-footer .customer-brand-light .replica-brand-copy small {
+  opacity: 0.74;
+}
+
+.customer-footer-contact-row svg {
+  color: #6d3c8a;
+}
+
+.customer-footer-payments {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.customer-footer-payments > span {
+  color: #3b2c43;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.customer-footer-payment-logos {
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid #ded3e4;
+  border-radius: 8px;
+  background: #fff;
+  padding: 7px 10px;
+  box-shadow: 0 6px 16px rgb(50 30 59 / 6%);
+}
+
+.customer-footer-payment-logos img {
+  display: block;
+  width: auto;
+  max-width: 58px;
+  height: 24px;
+  object-fit: contain;
+}
+
+@media (max-width: 720px) {
+  .customer-footer-payments {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .customer-footer-payment-logos {
+    max-width: 100%;
+  }
+}
+
+/* Compact single-row storefront header on phones */
+@media (max-width: 720px) {
+  .customer-header {
+    padding: 0;
+  }
+
+  .customer-header-shell {
+    grid-template-areas: "brand search location actions";
+    grid-template-columns: auto minmax(72px, 1fr) auto auto;
+    align-items: center;
+    gap: 8px;
+    width: calc(100% - 24px);
+    min-height: 64px;
+    padding: 8px 0;
+  }
+
+  .customer-header .customer-brand {
+    grid-area: brand;
+    min-width: 0;
+  }
+
+  .customer-header .replica-brand-header {
+    gap: 6px;
+  }
+
+  .customer-header .replica-brand-header .replica-brand-image {
+    width: 36px;
+    height: 36px;
+  }
+
+  .customer-header-search {
+    grid-area: search;
+    width: 100%;
+    min-width: 0;
+    min-height: 40px;
+    gap: 7px;
+    border-radius: 12px;
+    padding: 0 10px;
+    box-shadow: none;
+  }
+
+  .customer-header-search svg {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 auto;
+  }
+
+  .customer-header-search input {
+    min-width: 0;
+    font-size: 0.82rem;
+    text-overflow: ellipsis;
+  }
+
+  .customer-location-pill {
+    grid-area: location;
+    max-width: 94px;
+    min-height: 40px;
+    gap: 5px;
+    border: 1px solid #e7dced;
+    border-radius: 12px;
+    padding: 0 9px;
+    background: #f7f2f9;
+  }
+
+  .customer-location-pill svg:last-child {
+    display: none;
+  }
+
+  .customer-location-pill span {
+    font-size: 0.75rem;
+  }
+
+  .customer-actions {
+    grid-area: actions;
+    min-width: 0;
+    gap: 5px;
+  }
+
+  .customer-header .customer-cart-button,
+  .customer-header .customer-login-button {
+    width: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 520px) {
+  .customer-header .replica-brand-copy {
+    display: none;
+  }
+}
+
+@media (max-width: 360px) {
+  .customer-header-shell {
+    gap: 6px;
+    width: calc(100% - 20px);
+  }
+
+  .customer-location-pill {
+    width: 40px;
+    min-width: 40px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .customer-location-pill span {
+    display: none;
+  }
 }

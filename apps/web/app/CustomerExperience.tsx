@@ -32,6 +32,16 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import BrandLogo from "./BrandLogo";
+import CustomerFooter from "./CustomerFooter";
+import {
+  BRAND_ADDRESS,
+  BRAND_CITY,
+  BRAND_LOGO_PATH,
+  BRAND_NAME,
+  BRAND_SUPPORT_EMAIL,
+  BRAND_WEBSITE_URL,
+} from "./brand";
 import {
   CategoryExplorer,
   type CategoryExplorerGroup,
@@ -47,13 +57,10 @@ const INDIA_TIME_ZONE = "Asia/Kolkata";
 const FALLBACK_DEAL_STARTS_AT = "2026-01-01T00:00:00.000Z";
 const FALLBACK_DEAL_ENDS_AT = "2027-01-01T00:00:00.000Z";
 const CATALOGUE_SERVICES_PER_PAGE = 6;
-const BUSINESS_NAME = "Replica Home Saloon Service";
-const BUSINESS_LOGO_PRIMARY = "Replica";
-const BUSINESS_LOGO_SECONDARY = "Home Saloon Service";
-const BUSINESS_ADDRESS =
-  "C04 Gayatri Nagar (Pani Gao), Indira Nagar, near Peepal Tree, Lucknow 226016";
-const BUSINESS_SUPPORT_EMAIL = "support@replicahomesaloonservice.in";
-const BUSINESS_WEBSITE_URL = "https://replicahomesaloonservice.in";
+const BUSINESS_NAME = BRAND_NAME;
+const BUSINESS_ADDRESS = BRAND_ADDRESS;
+const BUSINESS_SUPPORT_EMAIL = BRAND_SUPPORT_EMAIL;
+const BUSINESS_WEBSITE_URL = BRAND_WEBSITE_URL;
 const SPA_CATEGORY_TERMS = ["spa", "facial", "body", "hair", "mani", "pedi"];
 const HYDRA_CATEGORY_TERMS = ["hydra", "facial", "glow", "skin"];
 const DEFAULT_CUSTOMER_ADDRESS_FORM = {
@@ -96,6 +103,9 @@ interface PublicCategory {
   parentSlug: string | null;
   description: string | null;
   imageUrl: string | null;
+  seoTitle?: string | null;
+  seoDescription?: string | null;
+  updatedAt?: string;
 }
 
 interface PublicService {
@@ -108,6 +118,9 @@ interface PublicService {
   slug: string;
   shortDescription: string | null;
   fullDescription: string | null;
+  seoTitle?: string | null;
+  seoDescription?: string | null;
+  updatedAt?: string;
   durationMinutes: number;
   pricePaise: number;
   compareAtPricePaise: number | null;
@@ -518,6 +531,7 @@ interface RazorpayOptions {
   amount: number;
   currency: string;
   name: string;
+  image: string;
   description: string;
   order_id: string;
   prefill: {
@@ -3181,6 +3195,7 @@ export default function CustomerExperience({
         amount: checkout.order.amount,
         currency: checkout.order.currency,
         name: catalogue?.business.name ?? BUSINESS_NAME,
+        image: `${window.location.origin}${BRAND_LOGO_PATH}`,
         description: currentBooking.items
           .map((item) => item.serviceName)
           .join(", "),
@@ -3566,10 +3581,7 @@ export default function CustomerExperience({
         <header className="customer-header">
           <div className="customer-header-shell">
             <a className="customer-brand" href="/" aria-label={BUSINESS_NAME}>
-              <span className="customer-brand-logo">
-                <strong>{BUSINESS_LOGO_PRIMARY}</strong>
-                <small>{BUSINESS_LOGO_SECONDARY}</small>
-              </span>
+              <BrandLogo className="replica-brand-header" />
             </a>
             <a
               aria-label={`Current service location: ${serviceLocationLabel}`}
@@ -3592,7 +3604,7 @@ export default function CustomerExperience({
               <input
                 id="customer-header-search"
                 onChange={(event) => setSearch(event.target.value)}
-                placeholder="Search facials, waxing, spa..."
+                placeholder="Search services"
                 type="search"
                 value={search}
               />
@@ -6064,8 +6076,7 @@ export default function CustomerExperience({
           ) : (
             <>
               <a className="customer-auth-dialog-brand" href="/">
-                <span>{BUSINESS_LOGO_PRIMARY}</span>
-                <small>{BUSINESS_LOGO_SECONDARY}</small>
+                <BrandLogo className="replica-brand-auth" />
               </a>
               <p className="customer-auth-welcome">Welcome</p>
               <h1>
@@ -7173,108 +7184,21 @@ export default function CustomerExperience({
   }
 
   function renderFooter(): React.ReactElement {
-    const supportPhone = catalogue?.business.supportPhone ?? "+918112868347";
+    const supportPhone = catalogue?.business.supportPhone ?? "+91 81128 68347";
     const supportEmail =
       catalogue?.business.supportEmail ?? BUSINESS_SUPPORT_EMAIL;
     const businessName = catalogue?.business.name ?? BUSINESS_NAME;
     const addressLine = catalogue?.business.addressLine ?? BUSINESS_ADDRESS;
-    const websiteUrl = catalogue?.business.websiteUrl ?? BUSINESS_WEBSITE_URL;
-    const city = catalogue?.business.city ?? "Lucknow";
+    const city = catalogue?.business.city ?? BRAND_CITY;
 
     return (
-      <footer className="customer-footer">
-        <div className="customer-footer-contact-row">
-          <span>
-            <MapPin size={18} />
-            <strong>Find us</strong>
-            {addressLine}
-          </span>
-          <a href={`tel:${supportPhone}`}>
-            <Phone size={18} />
-            <strong>Call us</strong>
-            {supportPhone}
-          </a>
-          <a href={`mailto:${supportEmail}`}>
-            <MessageCircle size={18} />
-            <strong>Mail us</strong>
-            {supportEmail}
-          </a>
-        </div>
-
-        <div className="customer-footer-main">
-          <div>
-            <a className="customer-brand customer-brand-light" href="/">
-              <span className="customer-brand-mark">R</span>
-              <span>
-                {BUSINESS_LOGO_PRIMARY}
-                <small>{BUSINESS_LOGO_SECONDARY}</small>
-              </span>
-            </a>
-            <p>
-              Professional beauty and grooming services at home in {city},
-              backed by booking, payment and assignment workflows.
-            </p>
-          </div>
-          <nav>
-            <h4>Useful links</h4>
-            <a href="/">Home</a>
-            <a href="/services">Services</a>
-            <a href="/blog">Blog</a>
-            <a href="/#categories">Categories</a>
-            <a href="/cart">Cart</a>
-            <a href="/orders">My orders</a>
-            <a href="/payments">Payments</a>
-            <a href="/addresses">Addresses</a>
-            <a href="/contact">Contact</a>
-          </nav>
-          <nav>
-            <h4>Policies</h4>
-            <a href="/privacy-policy">Privacy Policy</a>
-            <a href="/terms-and-conditions">Terms</a>
-            <a href="/return-refund-policy">Return and Refund Policy</a>
-            <a href="/refund-policy">Refund Policy</a>
-            <a href="/cancellation-policy">Cancellation Policy</a>
-          </nav>
-          <div className="customer-footer-support">
-            <h4>Booking support</h4>
-            <p>
-              Need help choosing a service? Contact support and we will guide
-              you to the right care option.
-            </p>
-            <a href="/contact">
-              Contact support
-              <ChevronRight size={16} />
-            </a>
-          </div>
-        </div>
-
-        <div className="customer-footer-bottom">
-          <p>
-            Service availability, tax details and payment status are confirmed
-            during checkout.
-          </p>
-          <span>{businessName}</span>
-          <a href={websiteUrl} rel="noreferrer">
-            replicahomesaloonservice.in
-          </a>
-        </div>
-
-        <a
-          aria-label="Chat on WhatsApp"
-          className="customer-whatsapp"
-          href="https://wa.me/918112868347"
-          rel="noreferrer"
-          target="_blank"
-        >
-          <svg
-            aria-hidden="true"
-            className="customer-whatsapp-logo"
-            viewBox="0 0 24 24"
-          >
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347ZM12.05 21.785h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884Zm8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" />
-          </svg>
-        </a>
-      </footer>
+      <CustomerFooter
+        addressLine={addressLine}
+        businessName={businessName}
+        city={city}
+        supportEmail={supportEmail}
+        supportPhone={supportPhone}
+      />
     );
   }
 }
